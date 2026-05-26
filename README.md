@@ -1,1 +1,1 @@
-# Bayesian_Auto-Tuning_for_Performance_Portability
+# Bayesian Auto-Tunin for Performance Portability
