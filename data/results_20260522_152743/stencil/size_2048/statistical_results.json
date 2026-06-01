@@ -1,0 +1,53 @@
+{
+  "sample_sizes": {
+    "bayesian": 10,
+    "random": 10
+  },
+  "descriptive_stats": {
+    "bayesian": {
+      "mean": 28.6589075088501,
+      "median": 28.610830783843994,
+      "std": 0.5857932546516017,
+      "min": 27.92957305908203,
+      "max": 29.83119487762451,
+      "q1": 28.13517451286316,
+      "q3": 28.90952754020691
+    },
+    "random": {
+      "mean": 28.426999282836913,
+      "median": 28.49744462966919,
+      "std": 0.20934790045116478,
+      "min": 28.011539459228516,
+      "max": 28.65062713623047,
+      "q1": 28.284024000167847,
+      "q3": 28.608240604400635
+    }
+  },
+  "effect_size_cohens_d": 0.5001588856225845,
+  "welch_ttest": {
+    "t_statistic": 1.1183892678026413,
+    "p_value": 0.2866892319340345,
+    "mean_difference": 0.23190822601318573,
+    "ci_95": 0.38556756165742445,
+    "significant_at_0_05": false,
+    "significant_at_0_01": false
+  },
+  "mann_whitney_u": {
+    "u_statistic": 59.0,
+    "p_value": 0.5205228832757727,
+    "significant_at_0_05": false,
+    "significant_at_0_01": false
+  },
+  "winner": "Random",
+  "kernel": "stencil",
+  "backend": "sycl",
+  "problem_size": {
+    "M": 2048,
+    "N": 2048,
+    "K": 512
+  },
+  "num_runs": 10,
+  "trials_per_run": 20,
+  "bench_runs_per_config": 10,
+  "warmup_runs_per_config": 5
+}

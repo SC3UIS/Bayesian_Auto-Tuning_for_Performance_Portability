@@ -1,0 +1,1653 @@
+
+================================================================================
+STATISTICAL ANALYSIS: SYCL MATMUL BAYESIAN vs RANDOM SEARCH
+Problem size: 4096x4096x4096
+Independent runs: 10
+Trials per run: 20
+Benchmark repeats per config: 10
+Warmup runs per config: 5
+================================================================================
+
+Benchmarking default config baseline: BM=32 BN=32 BK=32 TM=1 TN=1
+✓ Default baseline: 64.3369 ms (2136.24 GFLOP/s)
+
+================================================================================
+EXPERIMENT 1: SYCL MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning SYCL MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 150/243
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  64.4664 ms (median), mean=64.4444 ± 0.2453 ms (2131.95 GFLOP/s)
+[  2/20] BM=128, BN=128, BK=32, TM=4, TN=4:  36.3156 ms (median), mean=36.3424 ± 0.1641 ms (3784.57 GFLOP/s)
+[  3/20] BM= 32, BN=128, BK=16, TM=4, TN=1:  30.3872 ms (median), mean=30.3473 ± 0.1963 ms (4522.92 GFLOP/s)
+[  4/20] BM=128, BN= 32, BK= 8, TM=2, TN=2:  43.8820 ms (median), mean=43.9149 ± 0.2410 ms (3132.01 GFLOP/s)
+[  5/20] BM=128, BN= 64, BK=32, TM=4, TN=2:  21.5219 ms (median), mean=21.6093 ± 0.1534 ms (6386.00 GFLOP/s)
+[  6/20] BM= 32, BN= 32, BK=32, TM=1, TN=2:  60.3628 ms (median), mean=60.4369 ± 0.2396 ms (2276.88 GFLOP/s)
+[  7/20] BM= 32, BN= 32, BK=16, TM=4, TN=4:  23.4701 ms (median), mean=23.4335 ± 0.1980 ms (5855.92 GFLOP/s)
+[  8/20] BM=128, BN= 64, BK=32, TM=4, TN=4:  21.6100 ms (median), mean=21.5574 ± 0.1575 ms (6359.97 GFLOP/s)
+[  9/20] BM= 64, BN= 64, BK=32, TM=4, TN=1:  26.6143 ms (median), mean=26.6098 ± 0.2826 ms (5164.11 GFLOP/s)
+[ 10/20] BM= 64, BN= 64, BK=32, TM=4, TN=2:  20.6172 ms (median), mean=20.6722 ± 0.2251 ms (6666.22 GFLOP/s)
+[ 11/20] BM= 64, BN= 64, BK=32, TM=4, TN=2:  20.5245 ms (median), mean=20.5533 ± 0.1319 ms (6696.32 GFLOP/s)
+[ 12/20] BM= 64, BN= 64, BK=16, TM=2, TN=2:  45.2797 ms (median), mean=45.3724 ± 0.2020 ms (3035.33 GFLOP/s)
+[ 13/20] BM= 64, BN= 64, BK=32, TM=4, TN=2:  20.5901 ms (median), mean=20.7686 ± 0.2798 ms (6675.01 GFLOP/s)
+[ 14/20] BM= 64, BN= 64, BK=32, TM=4, TN=2:  21.1410 ms (median), mean=20.9835 ± 0.2698 ms (6501.06 GFLOP/s)
+[ 15/20] BM= 64, BN= 32, BK=32, TM=4, TN=4:  21.4124 ms (median), mean=21.5169 ± 0.2321 ms (6418.68 GFLOP/s)
+[ 16/20] BM= 64, BN= 64, BK=32, TM=1, TN=4:  71.0651 ms (median), mean=71.0968 ± 0.2216 ms (1933.99 GFLOP/s)
+[ 17/20] BM= 32, BN=128, BK= 8, TM=1, TN=4:  45.0698 ms (median), mean=45.1212 ± 0.1860 ms (3049.47 GFLOP/s)
+[ 18/20] BM= 32, BN=128, BK=32, TM=4, TN=2:  21.8470 ms (median), mean=21.7132 ± 0.2063 ms (6290.96 GFLOP/s)
+[ 19/20] BM= 32, BN= 32, BK=32, TM=4, TN=4:  23.0308 ms (median), mean=22.9112 ± 0.2620 ms (5967.62 GFLOP/s)
+[ 20/20] BM=128, BN= 32, BK=16, TM=4, TN=1:  31.7041 ms (median), mean=31.8830 ± 0.6877 ms (4335.06 GFLOP/s)
+
+Best trial: Trial #11
+Best value: 20.5245 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 1: SYCL MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning SYCL MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  64.7045 ms (median), mean=64.6622 ± 0.2450 ms (2124.10 GFLOP/s)
+[  2/20] BM= 64, BN= 64, BK=16, TM=1, TN=4:  64.7849 ms (median), mean=64.7819 ± 0.2161 ms (2121.47 GFLOP/s)
+[  3/20] BM= 64, BN= 64, BK=32, TM=4, TN=1:  26.4796 ms (median), mean=26.5118 ± 0.1974 ms (5190.37 GFLOP/s)
+[  4/20] BM= 32, BN= 32, BK=16, TM=1, TN=2:  42.5078 ms (median), mean=42.5774 ± 0.1768 ms (3233.27 GFLOP/s)
+[  5/20] BM= 32, BN=128, BK=32, TM=4, TN=2:  21.8865 ms (median), mean=21.8879 ± 0.1360 ms (6279.63 GFLOP/s)
+[  6/20] BM=128, BN= 32, BK=16, TM=4, TN=4:  22.5992 ms (median), mean=22.6868 ± 0.3357 ms (6081.59 GFLOP/s)
+[  7/20] BM=128, BN= 32, BK= 8, TM=4, TN=4:  23.9985 ms (median), mean=24.1224 ± 0.3259 ms (5726.99 GFLOP/s)
+[  8/20] BM= 64, BN= 64, BK=16, TM=4, TN=4:  22.5413 ms (median), mean=22.5130 ± 0.1702 ms (6097.20 GFLOP/s)
+[  9/20] BM= 64, BN= 32, BK=16, TM=1, TN=4:  47.3728 ms (median), mean=47.4184 ± 0.2379 ms (2901.22 GFLOP/s)
+[ 10/20] BM=128, BN= 32, BK= 8, TM=4, TN=1:  38.7410 ms (median), mean=38.7734 ± 0.0717 ms (3547.64 GFLOP/s)
+[ 11/20] BM= 64, BN= 32, BK=32, TM=4, TN=4:  21.4374 ms (median), mean=21.5199 ± 0.2673 ms (6411.16 GFLOP/s)
+[ 12/20] BM= 32, BN=128, BK= 8, TM=4, TN=4:  35.6342 ms (median), mean=35.6640 ± 0.2660 ms (3856.94 GFLOP/s)
+[ 13/20] BM=128, BN= 32, BK=16, TM=4, TN=2:  23.6288 ms (median), mean=23.7000 ± 0.1322 ms (5816.59 GFLOP/s)
+[ 14/20] BM= 32, BN= 64, BK=16, TM=1, TN=4:  65.4336 ms (median), mean=65.4278 ± 0.1093 ms (2100.43 GFLOP/s)
+[ 15/20] BM= 64, BN= 32, BK= 8, TM=2, TN=4:  26.0972 ms (median), mean=26.1363 ± 0.2134 ms (5266.44 GFLOP/s)
+[ 16/20] BM= 32, BN= 32, BK=32, TM=4, TN=2:  21.3980 ms (median), mean=21.4543 ± 0.2001 ms (6422.98 GFLOP/s)
+[ 17/20] BM= 32, BN=128, BK=32, TM=2, TN=4:  64.7839 ms (median), mean=64.9040 ± 0.2905 ms (2121.50 GFLOP/s)
+[ 18/20] BM=128, BN= 32, BK=32, TM=4, TN=4:  23.5080 ms (median), mean=23.5065 ± 0.2113 ms (5846.48 GFLOP/s)
+[ 19/20] BM= 32, BN= 64, BK=16, TM=2, TN=2:  46.0539 ms (median), mean=46.0807 ± 0.2304 ms (2984.31 GFLOP/s)
+[ 20/20] BM= 64, BN= 32, BK=16, TM=2, TN=2:  46.4660 ms (median), mean=46.5934 ± 0.2757 ms (2957.84 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ SYCL Bayesian Run 1: best = 20.5245 ms
+✓ SYCL Random Run 1:   best = 21.3980 ms
+
+================================================================================
+EXPERIMENT 2: SYCL MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning SYCL MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 150/243
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  64.3011 ms (median), mean=64.4012 ± 0.2140 ms (2137.43 GFLOP/s)
+[  2/20] BM=128, BN= 32, BK=32, TM=4, TN=1:  27.9409 ms (median), mean=27.9870 ± 0.1849 ms (4918.92 GFLOP/s)
+[  3/20] BM= 32, BN=128, BK= 8, TM=4, TN=2:  31.1977 ms (median), mean=31.1523 ± 0.2201 ms (4405.42 GFLOP/s)
+[  4/20] BM= 32, BN= 32, BK=16, TM=2, TN=1:  37.0488 ms (median), mean=37.0902 ± 0.1530 ms (3709.67 GFLOP/s)
+[  5/20] BM= 64, BN= 64, BK=32, TM=2, TN=2:  45.1963 ms (median), mean=45.2534 ± 0.1888 ms (3040.93 GFLOP/s)
+[  6/20] BM= 64, BN= 32, BK=16, TM=2, TN=2:  46.5920 ms (median), mean=46.6364 ± 0.1792 ms (2949.84 GFLOP/s)
+[  7/20] BM=128, BN= 32, BK=32, TM=4, TN=1:  28.1108 ms (median), mean=28.1004 ± 0.2302 ms (4889.18 GFLOP/s)
+[  8/20] BM= 64, BN= 64, BK=16, TM=4, TN=4:  22.6007 ms (median), mean=22.6789 ± 0.2242 ms (6081.18 GFLOP/s)
+[  9/20] BM= 64, BN= 64, BK=16, TM=4, TN=1:  27.2369 ms (median), mean=27.2626 ± 0.1034 ms (5046.06 GFLOP/s)
+[ 10/20] BM= 64, BN= 32, BK= 8, TM=1, TN=2:  58.4904 ms (median), mean=58.4861 ± 0.1875 ms (2349.77 GFLOP/s)
+[ 11/20] BM= 32, BN= 64, BK= 8, TM=1, TN=4:  43.2922 ms (median), mean=43.3837 ± 0.2416 ms (3174.68 GFLOP/s)
+[ 12/20] BM= 32, BN=128, BK=16, TM=4, TN=4:  34.7945 ms (median), mean=34.8461 ± 0.3057 ms (3950.02 GFLOP/s)
+[ 13/20] BM= 64, BN= 64, BK=16, TM=4, TN=1:  27.3746 ms (median), mean=27.4002 ± 0.2783 ms (5020.68 GFLOP/s)
+[ 14/20] BM= 64, BN=128, BK=16, TM=4, TN=4:  34.4643 ms (median), mean=34.5843 ± 0.2799 ms (3987.87 GFLOP/s)
+[ 15/20] BM= 64, BN= 64, BK=16, TM=4, TN=1:  27.6045 ms (median), mean=27.5554 ± 0.1248 ms (4978.86 GFLOP/s)
+[ 16/20] BM= 32, BN= 64, BK= 8, TM=1, TN=2:  56.7378 ms (median), mean=56.7989 ± 0.1768 ms (2422.35 GFLOP/s)
+[ 17/20] BM= 32, BN= 64, BK=16, TM=4, TN=4:  22.9714 ms (median), mean=23.0833 ± 0.2849 ms (5983.05 GFLOP/s)
+[ 18/20] BM=128, BN= 64, BK=16, TM=2, TN=4:  45.1436 ms (median), mean=45.1927 ± 0.2331 ms (3044.49 GFLOP/s)
+[ 19/20] BM= 64, BN= 64, BK=16, TM=4, TN=4:  22.7154 ms (median), mean=22.6835 ± 0.1194 ms (6050.48 GFLOP/s)
+[ 20/20] BM= 64, BN= 64, BK=16, TM=4, TN=4:  22.9217 ms (median), mean=22.9166 ± 0.2708 ms (5996.01 GFLOP/s)
+
+Best trial: Trial #8
+Best value: 22.6007 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 2: SYCL MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning SYCL MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  64.1403 ms (median), mean=64.2686 ± 0.3007 ms (2142.79 GFLOP/s)
+[  2/20] BM= 64, BN= 64, BK=32, TM=4, TN=4:  22.3831 ms (median), mean=22.4715 ± 0.2722 ms (6140.30 GFLOP/s)
+[  3/20] BM= 32, BN= 32, BK=32, TM=4, TN=4:  23.1347 ms (median), mean=23.0638 ± 0.1943 ms (5940.81 GFLOP/s)
+[  4/20] BM= 64, BN= 64, BK=16, TM=2, TN=4:  44.9290 ms (median), mean=45.0762 ± 0.3417 ms (3059.02 GFLOP/s)
+[  5/20] BM= 64, BN= 32, BK=32, TM=4, TN=2:  21.2772 ms (median), mean=21.3365 ± 0.1506 ms (6459.45 GFLOP/s)
+[  6/20] BM= 32, BN= 32, BK=16, TM=4, TN=2:  22.4814 ms (median), mean=22.4027 ± 0.3312 ms (6113.45 GFLOP/s)
+[  7/20] BM=128, BN= 32, BK= 8, TM=1, TN=4:  43.0525 ms (median), mean=43.0924 ± 0.1455 ms (3192.35 GFLOP/s)
+[  8/20] BM= 32, BN= 64, BK=32, TM=1, TN=2:  72.2227 ms (median), mean=72.2647 ± 0.1923 ms (1902.99 GFLOP/s)
+[  9/20] BM=128, BN= 32, BK=32, TM=4, TN=4:  23.4798 ms (median), mean=23.4755 ± 0.1883 ms (5853.50 GFLOP/s)
+[ 10/20] BM= 64, BN=128, BK= 8, TM=4, TN=2:  34.9962 ms (median), mean=35.0515 ± 0.1553 ms (3927.25 GFLOP/s)
+[ 11/20] BM= 32, BN= 64, BK= 8, TM=4, TN=4:  24.4255 ms (median), mean=24.4222 ± 0.2874 ms (5626.87 GFLOP/s)
+[ 12/20] BM= 32, BN=128, BK=16, TM=1, TN=4: 117.8829 ms (median), mean=117.4064 ± 0.9845 ms (1165.89 GFLOP/s)
+[ 13/20] BM= 32, BN=128, BK=16, TM=4, TN=4:  34.7715 ms (median), mean=34.7572 ± 0.2089 ms (3952.64 GFLOP/s)
+[ 14/20] BM= 64, BN= 64, BK= 8, TM=2, TN=2:  42.5216 ms (median), mean=42.4563 ± 0.1702 ms (3232.22 GFLOP/s)
+[ 15/20] BM=128, BN= 32, BK=16, TM=1, TN=4:  48.9738 ms (median), mean=48.9787 ± 0.1944 ms (2806.38 GFLOP/s)
+[ 16/20] BM= 32, BN=128, BK= 8, TM=2, TN=2:  42.5518 ms (median), mean=42.5331 ± 0.1843 ms (3229.92 GFLOP/s)
+[ 17/20] BM= 32, BN=128, BK=16, TM=2, TN=4:  63.9022 ms (median), mean=63.9195 ± 0.1829 ms (2150.77 GFLOP/s)
+[ 18/20] BM= 64, BN=128, BK=32, TM=4, TN=2:  21.6781 ms (median), mean=21.6463 ± 0.1497 ms (6340.00 GFLOP/s)
+[ 19/20] BM= 32, BN= 64, BK=32, TM=2, TN=4:  44.8998 ms (median), mean=44.9692 ± 0.2185 ms (3061.01 GFLOP/s)
+[ 20/20] BM= 32, BN= 32, BK=16, TM=1, TN=2:  42.5697 ms (median), mean=42.5857 ± 0.1561 ms (3228.56 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ SYCL Bayesian Run 2: best = 22.6007 ms
+✓ SYCL Random Run 2:   best = 21.2772 ms
+
+================================================================================
+EXPERIMENT 3: SYCL MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning SYCL MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 150/243
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  64.3523 ms (median), mean=64.4439 ± 0.2098 ms (2135.73 GFLOP/s)
+[  2/20] BM=128, BN= 32, BK= 8, TM=4, TN=1:  39.0308 ms (median), mean=39.0606 ± 0.2526 ms (3521.30 GFLOP/s)
+[  3/20] BM= 32, BN= 64, BK=32, TM=2, TN=1:  47.7445 ms (median), mean=47.7158 ± 0.1073 ms (2878.63 GFLOP/s)
+[  4/20] BM= 32, BN= 32, BK=32, TM=4, TN=2:  21.7129 ms (median), mean=21.7198 ± 0.1278 ms (6329.83 GFLOP/s)
+[  5/20] BM= 64, BN=128, BK=16, TM=2, TN=4:  63.4158 ms (median), mean=63.4345 ± 0.2609 ms (2167.27 GFLOP/s)
+[  6/20] BM= 64, BN= 64, BK=32, TM=2, TN=4:  44.1001 ms (median), mean=44.1701 ± 0.1860 ms (3116.52 GFLOP/s)
+[  7/20] BM= 32, BN= 32, BK=32, TM=4, TN=2:  21.7344 ms (median), mean=21.7804 ± 0.2019 ms (6323.57 GFLOP/s)
+[  8/20] BM=128, BN= 32, BK=32, TM=2, TN=4:  45.5608 ms (median), mean=45.6196 ± 0.1725 ms (3016.60 GFLOP/s)
+[  9/20] BM= 32, BN= 64, BK=16, TM=4, TN=2:  21.4047 ms (median), mean=21.4366 ± 0.2114 ms (6420.98 GFLOP/s)
+[ 10/20] BM= 32, BN= 64, BK=16, TM=4, TN=2:  21.4252 ms (median), mean=21.4560 ± 0.1489 ms (6414.84 GFLOP/s)
+[ 11/20] BM=128, BN= 64, BK= 8, TM=4, TN=2:  34.1130 ms (median), mean=34.1474 ± 0.1628 ms (4028.93 GFLOP/s)
+[ 12/20] BM= 32, BN= 64, BK=16, TM=4, TN=2:  21.3868 ms (median), mean=21.3770 ± 0.1296 ms (6426.36 GFLOP/s)
+[ 13/20] BM= 32, BN= 64, BK=32, TM=2, TN=2:  45.3550 ms (median), mean=45.3851 ± 0.3030 ms (3030.29 GFLOP/s)
+[ 14/20] BM= 32, BN= 64, BK= 8, TM=4, TN=2:  22.2909 ms (median), mean=22.3867 ± 0.2623 ms (6165.69 GFLOP/s)
+[ 15/20] BM= 32, BN= 32, BK= 8, TM=4, TN=1:  32.9103 ms (median), mean=32.9873 ± 0.2422 ms (4176.16 GFLOP/s)
+[ 16/20] BM= 32, BN= 64, BK=16, TM=4, TN=2:  21.3427 ms (median), mean=21.3481 ± 0.1059 ms (6439.62 GFLOP/s)
+[ 17/20] BM=128, BN= 64, BK=16, TM=4, TN=2:  26.0142 ms (median), mean=26.0317 ± 0.1405 ms (5283.23 GFLOP/s)
+[ 18/20] BM=128, BN= 64, BK=32, TM=4, TN=4:  21.8184 ms (median), mean=21.8397 ± 0.1209 ms (6299.23 GFLOP/s)
+[ 19/20] BM= 32, BN= 64, BK=32, TM=1, TN=4:  70.9489 ms (median), mean=71.0438 ± 0.2727 ms (1937.16 GFLOP/s)
+[ 20/20] BM=128, BN= 32, BK=16, TM=1, TN=4:  48.7214 ms (median), mean=48.8661 ± 0.2194 ms (2820.92 GFLOP/s)
+
+Best trial: Trial #16
+Best value: 21.3427 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 3: SYCL MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning SYCL MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  64.2995 ms (median), mean=64.3239 ± 0.1622 ms (2137.48 GFLOP/s)
+[  2/20] BM= 64, BN=128, BK=16, TM=4, TN=2:  24.4731 ms (median), mean=24.5148 ± 0.1645 ms (5615.92 GFLOP/s)
+[  3/20] BM= 32, BN= 32, BK=16, TM=2, TN=1:  37.0611 ms (median), mean=37.0591 ± 0.0917 ms (3708.44 GFLOP/s)
+[  4/20] BM=128, BN= 32, BK= 8, TM=2, TN=4:  30.4840 ms (median), mean=30.4771 ± 0.0892 ms (4508.57 GFLOP/s)
+[  5/20] BM= 32, BN=128, BK=32, TM=4, TN=1:  30.4261 ms (median), mean=30.4476 ± 0.1845 ms (4517.14 GFLOP/s)
+[  6/20] BM= 32, BN= 64, BK=32, TM=2, TN=4:  44.4575 ms (median), mean=44.4998 ± 0.1589 ms (3091.47 GFLOP/s)
+[  7/20] BM=128, BN=128, BK=16, TM=4, TN=4:  37.1149 ms (median), mean=37.1284 ± 0.1607 ms (3703.07 GFLOP/s)
+[  8/20] BM= 32, BN= 64, BK=16, TM=1, TN=4:  64.9503 ms (median), mean=65.0175 ± 0.1539 ms (2116.06 GFLOP/s)
+[  9/20] BM= 64, BN= 64, BK=16, TM=4, TN=2:  22.9053 ms (median), mean=22.9520 ± 0.1813 ms (6000.30 GFLOP/s)
+[ 10/20] BM= 32, BN= 64, BK=32, TM=4, TN=2:  20.5916 ms (median), mean=20.5871 ± 0.1257 ms (6674.51 GFLOP/s)
+[ 11/20] BM= 32, BN= 64, BK=16, TM=2, TN=2:  45.5757 ms (median), mean=45.5628 ± 0.1343 ms (3015.62 GFLOP/s)
+[ 12/20] BM=128, BN= 32, BK=32, TM=4, TN=4:  22.9489 ms (median), mean=22.9663 ± 0.1402 ms (5988.92 GFLOP/s)
+[ 13/20] BM= 64, BN= 32, BK=32, TM=2, TN=1:  47.1214 ms (median), mean=47.1720 ± 0.1246 ms (2916.70 GFLOP/s)
+[ 14/20] BM= 64, BN= 32, BK=32, TM=2, TN=4:  45.1528 ms (median), mean=45.1147 ± 0.1498 ms (3043.87 GFLOP/s)
+[ 15/20] BM=128, BN= 32, BK=32, TM=2, TN=4:  45.0729 ms (median), mean=44.9881 ± 0.1399 ms (3049.26 GFLOP/s)
+[ 16/20] BM= 64, BN= 64, BK=32, TM=4, TN=2:  20.3223 ms (median), mean=20.4078 ± 0.2685 ms (6762.96 GFLOP/s)
+[ 17/20] BM= 32, BN= 32, BK= 8, TM=4, TN=2:  23.8060 ms (median), mean=23.7083 ± 0.2088 ms (5773.30 GFLOP/s)
+[ 18/20] BM= 32, BN=128, BK= 8, TM=2, TN=4:  25.0245 ms (median), mean=24.9917 ± 0.1655 ms (5492.17 GFLOP/s)
+[ 19/20] BM= 32, BN= 32, BK= 8, TM=2, TN=1:  47.5853 ms (median), mean=47.6164 ± 0.1581 ms (2888.27 GFLOP/s)
+[ 20/20] BM= 64, BN=128, BK=16, TM=2, TN=4:  63.1716 ms (median), mean=63.1036 ± 0.1722 ms (2175.65 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ SYCL Bayesian Run 3: best = 21.3427 ms
+✓ SYCL Random Run 3:   best = 20.3223 ms
+
+================================================================================
+EXPERIMENT 4: SYCL MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning SYCL MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 150/243
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  63.8689 ms (median), mean=63.8429 ± 0.1048 ms (2151.89 GFLOP/s)
+[  2/20] BM= 32, BN= 32, BK=32, TM=4, TN=2:  21.1139 ms (median), mean=21.1486 ± 0.2026 ms (6509.42 GFLOP/s)
+[  3/20] BM= 32, BN= 64, BK=16, TM=1, TN=2:  45.9100 ms (median), mean=45.9394 ± 0.1254 ms (2993.66 GFLOP/s)
+[  4/20] BM= 64, BN= 32, BK= 8, TM=2, TN=4:  25.8842 ms (median), mean=25.8407 ± 0.1516 ms (5309.77 GFLOP/s)
+[  5/20] BM= 32, BN=128, BK=16, TM=1, TN=4: 117.6136 ms (median), mean=117.1650 ± 1.1271 ms (1168.56 GFLOP/s)
+[  6/20] BM=128, BN= 32, BK=16, TM=4, TN=4:  21.8378 ms (median), mean=21.8630 ± 0.0974 ms (6293.62 GFLOP/s)
+[  7/20] BM=128, BN= 32, BK=32, TM=4, TN=1:  27.4862 ms (median), mean=27.4423 ± 0.0987 ms (5000.29 GFLOP/s)
+[  8/20] BM= 64, BN= 64, BK= 8, TM=4, TN=2:  23.2274 ms (median), mean=23.2823 ± 0.3833 ms (5917.11 GFLOP/s)
+[  9/20] BM= 32, BN= 32, BK=32, TM=4, TN=2:  21.1471 ms (median), mean=21.1410 ± 0.1140 ms (6499.18 GFLOP/s)
+[ 10/20] BM= 64, BN=128, BK= 8, TM=2, TN=4:  35.6244 ms (median), mean=35.7270 ± 0.2549 ms (3858.00 GFLOP/s)
+[ 11/20] BM= 64, BN= 32, BK=16, TM=4, TN=1:  28.3873 ms (median), mean=28.3617 ± 0.0959 ms (4841.56 GFLOP/s)
+[ 12/20] BM= 32, BN= 32, BK=32, TM=4, TN=2:  21.1973 ms (median), mean=21.1901 ± 0.1430 ms (6483.79 GFLOP/s)
+[ 13/20] BM= 32, BN= 32, BK=32, TM=4, TN=2:  21.1169 ms (median), mean=21.0910 ± 0.1356 ms (6508.47 GFLOP/s)
+[ 14/20] BM= 32, BN= 32, BK=32, TM=4, TN=2:  21.2198 ms (median), mean=21.2626 ± 0.1889 ms (6476.91 GFLOP/s)
+[ 15/20] BM= 32, BN= 64, BK=16, TM=2, TN=1:  42.3480 ms (median), mean=42.3686 ± 0.1699 ms (3245.46 GFLOP/s)
+[ 16/20] BM=128, BN= 32, BK= 8, TM=2, TN=4:  30.2684 ms (median), mean=30.2887 ± 0.1360 ms (4540.67 GFLOP/s)
+[ 17/20] BM= 32, BN= 32, BK=16, TM=4, TN=1:  27.9148 ms (median), mean=27.9453 ± 0.1715 ms (4923.52 GFLOP/s)
+[ 18/20] BM=128, BN= 32, BK=32, TM=4, TN=4:  22.9970 ms (median), mean=23.0187 ± 0.1253 ms (5976.39 GFLOP/s)
+[ 19/20] BM= 64, BN= 32, BK=32, TM=4, TN=1:  26.9030 ms (median), mean=26.9533 ± 0.1429 ms (5108.68 GFLOP/s)
+[ 20/20] BM= 32, BN= 64, BK=32, TM=4, TN=1:  26.6752 ms (median), mean=26.6679 ± 0.1120 ms (5152.31 GFLOP/s)
+
+Best trial: Trial #2
+Best value: 21.1139 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 4: SYCL MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning SYCL MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  63.8019 ms (median), mean=63.9875 ± 0.2410 ms (2154.15 GFLOP/s)
+[  2/20] BM= 32, BN= 64, BK= 8, TM=4, TN=2:  21.5578 ms (median), mean=21.5795 ± 0.1369 ms (6375.38 GFLOP/s)
+[  3/20] BM= 64, BN= 32, BK=16, TM=2, TN=2:  46.3043 ms (median), mean=46.2814 ± 0.1144 ms (2968.17 GFLOP/s)
+[  4/20] BM= 32, BN= 32, BK=32, TM=2, TN=2:  45.9085 ms (median), mean=45.9850 ± 0.2698 ms (2993.76 GFLOP/s)
+[  5/20] BM= 64, BN= 32, BK= 8, TM=2, TN=2:  40.3610 ms (median), mean=40.4096 ± 0.2227 ms (3405.24 GFLOP/s)
+[  6/20] BM= 64, BN= 32, BK=16, TM=2, TN=1:  43.9890 ms (median), mean=43.9444 ± 0.1195 ms (3124.39 GFLOP/s)
+[  7/20] BM= 32, BN= 64, BK=16, TM=2, TN=1:  42.3388 ms (median), mean=42.3558 ± 0.1687 ms (3246.17 GFLOP/s)
+[  8/20] BM= 64, BN=128, BK=16, TM=2, TN=4:  62.9898 ms (median), mean=63.0017 ± 0.0976 ms (2181.92 GFLOP/s)
+[  9/20] BM= 64, BN= 32, BK=16, TM=1, TN=4:  46.8762 ms (median), mean=46.8899 ± 0.2381 ms (2931.96 GFLOP/s)
+[ 10/20] BM= 32, BN=128, BK=16, TM=1, TN=4: 117.2035 ms (median), mean=116.2486 ± 1.2774 ms (1172.65 GFLOP/s)
+[ 11/20] BM= 32, BN= 64, BK=32, TM=4, TN=1:  26.9261 ms (median), mean=26.8521 ± 0.1521 ms (5104.31 GFLOP/s)
+[ 12/20] BM=128, BN= 64, BK= 8, TM=4, TN=4:  24.1971 ms (median), mean=24.1488 ± 0.1764 ms (5679.97 GFLOP/s)
+[ 13/20] BM= 32, BN=128, BK= 8, TM=4, TN=2:  30.5638 ms (median), mean=30.6239 ± 0.1151 ms (4496.78 GFLOP/s)
+[ 14/20] BM=128, BN= 32, BK=32, TM=1, TN=4:  58.7428 ms (median), mean=58.7620 ± 0.2104 ms (2339.67 GFLOP/s)
+[ 15/20] BM= 64, BN= 32, BK=16, TM=2, TN=4:  46.1343 ms (median), mean=46.1827 ± 0.1715 ms (2979.11 GFLOP/s)
+[ 16/20] BM= 64, BN= 64, BK=32, TM=4, TN=2:  20.1969 ms (median), mean=20.1470 ± 0.1636 ms (6804.96 GFLOP/s)
+[ 17/20] BM= 64, BN= 64, BK=32, TM=4, TN=1:  26.1304 ms (median), mean=26.2504 ± 0.2482 ms (5259.73 GFLOP/s)
+[ 18/20] BM= 64, BN= 32, BK= 8, TM=2, TN=4:  25.5411 ms (median), mean=25.5487 ± 0.1100 ms (5381.09 GFLOP/s)
+[ 19/20] BM=128, BN= 64, BK=16, TM=4, TN=2:  25.5462 ms (median), mean=25.5845 ± 0.1203 ms (5380.01 GFLOP/s)
+[ 20/20] BM= 64, BN= 64, BK= 8, TM=2, TN=2:  41.7935 ms (median), mean=41.8074 ± 0.1782 ms (3288.52 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ SYCL Bayesian Run 4: best = 21.1139 ms
+✓ SYCL Random Run 4:   best = 20.1969 ms
+
+================================================================================
+EXPERIMENT 5: SYCL MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning SYCL MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 150/243
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  63.8689 ms (median), mean=63.8520 ± 0.1200 ms (2151.89 GFLOP/s)
+[  2/20] BM=128, BN= 64, BK=32, TM=4, TN=2:  20.8241 ms (median), mean=20.9303 ± 0.2848 ms (6600.01 GFLOP/s)
+[  3/20] BM=128, BN= 32, BK= 8, TM=4, TN=4:  23.3364 ms (median), mean=23.3373 ± 0.1199 ms (5889.45 GFLOP/s)
+[  4/20] BM= 32, BN= 32, BK=16, TM=4, TN=2:  21.6530 ms (median), mean=21.6736 ± 0.1442 ms (6347.34 GFLOP/s)
+[  5/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  63.9222 ms (median), mean=63.9379 ± 0.1835 ms (2150.10 GFLOP/s)
+[  6/20] BM= 32, BN=128, BK=32, TM=2, TN=4:  64.4224 ms (median), mean=64.4357 ± 0.1864 ms (2133.40 GFLOP/s)
+[  7/20] BM= 64, BN= 64, BK= 8, TM=4, TN=2:  23.2904 ms (median), mean=23.3313 ± 0.2096 ms (5901.11 GFLOP/s)
+[  8/20] BM= 64, BN= 32, BK=16, TM=1, TN=4:  46.9770 ms (median), mean=46.9285 ± 0.1471 ms (2925.66 GFLOP/s)
+[  9/20] BM= 64, BN= 64, BK= 8, TM=4, TN=1:  36.2783 ms (median), mean=36.2765 ± 0.1624 ms (3788.46 GFLOP/s)
+[ 10/20] BM=128, BN= 32, BK=16, TM=4, TN=2:  23.4895 ms (median), mean=23.5659 ± 0.1975 ms (5851.07 GFLOP/s)
+[ 11/20] BM= 32, BN= 32, BK= 8, TM=4, TN=2:  23.7573 ms (median), mean=23.7160 ± 0.1915 ms (5785.12 GFLOP/s)
+[ 12/20] BM= 32, BN=128, BK= 8, TM=1, TN=4:  44.5271 ms (median), mean=44.5426 ± 0.2289 ms (3086.64 GFLOP/s)
+[ 13/20] BM= 32, BN= 32, BK=16, TM=4, TN=2:  21.6212 ms (median), mean=21.6348 ± 0.1523 ms (6356.66 GFLOP/s)
+[ 14/20] BM= 64, BN=128, BK=32, TM=4, TN=4:  33.4648 ms (median), mean=33.4989 ± 0.1499 ms (4106.97 GFLOP/s)
+[ 15/20] BM=128, BN= 64, BK=32, TM=4, TN=2:  21.1451 ms (median), mean=21.1997 ± 0.2189 ms (6499.81 GFLOP/s)
+[ 16/20] BM= 64, BN= 32, BK=16, TM=4, TN=2:  21.3100 ms (median), mean=21.3470 ± 0.1424 ms (6449.52 GFLOP/s)
+[ 17/20] BM= 64, BN=128, BK=16, TM=4, TN=4:  34.0547 ms (median), mean=34.0464 ± 0.1653 ms (4035.83 GFLOP/s)
+[ 18/20] BM= 32, BN= 64, BK=32, TM=2, TN=2:  44.8266 ms (median), mean=44.8221 ± 0.1802 ms (3066.01 GFLOP/s)
+[ 19/20] BM=128, BN= 64, BK=32, TM=4, TN=2:  21.0504 ms (median), mean=21.0177 ± 0.1689 ms (6529.05 GFLOP/s)
+[ 20/20] BM= 64, BN= 64, BK= 8, TM=2, TN=2:  41.6563 ms (median), mean=41.6949 ± 0.1210 ms (3299.35 GFLOP/s)
+
+Best trial: Trial #2
+Best value: 20.8241 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 5: SYCL MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning SYCL MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  64.4920 ms (median), mean=64.5254 ± 0.1977 ms (2131.10 GFLOP/s)
+[  2/20] BM= 64, BN= 64, BK=32, TM=1, TN=4:  70.9125 ms (median), mean=70.8552 ± 0.2145 ms (1938.15 GFLOP/s)
+[  3/20] BM= 64, BN= 64, BK=32, TM=2, TN=4:  44.4652 ms (median), mean=44.5190 ± 0.2435 ms (3090.94 GFLOP/s)
+[  4/20] BM= 64, BN=128, BK=32, TM=4, TN=4:  33.9738 ms (median), mean=33.9664 ± 0.1671 ms (4045.44 GFLOP/s)
+[  5/20] BM= 32, BN=128, BK=32, TM=2, TN=2:  45.2961 ms (median), mean=45.3351 ± 0.0875 ms (3034.23 GFLOP/s)
+[  6/20] BM=128, BN= 32, BK=16, TM=4, TN=2:  23.7486 ms (median), mean=23.8770 ± 0.2752 ms (5787.24 GFLOP/s)
+[  7/20] BM= 64, BN=128, BK=32, TM=2, TN=4:  66.0209 ms (median), mean=66.0484 ± 0.1664 ms (2081.75 GFLOP/s)
+[  8/20] BM= 64, BN= 32, BK=16, TM=2, TN=4:  46.7533 ms (median), mean=46.8294 ± 0.3049 ms (2939.66 GFLOP/s)
+[  9/20] BM= 64, BN= 64, BK=16, TM=2, TN=2:  45.5286 ms (median), mean=45.5118 ± 0.1273 ms (3018.74 GFLOP/s)
+[ 10/20] BM= 32, BN= 64, BK= 8, TM=2, TN=2:  35.1713 ms (median), mean=35.2070 ± 0.2124 ms (3907.70 GFLOP/s)
+[ 11/20] BM= 64, BN= 64, BK= 8, TM=2, TN=2:  42.4248 ms (median), mean=42.3794 ± 0.2114 ms (3239.59 GFLOP/s)
+[ 12/20] BM= 64, BN= 32, BK=32, TM=2, TN=4:  45.5741 ms (median), mean=45.5216 ± 0.1687 ms (3015.72 GFLOP/s)
+[ 13/20] BM= 64, BN= 32, BK=32, TM=2, TN=2:  46.1460 ms (median), mean=46.0650 ± 0.2294 ms (2978.35 GFLOP/s)
+[ 14/20] BM= 32, BN= 32, BK= 8, TM=4, TN=4:  24.6927 ms (median), mean=24.7500 ± 0.1727 ms (5565.97 GFLOP/s)
+[ 15/20] BM= 64, BN= 32, BK=16, TM=4, TN=2:  21.8015 ms (median), mean=21.8828 ± 0.1393 ms (6304.11 GFLOP/s)
+[ 16/20] BM= 32, BN= 32, BK=32, TM=2, TN=2:  46.4143 ms (median), mean=46.4457 ± 0.2359 ms (2961.13 GFLOP/s)
+[ 17/20] BM= 32, BN= 64, BK= 8, TM=2, TN=4:  24.6804 ms (median), mean=24.7083 ± 0.1605 ms (5568.74 GFLOP/s)
+[ 18/20] BM= 64, BN= 64, BK=16, TM=4, TN=2:  23.0753 ms (median), mean=23.0598 ± 0.1462 ms (5956.10 GFLOP/s)
+[ 19/20] BM=128, BN= 32, BK=32, TM=1, TN=4:  59.2947 ms (median), mean=59.3638 ± 0.2049 ms (2317.90 GFLOP/s)
+[ 20/20] BM= 64, BN= 32, BK=32, TM=4, TN=1:  27.4478 ms (median), mean=27.4387 ± 0.2063 ms (5007.28 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ SYCL Bayesian Run 5: best = 20.8241 ms
+✓ SYCL Random Run 5:   best = 21.8015 ms
+
+================================================================================
+EXPERIMENT 6: SYCL MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning SYCL MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 150/243
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  64.2350 ms (median), mean=64.3173 ± 0.2710 ms (2139.63 GFLOP/s)
+[  2/20] BM= 32, BN= 32, BK= 8, TM=4, TN=1:  32.9201 ms (median), mean=32.9261 ± 0.1548 ms (4174.93 GFLOP/s)
+[  3/20] BM= 32, BN=128, BK=32, TM=1, TN=4: 116.1339 ms (median), mean=115.4459 ± 1.1303 ms (1183.45 GFLOP/s)
+[  4/20] BM=128, BN= 64, BK=16, TM=2, TN=4:  45.1031 ms (median), mean=45.2409 ± 0.2150 ms (3047.22 GFLOP/s)
+[  5/20] BM= 32, BN= 64, BK= 8, TM=1, TN=2:  56.6446 ms (median), mean=56.7198 ± 0.1720 ms (2426.34 GFLOP/s)
+[  6/20] BM= 64, BN=128, BK=32, TM=4, TN=4:  34.1192 ms (median), mean=34.1078 ± 0.1695 ms (4028.20 GFLOP/s)
+[  7/20] BM= 32, BN= 32, BK=16, TM=2, TN=2:  47.5730 ms (median), mean=47.6112 ± 0.1433 ms (2889.01 GFLOP/s)
+[  8/20] BM= 32, BN= 32, BK= 8, TM=4, TN=1:  32.7700 ms (median), mean=32.7828 ± 0.1873 ms (4194.04 GFLOP/s)
+[  9/20] BM= 64, BN= 32, BK=32, TM=2, TN=1:  47.9058 ms (median), mean=47.8851 ± 0.3313 ms (2868.94 GFLOP/s)
+[ 10/20] BM= 64, BN= 32, BK=32, TM=4, TN=1:  27.4719 ms (median), mean=27.4886 ± 0.1936 ms (5002.90 GFLOP/s)
+[ 11/20] BM= 64, BN= 32, BK=32, TM=4, TN=1:  27.2778 ms (median), mean=27.4414 ± 0.2437 ms (5038.49 GFLOP/s)
+[ 12/20] BM= 64, BN= 32, BK= 8, TM=1, TN=2:  58.5165 ms (median), mean=58.4999 ± 0.1948 ms (2348.72 GFLOP/s)
+[ 13/20] BM=128, BN= 32, BK=16, TM=2, TN=4:  45.9965 ms (median), mean=46.0936 ± 0.2665 ms (2988.03 GFLOP/s)
+[ 14/20] BM= 64, BN= 32, BK=32, TM=4, TN=1:  27.5779 ms (median), mean=27.5715 ± 0.2121 ms (4983.67 GFLOP/s)
+[ 15/20] BM= 64, BN= 64, BK=32, TM=4, TN=1:  26.5011 ms (median), mean=26.6040 ± 0.3025 ms (5186.16 GFLOP/s)
+[ 16/20] BM= 64, BN= 64, BK=32, TM=4, TN=1:  26.6583 ms (median), mean=26.6285 ± 0.2416 ms (5155.58 GFLOP/s)
+[ 17/20] BM= 32, BN= 32, BK=16, TM=2, TN=4:  47.4793 ms (median), mean=47.4506 ± 0.2233 ms (2894.71 GFLOP/s)
+[ 18/20] BM= 32, BN=128, BK= 8, TM=4, TN=4:  35.4499 ms (median), mean=35.4045 ± 0.2038 ms (3877.00 GFLOP/s)
+[ 19/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  24.1828 ms (median), mean=24.1055 ± 0.2853 ms (5683.34 GFLOP/s)
+[ 20/20] BM= 64, BN= 64, BK=32, TM=4, TN=1:  26.6255 ms (median), mean=26.6732 ± 0.2451 ms (5161.92 GFLOP/s)
+
+Best trial: Trial #19
+Best value: 24.1828 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 6: SYCL MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning SYCL MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  64.3430 ms (median), mean=64.4458 ± 0.2217 ms (2136.03 GFLOP/s)
+[  2/20] BM= 32, BN=128, BK=16, TM=4, TN=1:  30.2735 ms (median), mean=30.3090 ± 0.2221 ms (4539.90 GFLOP/s)
+[  3/20] BM= 64, BN= 64, BK= 8, TM=2, TN=2:  42.2938 ms (median), mean=42.3751 ± 0.2342 ms (3249.63 GFLOP/s)
+[  4/20] BM= 64, BN= 64, BK=16, TM=4, TN=1:  27.4033 ms (median), mean=27.4584 ± 0.2501 ms (5015.42 GFLOP/s)
+[  5/20] BM= 64, BN=128, BK=32, TM=2, TN=4:  66.0536 ms (median), mean=66.0146 ± 0.1709 ms (2080.72 GFLOP/s)
+[  6/20] BM= 32, BN= 64, BK= 8, TM=2, TN=1:  52.3827 ms (median), mean=52.4409 ± 0.2126 ms (2623.75 GFLOP/s)
+[  7/20] BM=128, BN= 32, BK=16, TM=4, TN=1:  31.3754 ms (median), mean=31.3645 ± 0.1260 ms (4380.47 GFLOP/s)
+[  8/20] BM= 64, BN= 64, BK=16, TM=4, TN=2:  23.1475 ms (median), mean=23.1226 ± 0.1062 ms (5937.52 GFLOP/s)
+[  9/20] BM= 32, BN= 32, BK=16, TM=1, TN=4:  47.5013 ms (median), mean=47.5226 ± 0.1657 ms (2893.37 GFLOP/s)
+[ 10/20] BM=128, BN= 32, BK=16, TM=4, TN=2:  23.8700 ms (median), mean=23.9013 ± 0.2102 ms (5757.82 GFLOP/s)
+[ 11/20] BM= 64, BN= 32, BK=32, TM=2, TN=2:  45.8911 ms (median), mean=45.9103 ± 0.1493 ms (2994.90 GFLOP/s)
+[ 12/20] BM=128, BN= 32, BK=32, TM=2, TN=4:  45.6438 ms (median), mean=45.7429 ± 0.1764 ms (3011.12 GFLOP/s)
+[ 13/20] BM= 32, BN=128, BK=32, TM=4, TN=1:  31.0369 ms (median), mean=31.0982 ± 0.2009 ms (4428.24 GFLOP/s)
+[ 14/20] BM= 32, BN= 32, BK=16, TM=4, TN=2:  22.1445 ms (median), mean=22.2989 ± 0.2649 ms (6206.46 GFLOP/s)
+[ 15/20] BM=128, BN= 32, BK=16, TM=1, TN=4:  49.1290 ms (median), mean=49.0877 ± 0.2336 ms (2797.51 GFLOP/s)
+[ 16/20] BM= 64, BN= 64, BK=16, TM=4, TN=4:  22.9043 ms (median), mean=22.9464 ± 0.2429 ms (6000.57 GFLOP/s)
+[ 17/20] BM= 32, BN= 32, BK= 8, TM=4, TN=1:  32.7931 ms (median), mean=32.7009 ± 0.1917 ms (4191.10 GFLOP/s)
+[ 18/20] BM= 32, BN=128, BK= 8, TM=2, TN=2:  42.4458 ms (median), mean=42.4478 ± 0.1768 ms (3237.99 GFLOP/s)
+[ 19/20] BM= 64, BN= 32, BK=16, TM=1, TN=2:  71.3144 ms (median), mean=71.4655 ± 0.2474 ms (1927.22 GFLOP/s)
+[ 20/20] BM= 64, BN= 32, BK=32, TM=4, TN=1:  27.4048 ms (median), mean=27.3919 ± 0.1014 ms (5015.14 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ SYCL Bayesian Run 6: best = 24.1828 ms
+✓ SYCL Random Run 6:   best = 22.1445 ms
+
+================================================================================
+EXPERIMENT 7: SYCL MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning SYCL MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 150/243
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  63.9370 ms (median), mean=63.9195 ± 0.1171 ms (2149.60 GFLOP/s)
+[  2/20] BM= 32, BN= 32, BK=16, TM=4, TN=4:  22.8567 ms (median), mean=22.8979 ± 0.2149 ms (6013.07 GFLOP/s)
+[  3/20] BM= 64, BN= 32, BK= 8, TM=2, TN=4:  25.5867 ms (median), mean=25.5802 ± 0.1711 ms (5371.50 GFLOP/s)
+[  4/20] BM= 32, BN= 64, BK=16, TM=2, TN=1:  42.4929 ms (median), mean=42.4993 ± 0.1597 ms (3234.40 GFLOP/s)
+[  5/20] BM= 64, BN= 64, BK= 8, TM=4, TN=2:  23.1050 ms (median), mean=23.1271 ± 0.1675 ms (5948.44 GFLOP/s)
+[  6/20] BM= 64, BN= 64, BK=32, TM=4, TN=2:  20.2143 ms (median), mean=20.2679 ± 0.1829 ms (6799.10 GFLOP/s)
+[  7/20] BM= 64, BN= 32, BK=16, TM=1, TN=4:  46.8946 ms (median), mean=46.9676 ± 0.2457 ms (2930.81 GFLOP/s)
+[  8/20] BM= 64, BN= 64, BK=32, TM=4, TN=2:  20.2552 ms (median), mean=20.2671 ± 0.1326 ms (6785.36 GFLOP/s)
+[  9/20] BM= 64, BN= 64, BK=32, TM=2, TN=2:  44.4544 ms (median), mean=44.5078 ± 0.1711 ms (3091.68 GFLOP/s)
+[ 10/20] BM= 32, BN= 32, BK=32, TM=4, TN=4:  22.2433 ms (median), mean=22.1970 ± 0.1904 ms (6178.88 GFLOP/s)
+[ 11/20] BM= 64, BN= 64, BK= 8, TM=1, TN=4:  44.3566 ms (median), mean=44.3597 ± 0.1382 ms (3098.50 GFLOP/s)
+[ 12/20] BM= 64, BN= 64, BK=32, TM=4, TN=2:  20.3331 ms (median), mean=20.3716 ± 0.1448 ms (6759.39 GFLOP/s)
+[ 13/20] BM= 64, BN= 32, BK=16, TM=4, TN=1:  28.6454 ms (median), mean=28.6092 ± 0.1156 ms (4797.95 GFLOP/s)
+[ 14/20] BM= 32, BN= 64, BK= 8, TM=1, TN=4:  42.9599 ms (median), mean=42.9865 ± 0.1227 ms (3199.24 GFLOP/s)
+[ 15/20] BM= 64, BN= 64, BK=32, TM=2, TN=4:  43.8042 ms (median), mean=43.9009 ± 0.1884 ms (3137.58 GFLOP/s)
+[ 16/20] BM= 64, BN= 64, BK=16, TM=4, TN=2:  22.6028 ms (median), mean=22.6275 ± 0.1910 ms (6080.63 GFLOP/s)
+[ 17/20] BM= 64, BN= 64, BK=32, TM=4, TN=2:  20.2803 ms (median), mean=20.2478 ± 0.1991 ms (6776.96 GFLOP/s)
+[ 18/20] BM=128, BN= 32, BK= 8, TM=4, TN=2:  30.8070 ms (median), mean=30.8194 ± 0.2032 ms (4461.28 GFLOP/s)
+[ 19/20] BM= 64, BN= 32, BK=32, TM=4, TN=1:  27.4540 ms (median), mean=27.4448 ± 0.1284 ms (5006.16 GFLOP/s)
+[ 20/20] BM= 32, BN= 64, BK= 8, TM=1, TN=2:  56.8566 ms (median), mean=56.8749 ± 0.0902 ms (2417.29 GFLOP/s)
+
+Best trial: Trial #6
+Best value: 20.2143 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 7: SYCL MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning SYCL MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  64.3461 ms (median), mean=64.3706 ± 0.1149 ms (2135.93 GFLOP/s)
+[  2/20] BM= 32, BN= 64, BK=32, TM=2, TN=1:  47.5223 ms (median), mean=47.6378 ± 0.3484 ms (2892.09 GFLOP/s)
+[  3/20] BM= 64, BN= 32, BK= 8, TM=2, TN=1:  52.9137 ms (median), mean=52.9471 ± 0.3624 ms (2597.42 GFLOP/s)
+[  4/20] BM= 32, BN= 64, BK=32, TM=1, TN=4:  71.3702 ms (median), mean=71.3952 ± 0.2373 ms (1925.72 GFLOP/s)
+[  5/20] BM= 32, BN= 64, BK=32, TM=2, TN=2:  45.1517 ms (median), mean=45.2434 ± 0.2423 ms (3043.93 GFLOP/s)
+[  6/20] BM= 64, BN= 32, BK=16, TM=4, TN=4:  22.0544 ms (median), mean=22.1116 ± 0.1620 ms (6231.82 GFLOP/s)
+[  7/20] BM= 32, BN= 64, BK=16, TM=1, TN=2:  46.3017 ms (median), mean=46.3103 ± 0.1544 ms (2968.34 GFLOP/s)
+[  8/20] BM= 32, BN= 32, BK=16, TM=2, TN=2:  47.3247 ms (median), mean=47.3270 ± 0.1155 ms (2904.17 GFLOP/s)
+[  9/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  23.7573 ms (median), mean=23.7413 ± 0.1586 ms (5785.12 GFLOP/s)
+[ 10/20] BM= 64, BN= 64, BK= 8, TM=2, TN=2:  42.2420 ms (median), mean=42.2254 ± 0.2048 ms (3253.61 GFLOP/s)
+[ 11/20] BM=128, BN= 64, BK= 8, TM=4, TN=4:  24.3226 ms (median), mean=24.3895 ± 0.1603 ms (5650.68 GFLOP/s)
+[ 12/20] BM= 64, BN= 32, BK= 8, TM=1, TN=2:  58.4888 ms (median), mean=58.4649 ± 0.1989 ms (2349.83 GFLOP/s)
+[ 13/20] BM= 64, BN= 64, BK=32, TM=1, TN=4:  70.7763 ms (median), mean=70.7834 ± 0.1097 ms (1941.88 GFLOP/s)
+[ 14/20] BM= 64, BN=128, BK= 8, TM=2, TN=4:  36.2040 ms (median), mean=36.3269 ± 0.3514 ms (3796.23 GFLOP/s)
+[ 15/20] BM= 64, BN= 64, BK=16, TM=1, TN=4:  65.1095 ms (median), mean=65.1348 ± 0.1596 ms (2110.89 GFLOP/s)
+[ 16/20] BM= 64, BN= 32, BK=32, TM=2, TN=1:  47.7614 ms (median), mean=47.9049 ± 0.3934 ms (2877.62 GFLOP/s)
+[ 17/20] BM= 64, BN= 64, BK= 8, TM=1, TN=4:  44.6029 ms (median), mean=44.5630 ± 0.1528 ms (3081.39 GFLOP/s)
+[ 18/20] BM= 32, BN= 32, BK= 8, TM=2, TN=2:  30.3954 ms (median), mean=30.3885 ± 0.1916 ms (4521.70 GFLOP/s)
+[ 19/20] BM=128, BN= 32, BK=16, TM=4, TN=2:  23.8730 ms (median), mean=23.9430 ± 0.2178 ms (5757.08 GFLOP/s)
+[ 20/20] BM= 64, BN= 32, BK=32, TM=1, TN=2:  59.8595 ms (median), mean=59.9929 ± 0.2870 ms (2296.03 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ SYCL Bayesian Run 7: best = 20.2143 ms
+✓ SYCL Random Run 7:   best = 22.0544 ms
+
+================================================================================
+EXPERIMENT 8: SYCL MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning SYCL MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 150/243
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  64.4137 ms (median), mean=64.4242 ± 0.1659 ms (2133.69 GFLOP/s)
+[  2/20] BM= 32, BN= 32, BK= 8, TM=1, TN=2:  50.3229 ms (median), mean=50.3996 ± 0.1998 ms (2731.14 GFLOP/s)
+[  3/20] BM= 32, BN= 64, BK= 8, TM=2, TN=2:  35.4038 ms (median), mean=35.4057 ± 0.2121 ms (3882.04 GFLOP/s)
+[  4/20] BM= 32, BN= 64, BK= 8, TM=1, TN=2:  56.8371 ms (median), mean=56.7845 ± 0.1648 ms (2418.12 GFLOP/s)
+[  5/20] BM= 64, BN= 64, BK=32, TM=4, TN=4:  22.0836 ms (median), mean=22.1161 ± 0.2065 ms (6223.58 GFLOP/s)
+[  6/20] BM=128, BN= 32, BK= 8, TM=4, TN=2:  30.6324 ms (median), mean=30.6808 ± 0.1853 ms (4486.71 GFLOP/s)
+[  7/20] BM= 32, BN=128, BK= 8, TM=4, TN=1:  37.8245 ms (median), mean=37.8302 ± 0.2321 ms (3633.59 GFLOP/s)
+[  8/20] BM= 64, BN= 64, BK=32, TM=4, TN=4:  22.0319 ms (median), mean=22.1045 ± 0.2169 ms (6238.19 GFLOP/s)
+[  9/20] BM= 64, BN= 64, BK=16, TM=4, TN=4:  22.6586 ms (median), mean=22.7489 ± 0.2399 ms (6065.65 GFLOP/s)
+[ 10/20] BM= 32, BN= 32, BK=32, TM=2, TN=4:  46.2515 ms (median), mean=46.2971 ± 0.2480 ms (2971.56 GFLOP/s)
+[ 11/20] BM=128, BN= 32, BK=32, TM=1, TN=4:  59.4406 ms (median), mean=59.3881 ± 0.2715 ms (2312.21 GFLOP/s)
+[ 12/20] BM= 64, BN= 64, BK=32, TM=4, TN=4:  22.1788 ms (median), mean=22.2074 ± 0.2392 ms (6196.86 GFLOP/s)
+[ 13/20] BM= 64, BN= 32, BK=16, TM=1, TN=4:  47.0364 ms (median), mean=47.0378 ± 0.2315 ms (2921.97 GFLOP/s)
+[ 14/20] BM=128, BN= 32, BK=16, TM=2, TN=2:  48.5970 ms (median), mean=48.5887 ± 0.2561 ms (2828.14 GFLOP/s)
+[ 15/20] BM= 64, BN=128, BK=32, TM=4, TN=2:  21.5603 ms (median), mean=21.6433 ± 0.2467 ms (6374.62 GFLOP/s)
+[ 16/20] BM= 64, BN= 32, BK=16, TM=4, TN=2:  21.5475 ms (median), mean=21.5321 ± 0.1785 ms (6378.41 GFLOP/s)
+[ 17/20] BM= 64, BN=128, BK=32, TM=4, TN=2:  20.9080 ms (median), mean=20.8489 ± 0.1418 ms (6573.50 GFLOP/s)
+[ 18/20] BM= 64, BN= 64, BK= 8, TM=4, TN=1:  36.2465 ms (median), mean=36.2837 ± 0.1427 ms (3791.78 GFLOP/s)
+[ 19/20] BM= 32, BN= 32, BK=16, TM=4, TN=4:  22.8808 ms (median), mean=22.9010 ± 0.1902 ms (6006.75 GFLOP/s)
+[ 20/20] BM= 64, BN= 32, BK=16, TM=4, TN=2:  21.3422 ms (median), mean=21.3193 ± 0.2614 ms (6439.77 GFLOP/s)
+
+Best trial: Trial #17
+Best value: 20.9080 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 8: SYCL MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning SYCL MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  63.8899 ms (median), mean=63.9297 ± 0.1791 ms (2151.18 GFLOP/s)
+[  2/20] BM= 64, BN= 32, BK=16, TM=4, TN=2:  21.2260 ms (median), mean=21.2293 ± 0.1239 ms (6475.03 GFLOP/s)
+[  3/20] BM= 32, BN= 32, BK=16, TM=1, TN=4:  47.2223 ms (median), mean=47.1984 ± 0.0949 ms (2910.47 GFLOP/s)
+[  4/20] BM= 64, BN= 32, BK=32, TM=2, TN=1:  47.0554 ms (median), mean=47.0973 ± 0.1207 ms (2920.79 GFLOP/s)
+[  5/20] BM=128, BN=128, BK=16, TM=4, TN=4:  37.0755 ms (median), mean=37.0440 ± 0.1368 ms (3707.01 GFLOP/s)
+[  6/20] BM= 32, BN=128, BK=16, TM=2, TN=2:  47.2044 ms (median), mean=47.2154 ± 0.1603 ms (2911.57 GFLOP/s)
+[  7/20] BM= 64, BN= 64, BK=32, TM=2, TN=2:  44.6858 ms (median), mean=44.9282 ± 0.5573 ms (3075.67 GFLOP/s)
+[  8/20] BM=128, BN= 32, BK=32, TM=4, TN=2:  20.5312 ms (median), mean=20.5978 ± 0.1709 ms (6694.15 GFLOP/s)
+[  9/20] BM= 32, BN= 32, BK=16, TM=2, TN=4:  47.0610 ms (median), mean=47.0083 ± 0.1652 ms (2920.44 GFLOP/s)
+[ 10/20] BM=128, BN= 64, BK=16, TM=4, TN=4:  22.3995 ms (median), mean=22.2416 ± 0.2077 ms (6135.81 GFLOP/s)
+[ 11/20] BM= 32, BN= 64, BK= 8, TM=4, TN=4:  23.5715 ms (median), mean=23.7337 ± 0.3659 ms (5830.74 GFLOP/s)
+[ 12/20] BM= 64, BN= 32, BK= 8, TM=2, TN=2:  40.5181 ms (median), mean=40.5319 ± 0.1126 ms (3392.03 GFLOP/s)
+[ 13/20] BM=128, BN= 32, BK= 8, TM=1, TN=4:  42.7310 ms (median), mean=42.7257 ± 0.1391 ms (3216.38 GFLOP/s)
+[ 14/20] BM= 32, BN= 32, BK= 8, TM=4, TN=4:  24.3174 ms (median), mean=24.3114 ± 0.1167 ms (5651.87 GFLOP/s)
+[ 15/20] BM= 32, BN= 32, BK=32, TM=1, TN=4:  59.0781 ms (median), mean=59.0829 ± 0.1310 ms (2326.39 GFLOP/s)
+[ 16/20] BM= 32, BN= 32, BK=32, TM=1, TN=2:  59.8528 ms (median), mean=59.9377 ± 0.1518 ms (2296.28 GFLOP/s)
+[ 17/20] BM= 32, BN=128, BK= 8, TM=2, TN=4:  24.9385 ms (median), mean=24.9504 ± 0.1452 ms (5511.12 GFLOP/s)
+[ 18/20] BM= 64, BN= 64, BK=16, TM=1, TN=4:  64.4234 ms (median), mean=64.4621 ± 0.1232 ms (2133.37 GFLOP/s)
+[ 19/20] BM= 32, BN= 64, BK= 8, TM=4, TN=1:  34.5800 ms (median), mean=34.5807 ± 0.1115 ms (3974.53 GFLOP/s)
+[ 20/20] BM= 32, BN=128, BK=16, TM=2, TN=4:  63.6605 ms (median), mean=63.7006 ± 0.2139 ms (2158.93 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ SYCL Bayesian Run 8: best = 20.9080 ms
+✓ SYCL Random Run 8:   best = 20.5312 ms
+
+================================================================================
+EXPERIMENT 9: SYCL MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning SYCL MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 150/243
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  64.0845 ms (median), mean=64.0538 ± 0.1174 ms (2144.65 GFLOP/s)
+[  2/20] BM=128, BN=128, BK=32, TM=4, TN=4:  35.9685 ms (median), mean=35.9650 ± 0.1161 ms (3821.09 GFLOP/s)
+[  3/20] BM= 32, BN= 32, BK= 8, TM=4, TN=4:  24.1480 ms (median), mean=24.0821 ± 0.2406 ms (5691.53 GFLOP/s)
+[  4/20] BM= 64, BN= 32, BK= 8, TM=1, TN=2:  57.7137 ms (median), mean=57.7904 ± 0.1646 ms (2381.39 GFLOP/s)
+[  5/20] BM= 32, BN= 32, BK=16, TM=1, TN=4:  47.0687 ms (median), mean=47.0614 ± 0.1065 ms (2919.97 GFLOP/s)
+[  6/20] BM= 64, BN= 64, BK= 8, TM=4, TN=1:  36.4723 ms (median), mean=36.3935 ± 0.1211 ms (3768.31 GFLOP/s)
+[  7/20] BM= 32, BN= 64, BK=32, TM=1, TN=2:  71.7676 ms (median), mean=71.7971 ± 0.1679 ms (1915.06 GFLOP/s)
+[  8/20] BM=128, BN= 32, BK= 8, TM=1, TN=4:  42.3808 ms (median), mean=42.4148 ± 0.1490 ms (3242.95 GFLOP/s)
+[  9/20] BM= 64, BN= 32, BK=32, TM=4, TN=4:  20.9290 ms (median), mean=20.8810 ± 0.2224 ms (6566.91 GFLOP/s)
+[ 10/20] BM= 32, BN= 64, BK= 8, TM=2, TN=4:  23.8520 ms (median), mean=23.8503 ± 0.1325 ms (5762.15 GFLOP/s)
+[ 11/20] BM= 64, BN= 64, BK=32, TM=4, TN=4:  21.8511 ms (median), mean=21.8472 ± 0.1369 ms (6289.79 GFLOP/s)
+[ 12/20] BM= 64, BN= 64, BK=32, TM=4, TN=4:  21.7252 ms (median), mean=21.7565 ± 0.1717 ms (6326.25 GFLOP/s)
+[ 13/20] BM= 32, BN=128, BK=16, TM=4, TN=4:  34.5027 ms (median), mean=34.5102 ± 0.1655 ms (3983.43 GFLOP/s)
+[ 14/20] BM= 32, BN= 64, BK=32, TM=4, TN=1:  26.9624 ms (median), mean=26.9593 ± 0.1563 ms (5097.42 GFLOP/s)
+[ 15/20] BM= 64, BN= 64, BK=32, TM=4, TN=4:  21.6054 ms (median), mean=21.6799 ± 0.2809 ms (6361.33 GFLOP/s)
+[ 16/20] BM= 64, BN= 32, BK=32, TM=2, TN=1:  47.0533 ms (median), mean=47.0794 ± 0.1097 ms (2920.92 GFLOP/s)
+[ 17/20] BM= 64, BN= 32, BK=32, TM=4, TN=4:  21.2506 ms (median), mean=21.2164 ± 0.1281 ms (6467.55 GFLOP/s)
+[ 18/20] BM= 32, BN=128, BK=16, TM=2, TN=2:  47.1485 ms (median), mean=47.0956 ± 0.1392 ms (2915.02 GFLOP/s)
+[ 19/20] BM= 64, BN= 32, BK=32, TM=4, TN=4:  20.8963 ms (median), mean=20.9043 ± 0.1380 ms (6577.20 GFLOP/s)
+[ 20/20] BM= 32, BN= 32, BK=32, TM=4, TN=1:  27.1949 ms (median), mean=27.2612 ± 0.1788 ms (5053.85 GFLOP/s)
+
+Best trial: Trial #19
+Best value: 20.8963 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 9: SYCL MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning SYCL MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  63.7332 ms (median), mean=63.7355 ± 0.1430 ms (2156.47 GFLOP/s)
+[  2/20] BM=128, BN=128, BK=16, TM=4, TN=4:  37.8194 ms (median), mean=37.8204 ± 0.2002 ms (3634.09 GFLOP/s)
+[  3/20] BM= 64, BN= 32, BK=32, TM=4, TN=2:  21.2803 ms (median), mean=21.3436 ± 0.2491 ms (6458.52 GFLOP/s)
+[  4/20] BM= 32, BN= 32, BK=16, TM=2, TN=1:  37.2260 ms (median), mean=37.1519 ± 0.2020 ms (3692.02 GFLOP/s)
+[  5/20] BM= 64, BN= 32, BK=16, TM=4, TN=1:  29.0611 ms (median), mean=28.9696 ± 0.2093 ms (4729.31 GFLOP/s)
+[  6/20] BM= 32, BN= 32, BK=32, TM=1, TN=4:  59.7391 ms (median), mean=59.6330 ± 0.2457 ms (2300.65 GFLOP/s)
+[  7/20] BM= 64, BN= 32, BK=32, TM=4, TN=1:  27.4053 ms (median), mean=27.4340 ± 0.1841 ms (5015.05 GFLOP/s)
+[  8/20] BM=128, BN= 64, BK=32, TM=2, TN=4:  46.2479 ms (median), mean=46.3421 ± 0.1679 ms (2971.79 GFLOP/s)
+[  9/20] BM= 64, BN= 64, BK=32, TM=4, TN=4:  22.1957 ms (median), mean=22.2185 ± 0.3318 ms (6192.14 GFLOP/s)
+[ 10/20] BM= 32, BN= 64, BK= 8, TM=2, TN=1:  52.6464 ms (median), mean=52.6481 ± 0.1612 ms (2610.60 GFLOP/s)
+[ 11/20] BM= 32, BN=128, BK=16, TM=1, TN=4: 117.8327 ms (median), mean=117.4638 ± 0.9353 ms (1166.39 GFLOP/s)
+[ 12/20] BM= 32, BN= 64, BK=32, TM=1, TN=4:  71.0098 ms (median), mean=71.0763 ± 0.1745 ms (1935.49 GFLOP/s)
+[ 13/20] BM= 32, BN= 32, BK=16, TM=4, TN=1:  28.6730 ms (median), mean=28.6785 ± 0.1602 ms (4793.32 GFLOP/s)
+[ 14/20] BM= 32, BN= 64, BK= 8, TM=1, TN=2:  56.8812 ms (median), mean=56.8713 ± 0.2553 ms (2416.25 GFLOP/s)
+[ 15/20] BM= 32, BN= 32, BK=32, TM=1, TN=2:  60.0079 ms (median), mean=60.1781 ± 0.3528 ms (2290.35 GFLOP/s)
+[ 16/20] BM= 32, BN=128, BK= 8, TM=2, TN=4:  25.8555 ms (median), mean=25.7053 ± 0.2618 ms (5315.66 GFLOP/s)
+[ 17/20] BM=128, BN= 32, BK=32, TM=4, TN=1:  28.1912 ms (median), mean=28.2288 ± 0.2764 ms (4875.24 GFLOP/s)
+[ 18/20] BM= 64, BN=128, BK=32, TM=4, TN=4:  33.8381 ms (median), mean=33.8857 ± 0.2310 ms (4061.67 GFLOP/s)
+[ 19/20] BM= 32, BN= 32, BK= 8, TM=1, TN=4:  40.1311 ms (median), mean=40.1582 ± 0.1783 ms (3424.75 GFLOP/s)
+[ 20/20] BM= 32, BN=128, BK=16, TM=4, TN=4:  35.1969 ms (median), mean=35.1352 ± 0.3502 ms (3904.86 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ SYCL Bayesian Run 9: best = 20.8963 ms
+✓ SYCL Random Run 9:   best = 21.2803 ms
+
+================================================================================
+EXPERIMENT 10: SYCL MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning SYCL MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 150/243
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  64.4106 ms (median), mean=64.4139 ± 0.1040 ms (2133.79 GFLOP/s)
+[  2/20] BM= 32, BN= 32, BK= 8, TM=1, TN=2:  50.4812 ms (median), mean=50.5490 ± 0.2455 ms (2722.58 GFLOP/s)
+[  3/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  64.5873 ms (median), mean=64.5284 ± 0.1291 ms (2127.96 GFLOP/s)
+[  4/20] BM= 32, BN= 32, BK= 8, TM=1, TN=1:  90.7315 ms (median), mean=90.7741 ± 0.2297 ms (1514.79 GFLOP/s)
+[  5/20] BM= 32, BN=128, BK= 8, TM=4, TN=2:  31.3544 ms (median), mean=31.3098 ± 0.1603 ms (4383.41 GFLOP/s)
+[  6/20] BM= 32, BN= 32, BK=32, TM=2, TN=2:  46.1619 ms (median), mean=46.2253 ± 0.1742 ms (2977.32 GFLOP/s)
+[  7/20] BM= 32, BN=128, BK= 8, TM=4, TN=2:  31.1680 ms (median), mean=31.1574 ± 0.1641 ms (4409.62 GFLOP/s)
+[  8/20] BM= 32, BN= 64, BK=16, TM=4, TN=4:  22.4154 ms (median), mean=22.4279 ± 0.1533 ms (6131.46 GFLOP/s)
+[  9/20] BM= 32, BN= 64, BK=16, TM=2, TN=1:  42.3905 ms (median), mean=42.4212 ± 0.0859 ms (3242.21 GFLOP/s)
+[ 10/20] BM=128, BN=128, BK=16, TM=4, TN=4:  37.1666 ms (median), mean=37.1619 ± 0.1917 ms (3697.92 GFLOP/s)
+[ 11/20] BM= 32, BN= 64, BK= 8, TM=1, TN=2:  56.2243 ms (median), mean=56.2939 ± 0.1163 ms (2444.48 GFLOP/s)
+[ 12/20] BM= 64, BN= 32, BK= 8, TM=2, TN=4:  25.6323 ms (median), mean=25.6071 ± 0.1476 ms (5361.95 GFLOP/s)
+[ 13/20] BM= 32, BN= 32, BK= 8, TM=4, TN=4:  24.0497 ms (median), mean=24.0375 ± 0.1442 ms (5714.80 GFLOP/s)
+[ 14/20] BM= 64, BN= 32, BK=32, TM=4, TN=4:  20.9597 ms (median), mean=20.9977 ± 0.1422 ms (6557.28 GFLOP/s)
+[ 15/20] BM= 64, BN= 32, BK=32, TM=4, TN=4:  21.1676 ms (median), mean=21.1628 ± 0.1137 ms (6492.89 GFLOP/s)
+[ 16/20] BM= 32, BN= 64, BK=16, TM=4, TN=2:  20.8881 ms (median), mean=20.8485 ± 0.1157 ms (6579.78 GFLOP/s)
+[ 17/20] BM=128, BN= 32, BK=32, TM=1, TN=4:  58.7443 ms (median), mean=58.7560 ± 0.0972 ms (2339.61 GFLOP/s)
+[ 18/20] BM= 32, BN=128, BK=16, TM=1, TN=4: 117.4825 ms (median), mean=117.1498 ± 0.9206 ms (1169.87 GFLOP/s)
+[ 19/20] BM= 32, BN= 64, BK=16, TM=4, TN=2:  21.2209 ms (median), mean=21.2356 ± 0.1397 ms (6476.60 GFLOP/s)
+[ 20/20] BM= 64, BN= 32, BK=16, TM=2, TN=1:  44.0274 ms (median), mean=44.0788 ± 0.1489 ms (3121.67 GFLOP/s)
+
+Best trial: Trial #16
+Best value: 20.8881 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 10: SYCL MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning SYCL MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=1:  64.2770 ms (median), mean=64.3737 ± 0.2037 ms (2138.23 GFLOP/s)
+[  2/20] BM= 64, BN= 32, BK=32, TM=2, TN=4:  45.7057 ms (median), mean=45.6948 ± 0.2490 ms (3007.04 GFLOP/s)
+[  3/20] BM= 64, BN= 32, BK=32, TM=1, TN=4:  58.8140 ms (median), mean=58.8699 ± 0.2069 ms (2336.84 GFLOP/s)
+[  4/20] BM= 32, BN= 32, BK= 8, TM=4, TN=4:  24.4956 ms (median), mean=24.5559 ± 0.2074 ms (5610.76 GFLOP/s)
+[  5/20] BM=128, BN= 64, BK= 8, TM=4, TN=2:  34.0393 ms (median), mean=34.2185 ± 0.2667 ms (4037.66 GFLOP/s)
+[  6/20] BM= 32, BN= 64, BK=16, TM=2, TN=2:  46.0805 ms (median), mean=46.0704 ± 0.1773 ms (2982.58 GFLOP/s)
+[  7/20] BM= 64, BN=128, BK= 8, TM=2, TN=4:  36.0013 ms (median), mean=36.0199 ± 0.2408 ms (3817.61 GFLOP/s)
+[  8/20] BM= 64, BN=128, BK=32, TM=4, TN=4:  33.9517 ms (median), mean=33.9206 ± 0.1580 ms (4048.07 GFLOP/s)
+[  9/20] BM= 32, BN= 64, BK=32, TM=2, TN=1:  47.6636 ms (median), mean=47.7546 ± 0.2141 ms (2883.52 GFLOP/s)
+[ 10/20] BM= 64, BN=128, BK=32, TM=2, TN=4:  65.9912 ms (median), mean=65.9976 ± 0.1616 ms (2082.69 GFLOP/s)
+[ 11/20] BM= 64, BN= 64, BK= 8, TM=1, TN=4:  44.4785 ms (median), mean=44.5255 ± 0.1122 ms (3090.01 GFLOP/s)
+[ 12/20] BM=128, BN= 32, BK=16, TM=2, TN=4:  45.8854 ms (median), mean=46.0364 ± 0.2216 ms (2995.26 GFLOP/s)
+[ 13/20] BM= 64, BN= 64, BK=32, TM=4, TN=4:  22.1486 ms (median), mean=22.1636 ± 0.1521 ms (6205.31 GFLOP/s)
+[ 14/20] BM= 32, BN= 32, BK=32, TM=1, TN=2:  60.3336 ms (median), mean=60.4300 ± 0.3080 ms (2277.98 GFLOP/s)
+[ 15/20] BM= 32, BN= 32, BK=16, TM=4, TN=2:  22.2991 ms (median), mean=22.3218 ± 0.2087 ms (6163.42 GFLOP/s)
+[ 16/20] BM= 32, BN= 64, BK=32, TM=2, TN=4:  44.8988 ms (median), mean=44.9782 ± 0.2085 ms (3061.08 GFLOP/s)
+[ 17/20] BM=128, BN= 64, BK= 8, TM=4, TN=4:  24.2924 ms (median), mean=24.3279 ± 0.1436 ms (5657.70 GFLOP/s)
+[ 18/20] BM= 32, BN= 32, BK=32, TM=1, TN=4:  59.5732 ms (median), mean=59.5292 ± 0.2040 ms (2307.06 GFLOP/s)
+[ 19/20] BM= 32, BN=128, BK= 8, TM=2, TN=4:  25.5222 ms (median), mean=25.5475 ± 0.1314 ms (5385.08 GFLOP/s)
+[ 20/20] BM= 32, BN=128, BK= 8, TM=1, TN=4:  45.0273 ms (median), mean=45.0079 ± 0.1916 ms (3052.35 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ SYCL Bayesian Run 10: best = 20.8881 ms
+✓ SYCL Random Run 10:   best = 22.1486 ms
+
+Saved SYCL convergence data to: /home/latorresn/hpc-gemm/results_20260522_152743/matmul/size_4096/convergence_sycl.json
+Legacy convergence data also saved to: /home/latorresn/hpc-gemm/results_20260522_152743/matmul/size_4096/convergence.json
+
+================================================================================
+Running SYCL statistical analysis...
+================================================================================
+
+================================================================================
+STATISTICAL COMPARISON: SYCL MATMUL: BAYESIAN vs RANDOM SEARCH
+================================================================================
+
+Sample Sizes:
+  Bayesian: 10 runs
+  Random:   10 runs
+
+Descriptive Statistics (Best Time Found):
+
+  BAYESIAN:
+    Mean:   21.3495 ms
+    Median: 20.9021 ms
+    Std:    1.1184 ms
+    Range:  [20.2143, 24.1828] ms
+    IQR:    [20.8401, 21.2855] ms
+
+  RANDOM:
+    Mean:   21.3155 ms
+    Median: 21.3391 ms
+    Std:    0.7089 ms
+    Range:  [20.1969, 22.1486] ms
+    IQR:    [20.7177, 21.9912] ms
+
+Effect Size (Cohen's d): 0.034
+  → Negligible effect size
+
+Welch's t-test:
+  t-statistic: 0.0771
+  p-value:     0.9395
+  Mean diff:   0.0340 ms (95% CI: ±0.8207)
+  Result:      Not significant
+
+Mann-Whitney U test (non-parametric):
+  U-statistic: 43.0000
+  p-value:     0.6232
+  Result:      Not significant
+
+WINNER: Random
+================================================================================
+
+SYCL statistical results saved to: /home/latorresn/hpc-gemm/results_20260522_152743/matmul/size_4096/statistical_results_sycl.json
+Legacy statistical results also saved to: /home/latorresn/hpc-gemm/results_20260522_152743/matmul/size_4096/statistical_results.json
+
+================================================================================
+STATISTICAL ANALYSIS: CUDA MATMUL BAYESIAN vs RANDOM SEARCH
+Problem size: 4096x4096x4096
+Independent runs: 10
+Trials per run: 20
+Benchmark repeats per config: 10
+Warmup runs per config: 5
+================================================================================
+
+Benchmarking default config baseline: BM=32 BN=32 BK=32 TM=1 TN=1
+✓ Default baseline: 47.9802 ms (2864.49 GFLOP/s)
+
+================================================================================
+EXPERIMENT 1: CUDA MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning CUDA MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 93/243
+
+[  1/20] BM= 64, BN= 32, BK= 8, TM=2, TN=2:  27.5695 ms (median), mean=27.0066 ± 0.8885 ms (4985.18 GFLOP/s)
+[  2/20] BM= 64, BN= 32, BK= 8, TM=4, TN=4:  19.1245 ms (median), mean=18.2698 ± 1.2720 ms (7186.55 GFLOP/s)
+[  3/20] BM= 32, BN= 64, BK= 8, TM=1, TN=4:  36.7757 ms (median), mean=36.7754 ± 0.0030 ms (3737.22 GFLOP/s)
+[  4/20] BM= 32, BN= 32, BK= 8, TM=4, TN=4:  20.1782 ms (median), mean=19.6391 ± 0.8048 ms (6811.27 GFLOP/s)
+[  5/20] BM= 64, BN=128, BK=16, TM=4, TN=4:  21.0057 ms (median), mean=21.0077 ± 0.0080 ms (6542.94 GFLOP/s)
+[  6/20] BM= 32, BN= 32, BK=16, TM=4, TN=1:  25.2464 ms (median), mean=25.2002 ± 0.1043 ms (5443.91 GFLOP/s)
+[  7/20] BM= 64, BN= 32, BK= 8, TM=4, TN=4:  19.1243 ms (median), mean=18.6165 ± 0.7579 ms (7186.62 GFLOP/s)
+[  8/20] BM=128, BN= 64, BK= 8, TM=4, TN=4:  18.4033 ms (median), mean=18.4045 ± 0.0056 ms (7468.17 GFLOP/s)
+[  9/20] BM= 64, BN= 32, BK=32, TM=4, TN=2:  35.7385 ms (median), mean=35.2557 ± 1.0769 ms (3845.68 GFLOP/s)
+[ 10/20] BM= 32, BN= 32, BK=16, TM=4, TN=4:  18.1354 ms (median), mean=17.6517 ± 0.7240 ms (7578.51 GFLOP/s)
+[ 11/20] BM= 32, BN= 32, BK=16, TM=4, TN=4:  18.1312 ms (median), mean=17.8119 ± 0.4798 ms (7580.25 GFLOP/s)
+[ 12/20] BM= 64, BN= 32, BK=16, TM=4, TN=4:  17.4788 ms (median), mean=17.4781 ± 0.0043 ms (7863.19 GFLOP/s)
+[ 13/20] BM= 64, BN= 32, BK=16, TM=4, TN=4:  17.4786 ms (median), mean=16.8256 ± 0.9721 ms (7863.28 GFLOP/s)
+[ 14/20] BM= 32, BN= 32, BK=32, TM=1, TN=4:  42.9848 ms (median), mean=42.6004 ± 0.8539 ms (3197.39 GFLOP/s)
+[ 15/20] BM= 64, BN= 32, BK=16, TM=4, TN=4:  17.4824 ms (median), mean=17.4832 ± 0.0086 ms (7861.55 GFLOP/s)
+[ 16/20] BM= 64, BN= 32, BK=32, TM=1, TN=4:  42.4573 ms (median), mean=42.0820 ± 0.8365 ms (3237.11 GFLOP/s)
+[ 17/20] BM= 64, BN= 32, BK=16, TM=4, TN=4:  17.4808 ms (median), mean=16.8281 ± 0.9765 ms (7862.27 GFLOP/s)
+[ 18/20] BM= 32, BN=128, BK= 8, TM=2, TN=4:  22.0936 ms (median), mean=21.2117 ± 1.3129 ms (6220.75 GFLOP/s)
+[ 19/20] BM= 32, BN= 32, BK=32, TM=1, TN=2:  37.2404 ms (median), mean=37.2403 ± 0.0016 ms (3690.58 GFLOP/s)
+[ 20/20] BM= 64, BN= 32, BK=16, TM=4, TN=4:  17.4770 ms (median), mean=17.1750 ± 0.4574 ms (7864.00 GFLOP/s)
+
+Best trial: Trial #20
+Best value: 17.4770 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 1: CUDA MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning CUDA MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 32, BN=128, BK=32, TM=4, TN=2:  19.5258 ms (median), mean=18.8135 ± 1.0624 ms (7038.83 GFLOP/s)
+[  2/20] BM= 64, BN= 32, BK= 8, TM=2, TN=4:  22.7418 ms (median), mean=22.7437 ± 0.0044 ms (6043.46 GFLOP/s)
+[  3/20] BM= 32, BN= 32, BK= 8, TM=4, TN=1:  28.1254 ms (median), mean=26.9000 ± 1.8232 ms (4886.64 GFLOP/s)
+[  4/20] BM= 32, BN= 64, BK=16, TM=4, TN=1:  24.1084 ms (median), mean=23.2042 ± 1.3446 ms (5700.89 GFLOP/s)
+[  5/20] BM= 64, BN= 32, BK=32, TM=2, TN=4:  22.7235 ms (median), mean=22.3227 ± 0.5979 ms (6048.31 GFLOP/s)
+[  6/20] BM= 64, BN= 32, BK=16, TM=4, TN=4:  17.4848 ms (median), mean=17.4819 ± 0.0044 ms (7860.47 GFLOP/s)
+[  7/20] BM= 64, BN= 32, BK= 8, TM=1, TN=4:  37.6496 ms (median), mean=36.2894 ± 2.0385 ms (3650.48 GFLOP/s)
+[  8/20] BM= 32, BN= 64, BK=32, TM=2, TN=4:  20.3252 ms (median), mean=20.3253 ± 0.0040 ms (6762.01 GFLOP/s)
+[  9/20] BM= 64, BN= 32, BK=16, TM=4, TN=2:  17.8610 ms (median), mean=17.0575 ± 1.1988 ms (7694.92 GFLOP/s)
+[ 10/20] BM= 32, BN=128, BK=16, TM=2, TN=4:  22.3144 ms (median), mean=22.3149 ± 0.0032 ms (6159.21 GFLOP/s)
+[ 11/20] BM= 64, BN= 64, BK=16, TM=4, TN=4:  15.9478 ms (median), mean=15.5214 ± 0.6393 ms (8618.05 GFLOP/s)
+[ 12/20] BM= 32, BN= 64, BK= 8, TM=4, TN=1:  28.7073 ms (median), mean=28.4678 ± 0.5385 ms (4787.59 GFLOP/s)
+[ 13/20] BM= 64, BN= 32, BK=32, TM=2, TN=2:  23.4390 ms (median), mean=23.3850 ± 0.1010 ms (5863.68 GFLOP/s)
+[ 14/20] BM= 32, BN= 32, BK=32, TM=1, TN=4:  42.9831 ms (median), mean=42.6012 ± 0.8525 ms (3197.51 GFLOP/s)
+[ 15/20] BM= 32, BN= 64, BK=32, TM=1, TN=4:  36.0141 ms (median), mean=35.9438 ± 0.1540 ms (3816.25 GFLOP/s)
+[ 16/20] BM= 32, BN= 32, BK=16, TM=2, TN=4:  24.4969 ms (median), mean=23.3872 ± 1.6509 ms (5610.45 GFLOP/s)
+[ 17/20] BM= 64, BN=128, BK=16, TM=4, TN=4:  21.0129 ms (median), mean=21.0122 ± 0.0045 ms (6540.70 GFLOP/s)
+[ 18/20] BM= 32, BN= 64, BK=16, TM=2, TN=4:  20.5046 ms (median), mean=20.4278 ± 0.1178 ms (6702.82 GFLOP/s)
+[ 19/20] BM= 64, BN= 32, BK=32, TM=4, TN=4:  16.8511 ms (median), mean=16.1006 ± 1.1153 ms (8156.10 GFLOP/s)
+[ 20/20] BM=128, BN= 64, BK= 8, TM=4, TN=4:  18.4036 ms (median), mean=18.4046 ± 0.0056 ms (7468.03 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ CUDA Bayesian Run 1: best = 17.4770 ms
+✓ CUDA Random Run 1:   best = 15.9478 ms
+
+================================================================================
+EXPERIMENT 2: CUDA MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning CUDA MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 93/243
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=4, TN=1:  37.6102 ms (median), mean=36.6377 ± 1.4513 ms (3654.30 GFLOP/s)
+[  2/20] BM= 32, BN=128, BK= 8, TM=2, TN=4:  22.0932 ms (median), mean=22.0926 ± 0.0018 ms (6220.87 GFLOP/s)
+[  3/20] BM= 32, BN= 32, BK=32, TM=2, TN=2:  23.8508 ms (median), mean=23.7965 ± 0.1018 ms (5762.45 GFLOP/s)
+[  4/20] BM= 32, BN= 32, BK=32, TM=2, TN=4:  23.3791 ms (median), mean=23.3247 ± 0.0996 ms (5878.72 GFLOP/s)
+[  5/20] BM=128, BN= 32, BK=16, TM=4, TN=2:  20.1147 ms (median), mean=19.2700 ± 1.2594 ms (6832.77 GFLOP/s)
+[  6/20] BM=128, BN= 64, BK=16, TM=4, TN=4:  21.1142 ms (median), mean=21.1141 ± 0.0047 ms (6509.31 GFLOP/s)
+[  7/20] BM=128, BN= 32, BK=16, TM=4, TN=2:  20.1212 ms (median), mean=19.2729 ± 1.2616 ms (6830.55 GFLOP/s)
+[  8/20] BM=128, BN= 32, BK=16, TM=4, TN=2:  20.1187 ms (median), mean=20.1191 ± 0.0041 ms (6831.40 GFLOP/s)
+[  9/20] BM= 64, BN= 32, BK=32, TM=1, TN=4:  42.4560 ms (median), mean=41.6024 ± 1.9069 ms (3237.21 GFLOP/s)
+[ 10/20] BM= 32, BN=128, BK= 8, TM=4, TN=2:  21.3430 ms (median), mean=20.4131 ± 1.3850 ms (6439.54 GFLOP/s)
+[ 11/20] BM= 32, BN= 32, BK=32, TM=1, TN=4:  42.9853 ms (median), mean=42.9854 ± 0.0021 ms (3197.34 GFLOP/s)
+[ 12/20] BM=128, BN= 32, BK=16, TM=4, TN=2:  20.1174 ms (median), mean=19.5581 ± 0.8313 ms (6831.83 GFLOP/s)
+[ 13/20] BM= 32, BN= 32, BK=16, TM=2, TN=2:  24.7332 ms (median), mean=24.6871 ± 0.1052 ms (5556.87 GFLOP/s)
+[ 14/20] BM=128, BN= 32, BK=16, TM=4, TN=2:  20.1170 ms (median), mean=19.3270 ± 1.1759 ms (6831.97 GFLOP/s)
+[ 15/20] BM= 32, BN= 32, BK= 8, TM=1, TN=4:  37.0021 ms (median), mean=37.0022 ± 0.0029 ms (3714.35 GFLOP/s)
+[ 16/20] BM=128, BN= 64, BK=32, TM=4, TN=4:  19.5552 ms (median), mean=19.2333 ± 0.4827 ms (7028.26 GFLOP/s)
+[ 17/20] BM= 32, BN= 64, BK= 8, TM=2, TN=4:  21.5160 ms (median), mean=21.5163 ± 0.0039 ms (6387.75 GFLOP/s)
+[ 18/20] BM=128, BN= 64, BK=32, TM=4, TN=4:  19.5614 ms (median), mean=19.5628 ± 0.0050 ms (7026.02 GFLOP/s)
+[ 19/20] BM= 32, BN= 64, BK=16, TM=4, TN=4:  15.5308 ms (median), mean=14.9458 ± 0.8702 ms (8849.46 GFLOP/s)
+[ 20/20] BM= 32, BN= 64, BK=16, TM=4, TN=4:  15.5322 ms (median), mean=14.9494 ± 0.8675 ms (8848.62 GFLOP/s)
+
+Best trial: Trial #19
+Best value: 15.5308 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 2: CUDA MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning CUDA MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 64, BN= 32, BK= 8, TM=4, TN=1:  29.5571 ms (median), mean=28.7334 ± 1.2857 ms (4649.95 GFLOP/s)
+[  2/20] BM=128, BN= 32, BK=16, TM=4, TN=2:  20.1209 ms (median), mean=19.7615 ± 0.5362 ms (6830.65 GFLOP/s)
+[  3/20] BM= 32, BN= 32, BK=16, TM=2, TN=4:  24.4949 ms (median), mean=24.4948 ± 0.0031 ms (5610.93 GFLOP/s)
+[  4/20] BM= 32, BN=128, BK=32, TM=4, TN=4:  16.5927 ms (median), mean=16.2962 ± 0.4467 ms (8283.10 GFLOP/s)
+[  5/20] BM= 32, BN=128, BK=16, TM=2, TN=4:  22.3112 ms (median), mean=21.5215 ± 1.1765 ms (6160.10 GFLOP/s)
+[  6/20] BM= 32, BN= 32, BK=16, TM=1, TN=2:  39.2719 ms (median), mean=39.2729 ± 0.0037 ms (3499.67 GFLOP/s)
+[  7/20] BM= 64, BN= 32, BK=16, TM=2, TN=4:  23.6531 ms (median), mean=23.6526 ± 0.0042 ms (5810.62 GFLOP/s)
+[  8/20] BM= 32, BN= 32, BK=32, TM=4, TN=1:  37.6128 ms (median), mean=37.6138 ± 0.0024 ms (3654.05 GFLOP/s)
+[  9/20] BM= 64, BN= 32, BK=32, TM=4, TN=4:  16.8498 ms (median), mean=16.8495 ± 0.0045 ms (8156.72 GFLOP/s)
+[ 10/20] BM= 64, BN= 32, BK= 8, TM=4, TN=2:  20.3234 ms (median), mean=20.3224 ± 0.0028 ms (6762.59 GFLOP/s)
+[ 11/20] BM= 32, BN= 32, BK=32, TM=1, TN=2:  37.2439 ms (median), mean=36.9126 ± 0.7403 ms (3690.24 GFLOP/s)
+[ 12/20] BM= 32, BN= 64, BK= 8, TM=4, TN=2:  19.1893 ms (median), mean=18.4919 ± 1.0389 ms (7162.26 GFLOP/s)
+[ 13/20] BM= 32, BN= 64, BK=16, TM=1, TN=4:  34.1657 ms (median), mean=34.1662 ± 0.0029 ms (4022.72 GFLOP/s)
+[ 14/20] BM= 32, BN=128, BK=16, TM=4, TN=2:  19.5432 ms (median), mean=18.7614 ± 1.1649 ms (7032.58 GFLOP/s)
+[ 15/20] BM=128, BN= 32, BK=16, TM=4, TN=4:  18.0533 ms (median), mean=18.0533 ± 0.0054 ms (7612.94 GFLOP/s)
+[ 16/20] BM= 64, BN= 32, BK=16, TM=4, TN=4:  17.4739 ms (median), mean=17.0094 ± 0.6943 ms (7865.40 GFLOP/s)
+[ 17/20] BM= 32, BN= 64, BK= 8, TM=2, TN=2:  26.4497 ms (median), mean=25.1086 ± 1.9966 ms (5196.24 GFLOP/s)
+[ 18/20] BM=128, BN= 32, BK=32, TM=2, TN=4:  23.5231 ms (median), mean=22.9000 ± 0.9275 ms (5842.72 GFLOP/s)
+[ 19/20] BM= 32, BN= 64, BK= 8, TM=4, TN=4:  15.8144 ms (median), mean=15.8147 ± 0.0029 ms (8690.73 GFLOP/s)
+[ 20/20] BM= 64, BN= 32, BK=16, TM=2, TN=2:  24.2427 ms (median), mean=23.3484 ± 1.3312 ms (5669.28 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ CUDA Bayesian Run 2: best = 15.5308 ms
+✓ CUDA Random Run 2:   best = 15.8144 ms
+
+================================================================================
+EXPERIMENT 3: CUDA MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning CUDA MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 93/243
+
+[  1/20] BM= 32, BN= 64, BK=16, TM=4, TN=2:  17.4495 ms (median), mean=17.4496 ± 0.0022 ms (7876.39 GFLOP/s)
+[  2/20] BM= 32, BN= 64, BK=16, TM=1, TN=4:  34.1631 ms (median), mean=33.0733 ± 1.6889 ms (4023.03 GFLOP/s)
+[  3/20] BM= 32, BN= 32, BK=16, TM=1, TN=4:  37.6098 ms (median), mean=37.6087 ± 0.0037 ms (3654.34 GFLOP/s)
+[  4/20] BM= 32, BN=128, BK=16, TM=4, TN=2:  19.5457 ms (median), mean=18.7620 ± 1.1670 ms (7031.68 GFLOP/s)
+[  5/20] BM= 32, BN=128, BK=16, TM=4, TN=4:  15.9837 ms (median), mean=15.9856 ± 0.0033 ms (8598.68 GFLOP/s)
+[  6/20] BM=128, BN= 32, BK=16, TM=2, TN=4:  24.9487 ms (median), mean=24.9491 ± 0.0026 ms (5508.87 GFLOP/s)
+[  7/20] BM= 64, BN= 32, BK= 8, TM=2, TN=4:  22.7419 ms (median), mean=22.7432 ± 0.0030 ms (6043.43 GFLOP/s)
+[  8/20] BM= 32, BN=128, BK=16, TM=4, TN=4:  15.9894 ms (median), mean=15.9899 ± 0.0036 ms (8595.62 GFLOP/s)
+[  9/20] BM= 32, BN= 64, BK= 8, TM=2, TN=2:  26.4506 ms (median), mean=26.4513 ± 0.0023 ms (5196.07 GFLOP/s)
+[ 10/20] BM=128, BN= 32, BK= 8, TM=4, TN=2:  22.8047 ms (median), mean=22.4139 ± 0.5811 ms (6026.78 GFLOP/s)
+[ 11/20] BM=128, BN= 32, BK=16, TM=4, TN=4:  18.0543 ms (median), mean=18.0545 ± 0.0061 ms (7612.54 GFLOP/s)
+[ 12/20] BM= 64, BN= 32, BK=16, TM=4, TN=1:  24.5107 ms (median), mean=23.5916 ± 1.3682 ms (5607.31 GFLOP/s)
+[ 13/20] BM= 32, BN= 32, BK=16, TM=4, TN=4:  18.1370 ms (median), mean=17.4553 ± 1.0190 ms (7577.83 GFLOP/s)
+[ 14/20] BM= 32, BN=128, BK=16, TM=4, TN=4:  15.9848 ms (median), mean=15.9286 ± 0.0870 ms (8598.11 GFLOP/s)
+[ 15/20] BM= 32, BN=128, BK=16, TM=4, TN=4:  15.9860 ms (median), mean=15.9853 ± 0.0048 ms (8597.47 GFLOP/s)
+[ 16/20] BM= 64, BN= 32, BK=16, TM=2, TN=2:  24.2416 ms (median), mean=23.3495 ± 1.3314 ms (5669.54 GFLOP/s)
+[ 17/20] BM=128, BN= 32, BK=32, TM=4, TN=2:  36.3061 ms (median), mean=36.3070 ± 0.0030 ms (3785.56 GFLOP/s)
+[ 18/20] BM=128, BN= 64, BK= 8, TM=4, TN=4:  18.4067 ms (median), mean=18.4010 ± 0.0101 ms (7466.78 GFLOP/s)
+[ 19/20] BM= 32, BN= 64, BK= 8, TM=4, TN=4:  15.8129 ms (median), mean=15.2284 ± 0.8706 ms (8691.56 GFLOP/s)
+[ 20/20] BM= 64, BN= 64, BK=32, TM=4, TN=4:  15.4170 ms (median), mean=15.3647 ± 0.0813 ms (8914.78 GFLOP/s)
+
+Best trial: Trial #20
+Best value: 15.4170 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 3: CUDA MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning CUDA MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 64, BN= 32, BK=16, TM=1, TN=4:  37.0490 ms (median), mean=36.9837 ± 0.1527 ms (3709.66 GFLOP/s)
+[  2/20] BM= 32, BN= 32, BK= 8, TM=4, TN=2:  20.5075 ms (median), mean=19.6960 ± 1.2078 ms (6701.90 GFLOP/s)
+[  3/20] BM= 64, BN= 32, BK=16, TM=4, TN=1:  24.5137 ms (median), mean=24.5134 ± 0.0022 ms (5606.62 GFLOP/s)
+[  4/20] BM= 32, BN= 64, BK=16, TM=2, TN=4:  20.5034 ms (median), mean=20.4282 ± 0.1164 ms (6703.22 GFLOP/s)
+[  5/20] BM=128, BN= 64, BK= 8, TM=4, TN=4:  18.3977 ms (median), mean=18.3437 ± 0.0896 ms (7470.44 GFLOP/s)
+[  6/20] BM= 32, BN= 32, BK=32, TM=4, TN=4:  17.4719 ms (median), mean=17.4715 ± 0.0049 ms (7866.28 GFLOP/s)
+[  7/20] BM= 64, BN= 64, BK=16, TM=4, TN=2:  17.2950 ms (median), mean=17.2968 ± 0.0044 ms (7946.76 GFLOP/s)
+[  8/20] BM=128, BN= 32, BK= 8, TM=2, TN=4:  23.9048 ms (median), mean=23.0047 ± 1.3376 ms (5749.43 GFLOP/s)
+[  9/20] BM= 32, BN= 32, BK=32, TM=1, TN=4:  42.9834 ms (median), mean=42.9842 ± 0.0021 ms (3197.49 GFLOP/s)
+[ 10/20] BM= 64, BN= 32, BK= 8, TM=1, TN=4:  37.6523 ms (median), mean=36.7777 ± 1.3214 ms (3650.21 GFLOP/s)
+[ 11/20] BM= 32, BN= 64, BK= 8, TM=1, TN=4:  36.7733 ms (median), mean=36.7734 ± 0.0025 ms (3737.47 GFLOP/s)
+[ 12/20] BM=128, BN= 32, BK= 8, TM=4, TN=4:  19.1515 ms (median), mean=19.1511 ± 0.0024 ms (7176.42 GFLOP/s)
+[ 13/20] BM= 32, BN= 32, BK=32, TM=2, TN=1:  31.1558 ms (median), mean=29.9004 ± 1.8657 ms (4411.34 GFLOP/s)
+[ 14/20] BM= 64, BN= 32, BK=32, TM=4, TN=4:  16.8567 ms (median), mean=16.8570 ± 0.0045 ms (8153.35 GFLOP/s)
+[ 15/20] BM=128, BN= 32, BK=16, TM=2, TN=4:  24.9492 ms (median), mean=24.9504 ± 0.0038 ms (5508.75 GFLOP/s)
+[ 16/20] BM= 64, BN=128, BK= 8, TM=4, TN=4:  17.7673 ms (median), mean=17.7690 ± 0.0103 ms (7735.49 GFLOP/s)
+[ 17/20] BM=128, BN= 64, BK=16, TM=4, TN=4:  21.1040 ms (median), mean=20.3585 ± 1.1121 ms (6512.46 GFLOP/s)
+[ 18/20] BM= 32, BN=128, BK= 8, TM=4, TN=2:  21.3576 ms (median), mean=21.3582 ± 0.0062 ms (6435.12 GFLOP/s)
+[ 19/20] BM= 32, BN=128, BK= 8, TM=4, TN=4:  15.8561 ms (median), mean=15.2703 ± 0.8697 ms (8667.88 GFLOP/s)
+[ 20/20] BM= 64, BN= 32, BK=32, TM=4, TN=1:  36.4452 ms (median), mean=36.1200 ± 0.7245 ms (3771.12 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ CUDA Bayesian Run 3: best = 15.4170 ms
+✓ CUDA Random Run 3:   best = 15.8561 ms
+
+================================================================================
+EXPERIMENT 4: CUDA MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning CUDA MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 93/243
+
+[  1/20] BM= 32, BN= 64, BK= 8, TM=2, TN=2:  26.4487 ms (median), mean=25.7412 ± 1.0524 ms (5196.43 GFLOP/s)
+[  2/20] BM=128, BN= 64, BK=32, TM=4, TN=4:  19.5673 ms (median), mean=19.5697 ± 0.0061 ms (7023.91 GFLOP/s)
+[  3/20] BM= 64, BN= 32, BK= 8, TM=4, TN=1:  29.5583 ms (median), mean=28.5028 ± 1.5718 ms (4649.76 GFLOP/s)
+[  4/20] BM= 64, BN= 32, BK=32, TM=4, TN=1:  36.4447 ms (median), mean=35.9501 ± 1.1018 ms (3771.16 GFLOP/s)
+[  5/20] BM= 32, BN= 32, BK= 8, TM=1, TN=4:  37.0020 ms (median), mean=36.4138 ± 0.8829 ms (3714.37 GFLOP/s)
+[  6/20] BM= 32, BN=128, BK= 8, TM=2, TN=4:  22.0976 ms (median), mean=22.0968 ± 0.0029 ms (6219.64 GFLOP/s)
+[  7/20] BM=128, BN= 64, BK=32, TM=4, TN=4:  19.5564 ms (median), mean=18.8577 ± 1.0401 ms (7027.84 GFLOP/s)
+[  8/20] BM=128, BN= 64, BK=32, TM=4, TN=4:  19.5644 ms (median), mean=19.5646 ± 0.0075 ms (7024.94 GFLOP/s)
+[  9/20] BM= 32, BN= 32, BK=32, TM=4, TN=2:  36.4624 ms (median), mean=35.7695 ± 1.5453 ms (3769.33 GFLOP/s)
+[ 10/20] BM= 64, BN= 64, BK= 8, TM=2, TN=4:  21.8111 ms (median), mean=21.4335 ± 0.5655 ms (6301.34 GFLOP/s)
+[ 11/20] BM= 64, BN= 32, BK= 8, TM=2, TN=4:  22.7425 ms (median), mean=22.7418 ± 0.0026 ms (6043.26 GFLOP/s)
+[ 12/20] BM=128, BN= 64, BK=32, TM=4, TN=4:  19.5603 ms (median), mean=18.8684 ± 1.0340 ms (7026.42 GFLOP/s)
+[ 13/20] BM= 32, BN= 32, BK= 8, TM=4, TN=2:  20.5028 ms (median), mean=20.5048 ± 0.0043 ms (6703.41 GFLOP/s)
+[ 14/20] BM=128, BN= 64, BK=32, TM=4, TN=4:  19.5548 ms (median), mean=18.8123 ± 1.1102 ms (7028.41 GFLOP/s)
+[ 15/20] BM= 64, BN= 32, BK=32, TM=4, TN=4:  16.8512 ms (median), mean=16.8508 ± 0.0035 ms (8156.04 GFLOP/s)
+[ 16/20] BM= 64, BN=128, BK=16, TM=4, TN=4:  21.0140 ms (median), mean=20.9478 ± 0.1033 ms (6540.36 GFLOP/s)
+[ 17/20] BM= 64, BN= 32, BK=32, TM=4, TN=4:  16.8516 ms (median), mean=16.8522 ± 0.0047 ms (8155.86 GFLOP/s)
+[ 18/20] BM=128, BN= 32, BK=16, TM=4, TN=2:  20.1164 ms (median), mean=19.5577 ± 0.8332 ms (6832.17 GFLOP/s)
+[ 19/20] BM= 64, BN= 32, BK=16, TM=2, TN=2:  24.2352 ms (median), mean=24.1967 ± 0.0968 ms (5671.05 GFLOP/s)
+[ 20/20] BM= 32, BN= 64, BK=16, TM=2, TN=4:  20.5010 ms (median), mean=20.1392 ± 0.5440 ms (6704.02 GFLOP/s)
+
+Best trial: Trial #15
+Best value: 16.8512 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 4: CUDA MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning CUDA MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM=128, BN= 32, BK= 8, TM=2, TN=4:  23.9036 ms (median), mean=23.9034 ± 0.0027 ms (5749.73 GFLOP/s)
+[  2/20] BM= 32, BN= 32, BK=32, TM=1, TN=2:  37.2401 ms (median), mean=37.2405 ± 0.0025 ms (3690.62 GFLOP/s)
+[  3/20] BM= 32, BN= 64, BK=32, TM=4, TN=1:  24.9965 ms (median), mean=24.9961 ± 0.0025 ms (5498.32 GFLOP/s)
+[  4/20] BM= 32, BN= 32, BK=16, TM=2, TN=1:  32.8976 ms (median), mean=32.4441 ± 1.0073 ms (4177.78 GFLOP/s)
+[  5/20] BM= 32, BN= 64, BK=16, TM=4, TN=4:  15.5316 ms (median), mean=15.5324 ± 0.0039 ms (8848.99 GFLOP/s)
+[  6/20] BM=128, BN= 64, BK=16, TM=4, TN=4:  21.1091 ms (median), mean=21.1084 ± 0.0039 ms (6510.88 GFLOP/s)
+[  7/20] BM=128, BN= 32, BK= 8, TM=4, TN=2:  22.8052 ms (median), mean=22.7546 ± 0.0937 ms (6026.66 GFLOP/s)
+[  8/20] BM= 32, BN= 32, BK=32, TM=2, TN=1:  31.1577 ms (median), mean=29.9018 ± 1.8657 ms (4411.08 GFLOP/s)
+[  9/20] BM= 64, BN= 64, BK=32, TM=4, TN=4:  15.4161 ms (median), mean=15.0069 ± 0.6121 ms (8915.29 GFLOP/s)
+[ 10/20] BM=128, BN= 32, BK=16, TM=4, TN=4:  18.0529 ms (median), mean=17.9937 ± 0.0931 ms (7613.11 GFLOP/s)
+[ 11/20] BM=128, BN= 64, BK=32, TM=4, TN=4:  19.5632 ms (median), mean=19.5648 ± 0.0081 ms (7025.36 GFLOP/s)
+[ 12/20] BM= 64, BN= 32, BK= 8, TM=4, TN=4:  19.1299 ms (median), mean=18.4126 ± 1.0672 ms (7184.51 GFLOP/s)
+[ 13/20] BM= 32, BN= 64, BK=32, TM=2, TN=4:  20.3235 ms (median), mean=20.3236 ± 0.0019 ms (6762.58 GFLOP/s)
+[ 14/20] BM= 32, BN= 64, BK= 8, TM=4, TN=2:  19.1929 ms (median), mean=18.6963 ± 0.7375 ms (7160.92 GFLOP/s)
+[ 15/20] BM= 32, BN= 32, BK=32, TM=4, TN=4:  17.4751 ms (median), mean=17.4712 ± 0.0089 ms (7864.84 GFLOP/s)
+[ 16/20] BM= 64, BN= 64, BK= 8, TM=2, TN=4:  21.8182 ms (median), mean=21.8182 ± 0.0045 ms (6299.27 GFLOP/s)
+[ 17/20] BM= 32, BN= 64, BK= 8, TM=4, TN=1:  28.7082 ms (median), mean=27.6907 ± 1.5138 ms (4787.45 GFLOP/s)
+[ 18/20] BM=128, BN= 64, BK= 8, TM=4, TN=4:  18.4054 ms (median), mean=17.7374 ± 0.9976 ms (7467.33 GFLOP/s)
+[ 19/20] BM=128, BN= 32, BK=32, TM=4, TN=4:  17.2512 ms (median), mean=17.2517 ± 0.0037 ms (7966.94 GFLOP/s)
+[ 20/20] BM= 64, BN= 32, BK=32, TM=2, TN=4:  22.7225 ms (median), mean=22.1132 ± 0.9096 ms (6048.59 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ CUDA Bayesian Run 4: best = 16.8512 ms
+✓ CUDA Random Run 4:   best = 15.4161 ms
+
+================================================================================
+EXPERIMENT 5: CUDA MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning CUDA MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 93/243
+
+[  1/20] BM=128, BN= 32, BK=32, TM=4, TN=4:  17.2445 ms (median), mean=17.2460 ± 0.0033 ms (7970.03 GFLOP/s)
+[  2/20] BM= 64, BN= 32, BK= 8, TM=2, TN=2:  27.5708 ms (median), mean=27.0883 ± 0.7176 ms (4984.94 GFLOP/s)
+[  3/20] BM=128, BN= 32, BK=32, TM=4, TN=4:  17.2440 ms (median), mean=16.5953 ± 0.9656 ms (7970.26 GFLOP/s)
+[  4/20] BM= 32, BN= 64, BK=32, TM=2, TN=2:  23.4295 ms (median), mean=22.5377 ± 1.3266 ms (5866.08 GFLOP/s)
+[  5/20] BM= 64, BN= 32, BK= 8, TM=4, TN=4:  19.1270 ms (median), mean=19.1284 ± 0.0031 ms (7185.60 GFLOP/s)
+[  6/20] BM= 32, BN= 32, BK= 8, TM=2, TN=2:  27.0735 ms (median), mean=26.0597 ± 1.5092 ms (5076.52 GFLOP/s)
+[  7/20] BM= 64, BN= 32, BK=16, TM=4, TN=1:  24.5078 ms (median), mean=23.4108 ± 1.6342 ms (5607.97 GFLOP/s)
+[  8/20] BM= 32, BN= 32, BK=16, TM=2, TN=1:  32.8909 ms (median), mean=32.8907 ± 0.0025 ms (4178.63 GFLOP/s)
+[  9/20] BM= 32, BN= 64, BK=16, TM=2, TN=4:  20.5033 ms (median), mean=19.7227 ± 1.1632 ms (6703.25 GFLOP/s)
+[ 10/20] BM=128, BN= 32, BK= 8, TM=2, TN=4:  23.9051 ms (median), mean=23.9042 ± 0.0027 ms (5749.36 GFLOP/s)
+[ 11/20] BM= 32, BN= 32, BK= 8, TM=2, TN=4:  23.5630 ms (median), mean=23.5634 ± 0.0025 ms (5832.83 GFLOP/s)
+[ 12/20] BM= 32, BN= 32, BK=16, TM=2, TN=2:  24.7320 ms (median), mean=24.0637 ± 0.9957 ms (5557.14 GFLOP/s)
+[ 13/20] BM=128, BN= 32, BK=32, TM=4, TN=4:  17.2452 ms (median), mean=16.5509 ± 1.0335 ms (7969.69 GFLOP/s)
+[ 14/20] BM=128, BN= 32, BK=32, TM=4, TN=4:  17.2471 ms (median), mean=17.2477 ± 0.0030 ms (7968.84 GFLOP/s)
+[ 15/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  15.7405 ms (median), mean=15.3292 ± 0.6186 ms (8731.53 GFLOP/s)
+[ 16/20] BM= 64, BN= 32, BK= 8, TM=1, TN=4:  37.6500 ms (median), mean=36.6754 ± 1.6280 ms (3650.44 GFLOP/s)
+[ 17/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  15.7515 ms (median), mean=15.7516 ± 0.0054 ms (8725.44 GFLOP/s)
+[ 18/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  15.7478 ms (median), mean=15.0505 ± 1.0424 ms (8727.48 GFLOP/s)
+[ 19/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  15.7492 ms (median), mean=15.3324 ± 0.6221 ms (8726.73 GFLOP/s)
+[ 20/20] BM= 64, BN= 32, BK=16, TM=2, TN=4:  23.6504 ms (median), mean=23.6498 ± 0.0040 ms (5811.28 GFLOP/s)
+
+Best trial: Trial #15
+Best value: 15.7405 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 5: CUDA MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning CUDA MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 64, BN= 32, BK= 8, TM=2, TN=2:  27.5737 ms (median), mean=26.5377 ± 1.5417 ms (4984.42 GFLOP/s)
+[  2/20] BM= 64, BN= 32, BK= 8, TM=2, TN=4:  22.7387 ms (median), mean=21.8842 ± 1.2710 ms (6044.27 GFLOP/s)
+[  3/20] BM= 64, BN= 32, BK=16, TM=2, TN=4:  23.6479 ms (median), mean=23.6493 ± 0.0050 ms (5811.90 GFLOP/s)
+[  4/20] BM=128, BN= 64, BK= 8, TM=4, TN=4:  18.4038 ms (median), mean=18.4040 ± 0.0044 ms (7467.97 GFLOP/s)
+[  5/20] BM= 32, BN= 64, BK=16, TM=2, TN=2:  23.8705 ms (median), mean=23.8693 ± 0.0029 ms (5757.70 GFLOP/s)
+[  6/20] BM= 64, BN= 32, BK=32, TM=2, TN=2:  23.4434 ms (median), mean=23.4433 ± 0.0033 ms (5862.58 GFLOP/s)
+[  7/20] BM=128, BN= 64, BK=32, TM=4, TN=4:  19.5560 ms (median), mean=19.2379 ± 0.4822 ms (7027.98 GFLOP/s)
+[  8/20] BM=128, BN= 32, BK=16, TM=2, TN=4:  24.9442 ms (median), mean=24.9443 ± 0.0032 ms (5509.85 GFLOP/s)
+[  9/20] BM= 64, BN= 32, BK=16, TM=2, TN=2:  24.2413 ms (median), mean=24.2420 ± 0.0033 ms (5669.62 GFLOP/s)
+[ 10/20] BM= 32, BN= 64, BK=32, TM=4, TN=2:  18.0915 ms (median), mean=18.0922 ± 0.0022 ms (7596.88 GFLOP/s)
+[ 11/20] BM= 32, BN=128, BK=32, TM=4, TN=2:  19.5299 ms (median), mean=19.0231 ± 0.7542 ms (7037.38 GFLOP/s)
+[ 12/20] BM=128, BN= 32, BK=16, TM=4, TN=2:  20.1166 ms (median), mean=19.7564 ± 0.5358 ms (6832.11 GFLOP/s)
+[ 13/20] BM= 32, BN= 32, BK=16, TM=4, TN=2:  18.3858 ms (median), mean=18.3857 ± 0.0025 ms (7475.27 GFLOP/s)
+[ 14/20] BM= 32, BN=128, BK=16, TM=4, TN=2:  19.5498 ms (median), mean=19.0051 ± 0.8093 ms (7030.21 GFLOP/s)
+[ 15/20] BM= 32, BN=128, BK= 8, TM=4, TN=4:  15.8567 ms (median), mean=15.8552 ± 0.0029 ms (8667.54 GFLOP/s)
+[ 16/20] BM= 32, BN=128, BK= 8, TM=4, TN=2:  21.3523 ms (median), mean=21.3515 ± 0.0057 ms (6436.72 GFLOP/s)
+[ 17/20] BM= 32, BN= 32, BK= 8, TM=2, TN=4:  23.5669 ms (median), mean=23.5671 ± 0.0049 ms (5831.86 GFLOP/s)
+[ 18/20] BM= 32, BN= 64, BK=32, TM=4, TN=4:  15.8700 ms (median), mean=15.8683 ± 0.0034 ms (8660.29 GFLOP/s)
+[ 19/20] BM= 32, BN= 32, BK=16, TM=2, TN=1:  32.8959 ms (median), mean=32.8958 ± 0.0025 ms (4177.99 GFLOP/s)
+[ 20/20] BM= 32, BN= 32, BK=16, TM=4, TN=4:  18.1299 ms (median), mean=17.8129 ± 0.4756 ms (7580.78 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ CUDA Bayesian Run 5: best = 15.7405 ms
+✓ CUDA Random Run 5:   best = 15.8567 ms
+
+================================================================================
+EXPERIMENT 6: CUDA MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning CUDA MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 93/243
+
+[  1/20] BM= 32, BN= 32, BK= 8, TM=4, TN=2:  20.5009 ms (median), mean=20.5037 ± 0.0037 ms (6704.04 GFLOP/s)
+[  2/20] BM=128, BN= 32, BK=16, TM=4, TN=2:  20.1166 ms (median), mean=19.1762 ± 1.3982 ms (6832.11 GFLOP/s)
+[  3/20] BM= 32, BN= 64, BK= 8, TM=4, TN=1:  28.7100 ms (median), mean=28.7109 ± 0.0049 ms (4787.14 GFLOP/s)
+[  4/20] BM= 64, BN= 64, BK= 8, TM=4, TN=2:  18.9721 ms (median), mean=18.9700 ± 0.0043 ms (7244.25 GFLOP/s)
+[  5/20] BM= 64, BN= 64, BK= 8, TM=2, TN=4:  21.8118 ms (median), mean=20.9982 ± 1.2127 ms (6301.13 GFLOP/s)
+[  6/20] BM= 32, BN= 32, BK=16, TM=2, TN=4:  24.4972 ms (median), mean=24.4967 ± 0.0039 ms (5610.40 GFLOP/s)
+[  7/20] BM= 32, BN= 32, BK=16, TM=1, TN=4:  37.6081 ms (median), mean=37.5380 ± 0.1595 ms (3654.50 GFLOP/s)
+[  8/20] BM=128, BN= 32, BK=32, TM=4, TN=2:  36.3056 ms (median), mean=35.8169 ± 1.0868 ms (3785.61 GFLOP/s)
+[  9/20] BM= 64, BN= 64, BK= 8, TM=4, TN=2:  18.9714 ms (median), mean=18.9004 ± 0.1054 ms (7244.54 GFLOP/s)
+[ 10/20] BM= 64, BN= 64, BK= 8, TM=4, TN=2:  18.9692 ms (median), mean=18.9701 ± 0.0054 ms (7245.36 GFLOP/s)
+[ 11/20] BM= 64, BN= 32, BK=32, TM=4, TN=2:  35.7370 ms (median), mean=34.3796 ± 2.0199 ms (3845.84 GFLOP/s)
+[ 12/20] BM= 32, BN=128, BK= 8, TM=4, TN=2:  21.3573 ms (median), mean=21.3567 ± 0.0050 ms (6435.23 GFLOP/s)
+[ 13/20] BM= 64, BN= 64, BK= 8, TM=4, TN=2:  18.9651 ms (median), mean=18.2591 ± 1.0534 ms (7246.94 GFLOP/s)
+[ 14/20] BM= 32, BN= 32, BK=32, TM=4, TN=4:  17.4728 ms (median), mean=17.4705 ± 0.0049 ms (7865.90 GFLOP/s)
+[ 15/20] BM= 32, BN= 32, BK=32, TM=4, TN=4:  17.4673 ms (median), mean=16.6854 ± 1.1636 ms (7868.35 GFLOP/s)
+[ 16/20] BM= 64, BN= 64, BK=16, TM=4, TN=4:  15.9391 ms (median), mean=15.6610 ± 0.4199 ms (8622.78 GFLOP/s)
+[ 17/20] BM= 64, BN= 64, BK=16, TM=4, TN=4:  15.9415 ms (median), mean=15.9419 ± 0.0058 ms (8621.48 GFLOP/s)
+[ 18/20] BM= 64, BN= 64, BK=16, TM=4, TN=4:  15.9428 ms (median), mean=15.9451 ± 0.0084 ms (8620.78 GFLOP/s)
+[ 19/20] BM= 64, BN= 64, BK=16, TM=4, TN=4:  15.9412 ms (median), mean=15.3420 ± 0.8986 ms (8621.61 GFLOP/s)
+[ 20/20] BM= 32, BN=128, BK= 8, TM=2, TN=4:  22.0905 ms (median), mean=21.5053 ± 0.8725 ms (6221.62 GFLOP/s)
+
+Best trial: Trial #16
+Best value: 15.9391 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 6: CUDA MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning CUDA MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 32, BN= 64, BK= 8, TM=4, TN=4:  15.8114 ms (median), mean=15.8119 ± 0.0036 ms (8692.41 GFLOP/s)
+[  2/20] BM= 32, BN=128, BK=16, TM=4, TN=2:  19.5462 ms (median), mean=18.6397 ± 1.3476 ms (7031.51 GFLOP/s)
+[  3/20] BM= 32, BN=128, BK=32, TM=4, TN=4:  16.5912 ms (median), mean=16.5925 ± 0.0052 ms (8283.87 GFLOP/s)
+[  4/20] BM= 64, BN= 32, BK=16, TM=2, TN=2:  24.2487 ms (median), mean=24.2470 ± 0.0081 ms (5667.88 GFLOP/s)
+[  5/20] BM= 32, BN= 32, BK=16, TM=4, TN=2:  18.3831 ms (median), mean=18.3857 ± 0.0038 ms (7476.38 GFLOP/s)
+[  6/20] BM= 64, BN= 32, BK=32, TM=2, TN=2:  23.4394 ms (median), mean=22.3733 ± 1.5839 ms (5863.58 GFLOP/s)
+[  7/20] BM= 64, BN= 32, BK= 8, TM=1, TN=4:  37.6528 ms (median), mean=37.6534 ± 0.0029 ms (3650.17 GFLOP/s)
+[  8/20] BM= 32, BN= 32, BK= 8, TM=4, TN=1:  28.1294 ms (median), mean=28.1291 ± 0.0055 ms (4885.96 GFLOP/s)
+[  9/20] BM= 32, BN=128, BK= 8, TM=4, TN=2:  21.3523 ms (median), mean=21.3535 ± 0.0080 ms (6436.74 GFLOP/s)
+[ 10/20] BM= 64, BN= 32, BK=32, TM=4, TN=1:  36.4433 ms (median), mean=36.3732 ± 0.1562 ms (3771.31 GFLOP/s)
+[ 11/20] BM= 32, BN= 64, BK=16, TM=2, TN=4:  20.5029 ms (median), mean=19.6705 ± 1.2394 ms (6703.39 GFLOP/s)
+[ 12/20] BM= 64, BN= 64, BK=32, TM=2, TN=4:  20.0002 ms (median), mean=19.9998 ± 0.0009 ms (6871.89 GFLOP/s)
+[ 13/20] BM= 32, BN= 32, BK=16, TM=1, TN=2:  39.2687 ms (median), mean=38.3687 ± 2.0112 ms (3499.96 GFLOP/s)
+[ 14/20] BM= 64, BN= 32, BK=16, TM=4, TN=4:  17.4799 ms (median), mean=16.8268 ± 0.9725 ms (7862.70 GFLOP/s)
+[ 15/20] BM=128, BN= 32, BK=16, TM=2, TN=4:  24.9451 ms (median), mean=24.3150 ± 0.9404 ms (5509.67 GFLOP/s)
+[ 16/20] BM= 64, BN= 64, BK=16, TM=4, TN=4:  15.9410 ms (median), mean=15.3428 ± 0.8973 ms (8621.71 GFLOP/s)
+[ 17/20] BM= 32, BN= 32, BK= 8, TM=2, TN=2:  27.0754 ms (median), mean=25.9939 ± 1.6090 ms (5076.15 GFLOP/s)
+[ 18/20] BM= 64, BN=128, BK=16, TM=4, TN=4:  21.0075 ms (median), mean=20.2086 ± 1.1921 ms (6542.38 GFLOP/s)
+[ 19/20] BM= 32, BN= 64, BK= 8, TM=2, TN=2:  26.4489 ms (median), mean=26.4483 ± 0.0032 ms (5196.39 GFLOP/s)
+[ 20/20] BM=128, BN= 32, BK=32, TM=4, TN=2:  36.3023 ms (median), mean=36.3022 ± 0.0016 ms (3785.96 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ CUDA Bayesian Run 6: best = 15.9391 ms
+✓ CUDA Random Run 6:   best = 15.8114 ms
+
+================================================================================
+EXPERIMENT 7: CUDA MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning CUDA MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 93/243
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=1, TN=4:  42.9824 ms (median), mean=42.6012 ± 0.8527 ms (3197.56 GFLOP/s)
+[  2/20] BM= 32, BN= 64, BK= 8, TM=2, TN=2:  26.4478 ms (median), mean=26.3998 ± 0.1094 ms (5196.61 GFLOP/s)
+[  3/20] BM= 32, BN= 64, BK=32, TM=2, TN=2:  23.4241 ms (median), mean=22.7892 ± 0.9456 ms (5867.43 GFLOP/s)
+[  4/20] BM= 64, BN= 32, BK=16, TM=2, TN=2:  24.2431 ms (median), mean=23.6067 ± 0.9484 ms (5669.21 GFLOP/s)
+[  5/20] BM= 32, BN= 64, BK= 8, TM=4, TN=2:  19.1940 ms (median), mean=19.1932 ± 0.0040 ms (7160.52 GFLOP/s)
+[  6/20] BM=128, BN= 32, BK= 8, TM=4, TN=2:  22.7946 ms (median), mean=21.8107 ± 1.4634 ms (6029.46 GFLOP/s)
+[  7/20] BM= 32, BN= 64, BK= 8, TM=4, TN=2:  19.1927 ms (median), mean=19.1915 ± 0.0042 ms (7161.01 GFLOP/s)
+[  8/20] BM= 32, BN= 64, BK=32, TM=1, TN=4:  36.0079 ms (median), mean=34.9602 ± 1.8351 ms (3816.91 GFLOP/s)
+[  9/20] BM= 64, BN= 32, BK=32, TM=2, TN=4:  22.7240 ms (median), mean=22.7240 ± 0.0032 ms (6048.18 GFLOP/s)
+[ 10/20] BM= 32, BN= 32, BK=32, TM=1, TN=2:  37.2393 ms (median), mean=37.2407 ± 0.0023 ms (3690.70 GFLOP/s)
+[ 11/20] BM= 64, BN= 32, BK= 8, TM=4, TN=4:  19.1266 ms (median), mean=19.1271 ± 0.0022 ms (7185.75 GFLOP/s)
+[ 12/20] BM= 32, BN= 32, BK=16, TM=2, TN=4:  24.4931 ms (median), mean=23.5643 ± 1.3838 ms (5611.34 GFLOP/s)
+[ 13/20] BM= 64, BN= 32, BK= 8, TM=1, TN=4:  37.6556 ms (median), mean=37.6556 ± 0.0025 ms (3649.90 GFLOP/s)
+[ 14/20] BM= 32, BN= 64, BK= 8, TM=4, TN=2:  19.1898 ms (median), mean=19.1906 ± 0.0044 ms (7162.09 GFLOP/s)
+[ 15/20] BM= 64, BN= 32, BK= 8, TM=4, TN=4:  19.1239 ms (median), mean=18.7911 ± 0.4991 ms (7186.78 GFLOP/s)
+[ 16/20] BM= 64, BN= 32, BK= 8, TM=4, TN=4:  19.1275 ms (median), mean=19.1272 ± 0.0031 ms (7185.41 GFLOP/s)
+[ 17/20] BM= 64, BN= 32, BK= 8, TM=4, TN=4:  19.1251 ms (median), mean=18.4093 ± 1.0676 ms (7186.31 GFLOP/s)
+[ 18/20] BM= 64, BN= 64, BK=32, TM=4, TN=2:  18.3934 ms (median), mean=18.3945 ± 0.0039 ms (7472.20 GFLOP/s)
+[ 19/20] BM= 64, BN= 64, BK=32, TM=4, TN=2:  18.3931 ms (median), mean=17.8927 ± 0.7449 ms (7472.32 GFLOP/s)
+[ 20/20] BM= 64, BN= 32, BK=32, TM=4, TN=2:  35.7371 ms (median), mean=35.7384 ± 0.0031 ms (3845.83 GFLOP/s)
+
+Best trial: Trial #19
+Best value: 18.3931 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 7: CUDA MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning CUDA MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 32, BN= 32, BK=32, TM=4, TN=2:  36.4614 ms (median), mean=35.4578 ± 1.6889 ms (3769.44 GFLOP/s)
+[  2/20] BM= 32, BN= 64, BK=16, TM=4, TN=4:  15.5312 ms (median), mean=15.5320 ± 0.0028 ms (8849.20 GFLOP/s)
+[  3/20] BM= 32, BN= 32, BK=32, TM=4, TN=1:  37.6136 ms (median), mean=36.3564 ± 1.8895 ms (3653.97 GFLOP/s)
+[  4/20] BM=128, BN= 64, BK=32, TM=4, TN=4:  19.5655 ms (median), mean=19.5648 ± 0.0078 ms (7024.54 GFLOP/s)
+[  5/20] BM= 32, BN= 64, BK=32, TM=4, TN=4:  15.8624 ms (median), mean=15.5865 ± 0.4112 ms (8664.48 GFLOP/s)
+[  6/20] BM= 32, BN= 32, BK=32, TM=1, TN=4:  42.9832 ms (median), mean=42.9015 ± 0.1829 ms (3197.51 GFLOP/s)
+[  7/20] BM= 32, BN= 32, BK= 8, TM=4, TN=2:  20.5056 ms (median), mean=20.5062 ± 0.0032 ms (6702.49 GFLOP/s)
+[  8/20] BM= 32, BN=128, BK=32, TM=2, TN=4:  20.9283 ms (median), mean=20.0975 ± 1.2371 ms (6567.14 GFLOP/s)
+[  9/20] BM= 32, BN=128, BK=16, TM=4, TN=2:  19.5492 ms (median), mean=19.5492 ± 0.0032 ms (7030.40 GFLOP/s)
+[ 10/20] BM= 64, BN= 64, BK= 8, TM=2, TN=4:  21.8159 ms (median), mean=21.0006 ± 1.2123 ms (6299.93 GFLOP/s)
+[ 11/20] BM=128, BN= 32, BK=16, TM=4, TN=2:  20.1175 ms (median), mean=20.1172 ± 0.0023 ms (6831.83 GFLOP/s)
+[ 12/20] BM=128, BN= 32, BK= 8, TM=4, TN=2:  22.7993 ms (median), mean=21.9185 ± 1.3092 ms (6028.21 GFLOP/s)
+[ 13/20] BM= 32, BN= 64, BK=16, TM=4, TN=2:  17.4464 ms (median), mean=17.4460 ± 0.0022 ms (7877.80 GFLOP/s)
+[ 14/20] BM= 64, BN= 32, BK= 8, TM=2, TN=2:  27.5740 ms (median), mean=26.5380 ± 1.5409 ms (4984.36 GFLOP/s)
+[ 15/20] BM= 64, BN= 32, BK= 8, TM=4, TN=2:  20.3255 ms (median), mean=19.5868 ± 1.0969 ms (6761.90 GFLOP/s)
+[ 16/20] BM= 32, BN=128, BK=32, TM=4, TN=2:  19.5305 ms (median), mean=19.5306 ± 0.0034 ms (7037.15 GFLOP/s)
+[ 17/20] BM= 32, BN=128, BK= 8, TM=4, TN=2:  21.3464 ms (median), mean=20.5133 ± 1.2400 ms (6438.51 GFLOP/s)
+[ 18/20] BM= 32, BN= 32, BK= 8, TM=2, TN=1:  40.3093 ms (median), mean=40.3092 ± 0.0034 ms (3409.61 GFLOP/s)
+[ 19/20] BM=128, BN= 32, BK=32, TM=4, TN=2:  36.3016 ms (median), mean=36.3017 ± 0.0018 ms (3786.03 GFLOP/s)
+[ 20/20] BM= 64, BN= 32, BK=32, TM=2, TN=2:  23.4393 ms (median), mean=23.4395 ± 0.0011 ms (5863.61 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ CUDA Bayesian Run 7: best = 18.3931 ms
+✓ CUDA Random Run 7:   best = 15.5312 ms
+
+================================================================================
+EXPERIMENT 8: CUDA MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning CUDA MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 93/243
+
+[  1/20] BM= 32, BN= 32, BK= 8, TM=1, TN=4:  37.0001 ms (median), mean=36.6730 ± 0.7333 ms (3714.56 GFLOP/s)
+[  2/20] BM=128, BN= 32, BK=32, TM=2, TN=4:  23.5244 ms (median), mean=22.6450 ± 1.3084 ms (5842.41 GFLOP/s)
+[  3/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  15.7538 ms (median), mean=15.7560 ± 0.0064 ms (8724.20 GFLOP/s)
+[  4/20] BM= 32, BN= 32, BK=16, TM=2, TN=2:  24.7329 ms (median), mean=23.7936 ± 1.3968 ms (5556.92 GFLOP/s)
+[  5/20] BM= 32, BN= 32, BK= 8, TM=2, TN=2:  27.0736 ms (median), mean=27.0747 ± 0.0023 ms (5076.49 GFLOP/s)
+[  6/20] BM= 64, BN= 64, BK= 8, TM=2, TN=4:  21.8145 ms (median), mean=21.8154 ± 0.0035 ms (6300.34 GFLOP/s)
+[  7/20] BM= 32, BN= 64, BK=16, TM=4, TN=2:  17.4427 ms (median), mean=17.1318 ± 0.4635 ms (7879.45 GFLOP/s)
+[  8/20] BM=128, BN= 64, BK=16, TM=4, TN=4:  21.1104 ms (median), mean=21.1110 ± 0.0047 ms (6510.48 GFLOP/s)
+[  9/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  15.7453 ms (median), mean=15.3315 ± 0.6243 ms (8728.91 GFLOP/s)
+[ 10/20] BM= 32, BN= 32, BK=16, TM=4, TN=2:  18.3864 ms (median), mean=18.3168 ± 0.1051 ms (7475.03 GFLOP/s)
+[ 11/20] BM=128, BN= 32, BK= 8, TM=2, TN=4:  23.9040 ms (median), mean=23.9047 ± 0.0025 ms (5749.62 GFLOP/s)
+[ 12/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  15.7445 ms (median), mean=15.7466 ± 0.0060 ms (8729.34 GFLOP/s)
+[ 13/20] BM= 32, BN=128, BK=32, TM=2, TN=4:  20.9307 ms (median), mean=20.9292 ± 0.0028 ms (6566.40 GFLOP/s)
+[ 14/20] BM= 64, BN=128, BK= 8, TM=4, TN=4:  17.7685 ms (median), mean=17.7697 ± 0.0045 ms (7734.98 GFLOP/s)
+[ 15/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  15.7484 ms (median), mean=15.4754 ± 0.4089 ms (8727.18 GFLOP/s)
+[ 16/20] BM= 64, BN= 32, BK= 8, TM=2, TN=2:  27.5736 ms (median), mean=26.5383 ± 1.5392 ms (4984.44 GFLOP/s)
+[ 17/20] BM= 32, BN=128, BK= 8, TM=4, TN=2:  21.3583 ms (median), mean=20.5728 ± 1.1687 ms (6434.93 GFLOP/s)
+[ 18/20] BM= 64, BN= 32, BK=16, TM=2, TN=4:  23.6456 ms (median), mean=23.6463 ± 0.0029 ms (5812.45 GFLOP/s)
+[ 19/20] BM= 32, BN= 32, BK=16, TM=2, TN=1:  32.8899 ms (median), mean=32.1286 ± 1.4001 ms (4178.76 GFLOP/s)
+[ 20/20] BM= 64, BN= 32, BK= 8, TM=4, TN=2:  20.3202 ms (median), mean=20.3211 ± 0.0037 ms (6763.67 GFLOP/s)
+
+Best trial: Trial #12
+Best value: 15.7445 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 8: CUDA MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning CUDA MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 32, BN= 64, BK=32, TM=4, TN=4:  15.8681 ms (median), mean=15.5922 ± 0.4131 ms (8661.34 GFLOP/s)
+[  2/20] BM= 32, BN= 32, BK= 8, TM=4, TN=1:  28.1247 ms (median), mean=28.1251 ± 0.0038 ms (4886.78 GFLOP/s)
+[  3/20] BM= 32, BN=128, BK= 8, TM=4, TN=2:  21.3559 ms (median), mean=21.3575 ± 0.0056 ms (6435.65 GFLOP/s)
+[  4/20] BM= 64, BN= 64, BK=16, TM=4, TN=2:  17.2949 ms (median), mean=16.8338 ± 0.6858 ms (7946.78 GFLOP/s)
+[  5/20] BM= 32, BN= 64, BK= 8, TM=4, TN=2:  19.1892 ms (median), mean=19.1911 ± 0.0028 ms (7162.31 GFLOP/s)
+[  6/20] BM= 64, BN= 32, BK= 8, TM=2, TN=2:  27.5741 ms (median), mean=26.8372 ± 1.0959 ms (4984.36 GFLOP/s)
+[  7/20] BM= 64, BN= 32, BK=32, TM=4, TN=2:  35.7398 ms (median), mean=34.4269 ± 1.9525 ms (3845.55 GFLOP/s)
+[  8/20] BM= 32, BN= 32, BK= 8, TM=4, TN=4:  20.1853 ms (median), mean=20.1840 ± 0.0045 ms (6808.86 GFLOP/s)
+[  9/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  15.7443 ms (median), mean=15.1585 ± 0.8719 ms (8729.47 GFLOP/s)
+[ 10/20] BM= 32, BN= 32, BK=32, TM=1, TN=2:  37.2395 ms (median), mean=36.9085 ± 0.7392 ms (3690.67 GFLOP/s)
+[ 11/20] BM= 32, BN= 64, BK=16, TM=4, TN=4:  15.5279 ms (median), mean=14.8330 ± 1.0346 ms (8851.12 GFLOP/s)
+[ 12/20] BM= 64, BN= 32, BK=16, TM=2, TN=4:  23.6470 ms (median), mean=22.7548 ± 1.3305 ms (5812.12 GFLOP/s)
+[ 13/20] BM= 32, BN= 32, BK= 8, TM=2, TN=4:  23.5657 ms (median), mean=23.1479 ± 0.6227 ms (5832.15 GFLOP/s)
+[ 14/20] BM= 32, BN= 32, BK=16, TM=1, TN=4:  37.6060 ms (median), mean=37.6079 ± 0.0038 ms (3654.71 GFLOP/s)
+[ 15/20] BM= 32, BN= 64, BK= 8, TM=2, TN=4:  21.5176 ms (median), mean=21.5197 ± 0.0050 ms (6387.30 GFLOP/s)
+[ 16/20] BM= 32, BN=128, BK=32, TM=4, TN=2:  19.5283 ms (median), mean=19.4781 ± 0.0821 ms (7037.94 GFLOP/s)
+[ 17/20] BM= 32, BN= 32, BK=16, TM=4, TN=4:  18.1354 ms (median), mean=17.4043 ± 1.0860 ms (7578.51 GFLOP/s)
+[ 18/20] BM= 32, BN= 64, BK= 8, TM=4, TN=4:  15.8103 ms (median), mean=15.8103 ± 0.0049 ms (8693.03 GFLOP/s)
+[ 19/20] BM= 64, BN= 64, BK=16, TM=2, TN=4:  20.0143 ms (median), mean=20.0141 ± 0.0019 ms (6867.04 GFLOP/s)
+[ 20/20] BM= 64, BN= 64, BK=32, TM=4, TN=2:  18.3942 ms (median), mean=18.3923 ± 0.0041 ms (7471.87 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ CUDA Bayesian Run 8: best = 15.7445 ms
+✓ CUDA Random Run 8:   best = 15.5279 ms
+
+================================================================================
+EXPERIMENT 9: CUDA MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning CUDA MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 93/243
+
+[  1/20] BM= 64, BN= 32, BK=16, TM=2, TN=4:  23.6504 ms (median), mean=23.6501 ± 0.0020 ms (5811.29 GFLOP/s)
+[  2/20] BM= 64, BN= 32, BK=32, TM=2, TN=4:  22.7256 ms (median), mean=22.7255 ± 0.0029 ms (6047.76 GFLOP/s)
+[  3/20] BM= 32, BN= 32, BK=32, TM=2, TN=2:  23.8507 ms (median), mean=23.8508 ± 0.0008 ms (5762.46 GFLOP/s)
+[  4/20] BM=128, BN= 64, BK= 8, TM=4, TN=4:  18.4017 ms (median), mean=18.4031 ± 0.0047 ms (7468.82 GFLOP/s)
+[  5/20] BM=128, BN= 32, BK=32, TM=4, TN=4:  17.2492 ms (median), mean=16.5994 ± 0.9679 ms (7967.83 GFLOP/s)
+[  6/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  15.7426 ms (median), mean=15.6882 ± 0.0835 ms (8730.41 GFLOP/s)
+[  7/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  15.7427 ms (median), mean=15.7445 ± 0.0067 ms (8730.31 GFLOP/s)
+[  8/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  15.7398 ms (median), mean=15.6841 ± 0.0877 ms (8731.92 GFLOP/s)
+[  9/20] BM= 64, BN= 32, BK=16, TM=2, TN=2:  24.2439 ms (median), mean=23.1735 ± 1.5946 ms (5669.01 GFLOP/s)
+[ 10/20] BM=128, BN= 32, BK=16, TM=2, TN=4:  24.9436 ms (median), mean=24.0561 ± 1.3218 ms (5509.99 GFLOP/s)
+[ 11/20] BM= 64, BN= 64, BK= 8, TM=4, TN=2:  18.9722 ms (median), mean=18.9726 ± 0.0025 ms (7244.21 GFLOP/s)
+[ 12/20] BM= 32, BN= 64, BK=16, TM=2, TN=2:  23.8680 ms (median), mean=23.5471 ± 0.4958 ms (5758.29 GFLOP/s)
+[ 13/20] BM= 32, BN= 64, BK=32, TM=2, TN=4:  20.3214 ms (median), mean=19.5570 ± 1.1379 ms (6763.26 GFLOP/s)
+[ 14/20] BM= 32, BN= 64, BK=16, TM=1, TN=4:  34.1690 ms (median), mean=34.1715 ± 0.0060 ms (4022.32 GFLOP/s)
+[ 15/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  15.7441 ms (median), mean=15.4720 ± 0.4074 ms (8729.55 GFLOP/s)
+[ 16/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  15.7468 ms (median), mean=15.7496 ± 0.0044 ms (8728.06 GFLOP/s)
+[ 17/20] BM= 32, BN= 32, BK=32, TM=4, TN=2:  36.4587 ms (median), mean=35.8140 ± 0.9604 ms (3769.72 GFLOP/s)
+[ 18/20] BM= 32, BN= 64, BK=32, TM=1, TN=4:  36.0066 ms (median), mean=36.0071 ± 0.0017 ms (3817.05 GFLOP/s)
+[ 19/20] BM= 32, BN=128, BK= 8, TM=4, TN=4:  15.8544 ms (median), mean=15.4420 ± 0.6162 ms (8668.81 GFLOP/s)
+[ 20/20] BM= 32, BN= 32, BK=16, TM=4, TN=4:  18.1360 ms (median), mean=18.1370 ± 0.0060 ms (7578.25 GFLOP/s)
+
+Best trial: Trial #8
+Best value: 15.7398 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 9: CUDA MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning CUDA MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 64, BN= 64, BK=16, TM=4, TN=2:  17.2975 ms (median), mean=17.2974 ± 0.0037 ms (7945.61 GFLOP/s)
+[  2/20] BM= 32, BN=128, BK=16, TM=2, TN=4:  22.3145 ms (median), mean=21.2324 ± 1.6109 ms (6159.18 GFLOP/s)
+[  3/20] BM= 32, BN= 32, BK= 8, TM=4, TN=2:  20.5050 ms (median), mean=20.5054 ± 0.0027 ms (6702.71 GFLOP/s)
+[  4/20] BM= 64, BN=128, BK=16, TM=4, TN=4:  21.0022 ms (median), mean=20.2060 ± 1.1911 ms (6544.02 GFLOP/s)
+[  5/20] BM=128, BN= 64, BK=32, TM=4, TN=4:  19.5630 ms (median), mean=19.5632 ± 0.0079 ms (7025.45 GFLOP/s)
+[  6/20] BM= 32, BN= 64, BK=32, TM=4, TN=2:  18.0885 ms (median), mean=17.3617 ± 1.0814 ms (7598.15 GFLOP/s)
+[  7/20] BM= 32, BN= 32, BK=16, TM=1, TN=4:  37.6066 ms (median), mean=37.2713 ± 0.7492 ms (3654.65 GFLOP/s)
+[  8/20] BM= 32, BN=128, BK= 8, TM=4, TN=4:  15.8519 ms (median), mean=15.4395 ± 0.6153 ms (8670.21 GFLOP/s)
+[  9/20] BM= 64, BN= 64, BK= 8, TM=4, TN=4:  15.7471 ms (median), mean=15.1627 ± 0.8735 ms (8727.91 GFLOP/s)
+[ 10/20] BM= 64, BN= 32, BK= 8, TM=4, TN=1:  29.5587 ms (median), mean=28.4327 ± 1.6758 ms (4649.69 GFLOP/s)
+[ 11/20] BM= 32, BN= 32, BK=16, TM=4, TN=2:  18.3862 ms (median), mean=17.5553 ± 1.2360 ms (7475.13 GFLOP/s)
+[ 12/20] BM= 64, BN=128, BK=32, TM=4, TN=4:  19.7536 ms (median), mean=19.7530 ± 0.0076 ms (6957.67 GFLOP/s)
+[ 13/20] BM=128, BN= 64, BK=16, TM=4, TN=4:  21.1085 ms (median), mean=20.5816 ± 0.7897 ms (6511.06 GFLOP/s)
+[ 14/20] BM= 32, BN= 64, BK= 8, TM=4, TN=2:  19.1914 ms (median), mean=19.1918 ± 0.0031 ms (7161.50 GFLOP/s)
+[ 15/20] BM= 32, BN= 32, BK=32, TM=4, TN=1:  37.6101 ms (median), mean=36.9731 ± 0.9512 ms (3654.31 GFLOP/s)
+[ 16/20] BM= 32, BN= 32, BK= 8, TM=4, TN=4:  20.1796 ms (median), mean=20.1814 ± 0.0044 ms (6810.78 GFLOP/s)
+[ 17/20] BM= 32, BN= 32, BK=16, TM=4, TN=1:  25.2487 ms (median), mean=24.2955 ± 1.4178 ms (5443.42 GFLOP/s)
+[ 18/20] BM= 32, BN= 64, BK= 8, TM=2, TN=4:  21.5175 ms (median), mean=21.1394 ± 0.5642 ms (6387.32 GFLOP/s)
+[ 19/20] BM= 64, BN= 32, BK=32, TM=4, TN=2:  35.7426 ms (median), mean=35.7425 ± 0.0020 ms (3845.24 GFLOP/s)
+[ 20/20] BM= 64, BN=128, BK= 8, TM=4, TN=4:  17.7817 ms (median), mean=17.3380 ± 0.6574 ms (7729.23 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ CUDA Bayesian Run 9: best = 15.7398 ms
+✓ CUDA Random Run 9:   best = 15.7471 ms
+
+================================================================================
+EXPERIMENT 10: CUDA MATMUL Bayesian Search
+================================================================================
+
+================================================================================
+Bayesian Optimization Auto-tuning CUDA MATMUL kernel (Optuna)
+================================================================================
+Problem size: 4096x4096x4096
+Trials to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+Valid configurations in search space: 93/243
+
+[  1/20] BM= 32, BN= 32, BK= 8, TM=1, TN=4:  36.9998 ms (median), mean=36.9988 ± 0.0049 ms (3714.58 GFLOP/s)
+[  2/20] BM= 64, BN= 64, BK=32, TM=2, TN=4:  20.0020 ms (median), mean=19.4648 ± 0.7982 ms (6871.25 GFLOP/s)
+[  3/20] BM= 32, BN= 64, BK=32, TM=2, TN=4:  20.3265 ms (median), mean=20.3274 ± 0.0026 ms (6761.56 GFLOP/s)
+[  4/20] BM= 32, BN= 32, BK=32, TM=4, TN=1:  37.6158 ms (median), mean=36.2748 ± 2.0831 ms (3653.76 GFLOP/s)
+[  5/20] BM= 32, BN= 64, BK= 8, TM=2, TN=4:  21.5188 ms (median), mean=21.5194 ± 0.0048 ms (6386.94 GFLOP/s)
+[  6/20] BM= 32, BN= 64, BK=32, TM=4, TN=2:  18.0912 ms (median), mean=17.2765 ± 1.2118 ms (7597.03 GFLOP/s)
+[  7/20] BM= 32, BN= 32, BK=16, TM=4, TN=2:  18.3884 ms (median), mean=18.3181 ± 0.1056 ms (7474.23 GFLOP/s)
+[  8/20] BM= 32, BN= 64, BK=32, TM=4, TN=2:  18.0944 ms (median), mean=18.0939 ± 0.0021 ms (7595.66 GFLOP/s)
+[  9/20] BM= 32, BN= 32, BK=32, TM=4, TN=4:  17.4700 ms (median), mean=17.4055 ± 0.0959 ms (7867.13 GFLOP/s)
+[ 10/20] BM=128, BN= 64, BK=16, TM=4, TN=4:  21.1117 ms (median), mean=21.1084 ± 0.0057 ms (6510.07 GFLOP/s)
+[ 11/20] BM= 32, BN= 32, BK=32, TM=1, TN=4:  42.9819 ms (median), mean=42.8992 ± 0.1842 ms (3197.60 GFLOP/s)
+[ 12/20] BM= 32, BN=128, BK=16, TM=2, TN=4:  22.3187 ms (median), mean=22.3179 ± 0.0023 ms (6158.02 GFLOP/s)
+[ 13/20] BM= 32, BN= 32, BK= 8, TM=4, TN=1:  28.1255 ms (median), mean=27.0972 ± 1.5310 ms (4886.63 GFLOP/s)
+[ 14/20] BM= 32, BN= 32, BK=32, TM=4, TN=4:  17.4678 ms (median), mean=17.0042 ± 0.6955 ms (7868.15 GFLOP/s)
+[ 15/20] BM= 32, BN= 32, BK=32, TM=4, TN=4:  17.4740 ms (median), mean=17.4746 ± 0.0046 ms (7865.33 GFLOP/s)
+[ 16/20] BM= 32, BN= 64, BK= 8, TM=2, TN=2:  26.4500 ms (median), mean=26.3530 ± 0.1459 ms (5196.18 GFLOP/s)
+[ 17/20] BM=128, BN= 32, BK= 8, TM=4, TN=2:  22.7948 ms (median), mean=22.7142 ± 0.1225 ms (6029.40 GFLOP/s)
+[ 18/20] BM= 32, BN= 32, BK=32, TM=4, TN=4:  17.4717 ms (median), mean=17.4721 ± 0.0058 ms (7866.37 GFLOP/s)
+[ 19/20] BM= 32, BN=128, BK= 8, TM=4, TN=2:  21.3549 ms (median), mean=20.5205 ± 1.2429 ms (6435.95 GFLOP/s)
+[ 20/20] BM= 32, BN= 32, BK=32, TM=4, TN=4:  17.4692 ms (median), mean=17.4688 ± 0.0040 ms (7867.48 GFLOP/s)
+
+Best trial: Trial #14
+Best value: 17.4678 ms
+✓ Bayesian run completed: 20 configs evaluated
+
+================================================================================
+EXPERIMENT 10: CUDA MATMUL Random Search
+================================================================================
+
+================================================================================
+Random Search Auto-tuning CUDA MATMUL kernel
+================================================================================
+Problem size: 4096x4096x4096
+Samples to evaluate: 20
+
+Benchmark repeats per config: 10, warmup runs: 5
+
+[  1/20] BM= 32, BN=128, BK= 8, TM=4, TN=4:  15.8552 ms (median), mean=15.2322 ± 0.9280 ms (8668.40 GFLOP/s)
+[  2/20] BM= 32, BN=128, BK= 8, TM=2, TN=4:  22.0957 ms (median), mean=21.1071 ± 1.4685 ms (6220.16 GFLOP/s)
+[  3/20] BM= 64, BN= 64, BK=32, TM=4, TN=2:  18.3890 ms (median), mean=18.3897 ± 0.0034 ms (7473.97 GFLOP/s)
+[  4/20] BM= 32, BN= 32, BK= 8, TM=2, TN=4:  23.5614 ms (median), mean=22.9272 ± 0.9447 ms (5833.22 GFLOP/s)
+[  5/20] BM= 64, BN= 64, BK= 8, TM=2, TN=4:  21.8153 ms (median), mean=21.8163 ± 0.0032 ms (6300.11 GFLOP/s)
+[  6/20] BM= 32, BN= 32, BK=32, TM=2, TN=1:  31.1562 ms (median), mean=29.9012 ± 1.8654 ms (4411.28 GFLOP/s)
+[  7/20] BM= 64, BN= 32, BK= 8, TM=4, TN=2:  20.3170 ms (median), mean=19.7948 ± 0.7790 ms (6764.73 GFLOP/s)
+[  8/20] BM= 64, BN= 32, BK=16, TM=2, TN=4:  23.6521 ms (median), mean=23.6519 ± 0.0014 ms (5810.85 GFLOP/s)
+[  9/20] BM= 32, BN= 32, BK=32, TM=4, TN=2:  36.4616 ms (median), mean=36.4605 ± 0.0036 ms (3769.41 GFLOP/s)
+[ 10/20] BM= 64, BN= 32, BK=16, TM=2, TN=2:  24.2498 ms (median), mean=23.8926 ± 0.5464 ms (5667.64 GFLOP/s)
+[ 11/20] BM= 32, BN=128, BK=16, TM=4, TN=2:  19.5501 ms (median), mean=18.7670 ± 1.1653 ms (7030.10 GFLOP/s)
+[ 12/20] BM= 64, BN= 32, BK=32, TM=1, TN=4:  42.4602 ms (median), mean=42.4600 ± 0.0017 ms (3236.89 GFLOP/s)
+[ 13/20] BM= 64, BN= 32, BK= 8, TM=4, TN=1:  29.5605 ms (median), mean=29.5615 ± 0.0049 ms (4649.41 GFLOP/s)
+[ 14/20] BM= 32, BN= 32, BK=16, TM=1, TN=4:  37.6083 ms (median), mean=37.6079 ± 0.0039 ms (3654.48 GFLOP/s)
+[ 15/20] BM= 32, BN= 32, BK=16, TM=1, TN=2:  39.2719 ms (median), mean=39.2734 ± 0.0033 ms (3499.68 GFLOP/s)
+[ 16/20] BM= 32, BN= 32, BK=32, TM=4, TN=4:  17.4675 ms (median), mean=17.4695 ± 0.0070 ms (7868.26 GFLOP/s)
+[ 17/20] BM= 32, BN= 64, BK= 8, TM=2, TN=4:  21.5196 ms (median), mean=21.5206 ± 0.0041 ms (6386.70 GFLOP/s)
+[ 18/20] BM= 32, BN= 64, BK= 8, TM=2, TN=2:  26.4485 ms (median), mean=26.1342 ± 0.5309 ms (5196.48 GFLOP/s)
+[ 19/20] BM= 32, BN= 64, BK=32, TM=4, TN=2:  18.0922 ms (median), mean=17.1958 ± 1.3339 ms (7596.59 GFLOP/s)
+[ 20/20] BM= 64, BN= 64, BK= 8, TM=4, TN=2:  18.9726 ms (median), mean=18.9018 ± 0.1055 ms (7244.07 GFLOP/s)
+✓ Random run completed: 20 configs evaluated
+
+✓ CUDA Bayesian Run 10: best = 17.4678 ms
+✓ CUDA Random Run 10:   best = 15.8552 ms
+
+Saved CUDA convergence data to: /home/latorresn/hpc-gemm/results_20260522_152743/matmul/size_4096/convergence_cuda.json
+
+================================================================================
+Running CUDA statistical analysis...
+================================================================================
+
+================================================================================
+STATISTICAL COMPARISON: CUDA MATMUL: BAYESIAN vs RANDOM SEARCH
+================================================================================
+
+Sample Sizes:
+  Bayesian: 10 runs
+  Random:   10 runs
+
+Descriptive Statistics (Best Time Found):
+
+  BAYESIAN:
+    Mean:   16.4301 ms
+    Median: 15.8418 ms
+    Std:    0.9850 ms
+    Range:  [15.4170, 18.3931] ms
+    IQR:    [15.7400, 17.3136] ms
+
+  RANDOM:
+    Mean:   15.7364 ms
+    Median: 15.8129 ms
+    Std:    0.1696 ms
+    Range:  [15.4161, 15.9478] ms
+    IQR:    [15.5852, 15.8559] ms
+
+Effect Size (Cohen's d): 0.931
+  → Large effect size
+
+Welch's t-test:
+  t-statistic: 2.0822
+  p-value:     0.0653
+  Mean diff:   0.6937 ms (95% CI: ±0.6195)
+  Result:      Not significant
+
+Mann-Whitney U test (non-parametric):
+  U-statistic: 61.0000
+  p-value:     0.4274
+  Result:      Not significant
+
+WINNER: Random
+================================================================================
+
+CUDA statistical results saved to: /home/latorresn/hpc-gemm/results_20260522_152743/matmul/size_4096/statistical_results_cuda.json
+
+================================================================================
+Analysis complete! Results saved to:
+  - SYCL MATMUL convergence data: /home/latorresn/hpc-gemm/results_20260522_152743/matmul/size_4096/convergence_sycl.json
+  - SYCL MATMUL statistical results: /home/latorresn/hpc-gemm/results_20260522_152743/matmul/size_4096/statistical_results_sycl.json
+  - CUDA MATMUL convergence data: /home/latorresn/hpc-gemm/results_20260522_152743/matmul/size_4096/convergence_cuda.json
+  - CUDA MATMUL statistical results: /home/latorresn/hpc-gemm/results_20260522_152743/matmul/size_4096/statistical_results_cuda.json
+================================================================================
+

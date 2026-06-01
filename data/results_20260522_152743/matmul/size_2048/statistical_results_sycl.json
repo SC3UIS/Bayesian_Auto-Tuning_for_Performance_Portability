@@ -1,0 +1,53 @@
+{
+  "sample_sizes": {
+    "bayesian": 10,
+    "random": 10
+  },
+  "descriptive_stats": {
+    "bayesian": {
+      "mean": 4.578457593917847,
+      "median": 4.71833598613739,
+      "std": 0.35186165354182924,
+      "min": 4.036607980728149,
+      "max": 5.094912052154541,
+      "q1": 4.21913605928421,
+      "q3": 4.851199924945831
+    },
+    "random": {
+      "mean": 4.656588816642762,
+      "median": 4.70963191986084,
+      "std": 0.216188743451576,
+      "min": 4.356096029281616,
+      "max": 5.0135040283203125,
+      "q1": 4.45248007774353,
+      "q3": 4.818560063838959
+    }
+  },
+  "effect_size_cohens_d": -0.25382967951778096,
+  "welch_ttest": {
+    "t_statistic": -0.5675804181087442,
+    "p_value": 0.5787458335015657,
+    "mean_difference": -0.0781312227249149,
+    "ci_95": 0.25596143917835634,
+    "significant_at_0_05": false,
+    "significant_at_0_01": false
+  },
+  "mann_whitney_u": {
+    "u_statistic": 44.5,
+    "p_value": 0.7053513720635047,
+    "significant_at_0_05": false,
+    "significant_at_0_01": false
+  },
+  "winner": "Bayesian",
+  "kernel": "matmul",
+  "backend": "sycl",
+  "problem_size": {
+    "M": 2048,
+    "N": 2048,
+    "K": 2048
+  },
+  "num_runs": 10,
+  "trials_per_run": 20,
+  "bench_runs_per_config": 10,
+  "warmup_runs_per_config": 5
+}
