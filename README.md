@@ -157,7 +157,7 @@ ls -la
 
 ## Documentation
 
-Comprehensive documentation is available in the `docs/` directory:
+Comprehensive documentation for each source file is available in the `docs/` directory
 
 ## Acknowledgments
 
