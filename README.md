@@ -24,13 +24,7 @@ This repository contains the implementation and experimental pipeline for compar
 
 ## Quick Start
 
-### Prerequisites
-
-**System Requirements:**
-- Linux operating system 
-- NVIDIA GPU with compute capability 8.0+ 
-- 40 GB+ GPU memory for largest problem sizes
-- 16 GB+ CPU RAM for analysis
+### Requirements
 
 **Software Stack:**
 - Python 3.8+
