@@ -15,11 +15,11 @@ This repository contains the implementation and experimental pipeline for compar
 
 ## Authors 
 
-- **Juan F. Rojas de la H.** (ORCID: 0009-0005-7595-4524)
-- **Diego A. Arévalo Q.** (ORCID: 0009-0003-6987-411X)
-- **Sergio A. Gélvez C.** (ORCID: 0000-0002-7898-3962)
-- **Luis A. Torres N.** (ORCID: 0000-0003-2597-9430)
-- **Carlos J. Barrios H.** (ORCID: 0000-0002-3227-8651) 
+- **Juan F. Rojas de la H.** 
+- **Diego A. Arévalo Q.** 
+- **Sergio A. Gélvez C.** 
+- **Luis A. Torres N.** 
+- **Carlos J. Barrios H.** 
 ---
 
 ## Quick Start
