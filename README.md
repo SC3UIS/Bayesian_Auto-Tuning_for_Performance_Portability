@@ -26,7 +26,6 @@ This repository contains the implementation and experimental pipeline for compar
 
 ### Requirements
 
-**Software Stack:**
 - Python 3.8+
 - CUDA Toolkit 11.8+
 - AdaptiveCpp (SYCL toolchain)
