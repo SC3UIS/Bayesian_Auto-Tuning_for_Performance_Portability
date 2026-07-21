@@ -28,8 +28,12 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 from statistics import mean, median, stdev
+from typing import TYPE_CHECKING, Any
 
-plt = None
+if TYPE_CHECKING:
+    import matplotlib.pyplot as plt
+else:
+    plt: Any = None
 
 KERNELS = ("matmul", "stencil")
 BACKENDS = ("sycl", "cuda")
@@ -83,6 +87,16 @@ def require_plot_deps() -> None:
                 "Plotting requires matplotlib. Install it with: python3 -m pip install matplotlib"
             ) from exc
         plt = matplotlib_pyplot
+
+        plt.rcParams.update({
+            'font.size': 14,             # Base font size for all text
+            'axes.titlesize': 16,        # Size of individual subplot titles (e.g., "N = 512")
+            'axes.labelsize': 13,        # Size of x and y axis labels (e.g., "Evaluation")
+            'xtick.labelsize': 11,       # Size of x-axis tick labels
+            'ytick.labelsize': 11,       # Size of y-axis tick labels
+            'legend.fontsize': 11,       # Size of the legend labels
+            'figure.titlesize': 16,      # Size of the overall figure super title
+        })
 
 
 def parse_size(size_dir: Path) -> int:
@@ -208,6 +222,44 @@ def algorithm_runs(entry: ResultEntry, algorithm: str) -> list[dict]:
     return entry.data.get(f"{algorithm}_runs", [])
 
 
+def default_time_ms(entry: ResultEntry) -> float:
+    """Untuned/default execution time for this (kernel, backend, size).
+
+    Looked up under a few common key names so this works whether the
+    orchestrator wrote it as a flat field or nested under a "default"-style
+    object:
+        {"default_baseline": {"time_ms": 64.34, "mean_time_ms": 64.30}}
+        {"default_time_ms": 64.34}
+        {"default": {"time_ms": 64.34}}
+        {"baseline_time_ms": 64.34}
+        {"default": {"best_time_ms": 64.34}}
+    """
+    data = entry.data
+    candidates = [
+        data.get("default_time_ms"),
+        data.get("baseline_time_ms"),
+    ]
+    for key in ("default_baseline", "default"):
+        obj = data.get(key)
+        if isinstance(obj, dict):
+            candidates.append(obj.get("time_ms"))
+            candidates.append(obj.get("mean_time_ms"))
+            candidates.append(obj.get("best_time_ms"))
+        elif isinstance(obj, (int, float)):
+            candidates.append(obj)
+
+    for value in candidates:
+        if value is None:
+            continue
+        try:
+            value = float(value)
+        except (TypeError, ValueError):
+            continue
+        if math.isfinite(value) and value > 0.0:
+            return value
+    return math.nan
+
+
 def percentile(values: list[float], pct: float) -> float:
     values = finite_positive(values)
     if not values:
@@ -297,6 +349,7 @@ def performance_summary(entry: ResultEntry, algorithm: str) -> dict:
         "std_gflops": gflops_stats["std"],
         "ci95_gflops": gflops_stats["ci95"],
         "best_observed_gflops": gflops_stats["max"],
+        "default_ms": default_time_ms(entry),
     }
 
 
@@ -609,6 +662,164 @@ def plot_cuda_sycl_ratio(performance_rows: list[dict], output_dir: Path) -> list
     return outputs
 
 
+EFFICIENCY_CONFIGS = ("default", "random", "bayesian")
+
+EFFICIENCY_LABELS = {
+    "default": "SYCL default",
+    "random": "SYCL after Random Search",
+    "bayesian": "SYCL after Bayesian Opt",
+}
+
+EFFICIENCY_COLORS = {
+    "default": "#7f7f7f",
+    "random": "#2ca02c",
+    "bayesian": "#1f77b4",
+}
+
+
+def build_efficiency_rows(performance_rows: list[dict]) -> list[dict]:
+    """Application efficiency e_app (Eq. 3) for the SYCL backend, expressed
+    as a percentage of the CUDA Bayesian-Optimization-tuned baseline time:
+
+        e_app = t_CUDA,BO-tuned / t_SYCL,config * 100
+
+    Both t_CUDA,BO-tuned and t_SYCL,config are the mean best-time across the
+    10 independent tuning campaigns (mean_best_ms), matching the paper's
+    Table 4 methodology -- not a single best-observed trial. One row is
+    emitted per (kernel, size, config) where config is one of "default"
+    (untuned SYCL), "random" (SYCL after Random Search), or "bayesian"
+    (SYCL after Bayesian Optimization) -- matching Figure 2.
+    """
+    rows: list[dict] = []
+    for kernel in KERNELS:
+        subset = rows_for(performance_rows, kernel=kernel)
+        sizes = sorted({row["size"] for row in subset})
+
+        for size in sizes:
+            cuda_bo_rows = rows_for(
+                subset, size=size, backend="cuda", algorithm="bayesian"
+            )
+            if not cuda_bo_rows:
+                continue
+            baseline_ms = cuda_bo_rows[0]["mean_best_ms"]
+            if not (math.isfinite(baseline_ms) and baseline_ms > 0.0):
+                baseline_ms = cuda_bo_rows[0]["best_observed_ms"]
+            if not (math.isfinite(baseline_ms) and baseline_ms > 0.0):
+                continue
+
+            sycl_rows = rows_for(subset, size=size, backend="sycl")
+            if not sycl_rows:
+                continue
+
+            configs: list[tuple[str, float]] = []
+
+            default_ms = sycl_rows[0].get("default_ms", math.nan)
+            if math.isfinite(default_ms) and default_ms > 0.0:
+                configs.append(("default", default_ms))
+
+            for algorithm in ("random", "bayesian"):
+                algo_rows = rows_for(
+                    subset, size=size, backend="sycl", algorithm=algorithm
+                )
+                if not algo_rows:
+                    continue
+                tuned_ms = algo_rows[0]["mean_best_ms"]
+                if not (math.isfinite(tuned_ms) and tuned_ms > 0.0):
+                    tuned_ms = algo_rows[0]["best_observed_ms"]
+                if math.isfinite(tuned_ms) and tuned_ms > 0.0:
+                    configs.append((algorithm, tuned_ms))
+
+            for config, sycl_ms in configs:
+                rows.append(
+                    {
+                        "kernel": kernel,
+                        "size": size,
+                        "config": config,
+                        "sycl_time_ms": sycl_ms,
+                        "cuda_bo_baseline_ms": baseline_ms,
+                        "efficiency_pct": 100.0 * baseline_ms / sycl_ms,
+                    }
+                )
+    return rows
+
+
+def plot_application_efficiency(
+    efficiency_rows: list[dict], output_dir: Path
+) -> list[Path]:
+    """Reproduces Figure 2: grouped bar chart of e_app (%) per matrix size,
+    for SYCL default / after Random Search / after Bayesian Opt, relative
+    to the CUDA BO-tuned baseline -- one chart per kernel.
+    """
+    require_plot_deps()
+    outputs = []
+
+    for kernel in KERNELS:
+        subset = [row for row in efficiency_rows if row["kernel"] == kernel]
+        sizes = sorted({row["size"] for row in subset})
+        if not sizes:
+            continue
+
+        fig, ax = plt.subplots(figsize=(6.2, 4.6))
+        width = 0.26
+        base_positions = list(range(len(sizes)))
+        plotted = False
+
+        for offset_idx, config in enumerate(EFFICIENCY_CONFIGS):
+            by_size = {
+                row["size"]: row["efficiency_pct"]
+                for row in subset
+                if row["config"] == config
+            }
+            values = [by_size.get(size, math.nan) for size in sizes]
+            if all(not math.isfinite(value) for value in values):
+                continue
+
+            positions = [
+                pos + (offset_idx - 1) * width for pos in base_positions
+            ]
+            bars = ax.bar(
+                positions,
+                [value if math.isfinite(value) else 0.0 for value in values],
+                width=width,
+                color=EFFICIENCY_COLORS[config],
+                label=EFFICIENCY_LABELS[config],
+            )
+            for bar, value in zip(bars, values):
+                if math.isfinite(value):
+                    ax.annotate(
+                        f"{value:.1f}%",
+                        xy=(bar.get_x() + bar.get_width() / 2, value),
+                        xytext=(0, 3),
+                        textcoords="offset points",
+                        ha="center",
+                        fontsize=8,
+                    )
+            plotted = True
+
+        if not plotted:
+            plt.close(fig)
+            continue
+
+        ax.set_ylim(0, 105)
+        ax.set_xticks(base_positions)
+        ax.set_xticklabels([str(size) for size in sizes])
+        ax.set_xlabel("Matrix size N x N")
+        ax.set_ylabel("Application efficiency E_app (%)")
+        ax.set_title(
+            f"Application Efficiency vs CUDA BO-tuned Baseline - {KERNEL_LABELS[kernel]}"
+        )
+        ax.grid(True, axis="y", linestyle=":", linewidth=0.7)
+        ax.legend(frameon=False, loc="upper left", fontsize=9)
+        fig.tight_layout()
+
+        output_path = output_dir / f"application_efficiency_{kernel}.eps"
+        fig.savefig(output_path, format="eps", bbox_inches="tight")
+        plt.close(fig)
+        outputs.append(output_path)
+
+    return outputs
+
+
 def print_summary(
     results_dir: Path, output_dir: Path, entries: list[ResultEntry], outputs: list[Path]
 ) -> None:
@@ -632,13 +843,13 @@ def main() -> int:
         description="Analyze SYCL/CUDA autotuning results and generate EPS plots."
     )
     parser.add_argument(
-        "results_dir",
+        "--input",
         nargs="?",
         type=Path,
         help="Results directory. Defaults to the newest results_* folder in the current directory.",
     )
     parser.add_argument(
-        "--output-dir",
+        "--output",
         type=Path,
         default=None,
         help="Directory for CSV and EPS artifacts. Default: RESULTS_DIR/eps_analysis",
@@ -702,6 +913,7 @@ def main() -> int:
             "std_gflops",
             "ci95_gflops",
             "best_observed_gflops",
+            "default_ms",
         ],
     )
     write_csv(
@@ -722,11 +934,35 @@ def main() -> int:
         ],
     )
 
-    outputs = [performance_csv, convergence_csv]
+    efficiency_rows = build_efficiency_rows(performance_rows)
+    efficiency_csv = output_dir / "application_efficiency.csv"
+    write_csv(
+        efficiency_csv,
+        efficiency_rows,
+        [
+            "kernel",
+            "size",
+            "config",
+            "sycl_time_ms",
+            "cuda_bo_baseline_ms",
+            "efficiency_pct",
+        ],
+    )
+
+    outputs = [performance_csv, convergence_csv, efficiency_csv]
     outputs.extend(plot_convergence(convergence_rows, output_dir, args.log_y))
     outputs.extend(plot_performance(performance_rows, output_dir))
     outputs.extend(plot_time(performance_rows, output_dir, args.log_y))
     outputs.extend(plot_cuda_sycl_ratio(performance_rows, output_dir))
+    outputs.extend(plot_application_efficiency(efficiency_rows, output_dir))
+
+    if not efficiency_rows:
+        print(
+            "\nWARNING: no 'default_time_ms' (untuned baseline) field was found in "
+            "the convergence JSON files, so application-efficiency bars could not "
+            "be computed. Add a 'default_time_ms' key to each convergence_*.json "
+            "(see default_time_ms() in this script for accepted key names)."
+        )
 
     print_summary(results_dir, output_dir, entries, outputs)
     return 0

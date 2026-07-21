@@ -16,7 +16,7 @@ set -o pipefail
 source "$(conda info --base)/etc/profile.d/conda.sh"
 conda activate hpc-gemm
 
-REPO_DIR="$HOME/hpc-gemm"             
+REPO_DIR="$HOME/Bayesian_Auto-Tuning_for_Performance_Portability"             
 cd "$REPO_DIR" || { echo "ERROR: repo dir not found"; exit 1; }
 
 # ---------------------------------------------------------------------------

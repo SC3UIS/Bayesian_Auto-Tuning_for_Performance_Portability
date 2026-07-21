@@ -11,15 +11,17 @@ This repository contains the implementation and experimental pipeline for compar
 - **Performance Portability**: Quantifying the cost of porting from vendor-specific CUDA to open-standard SYCL
 - **Auto-tuning Strategies**: Comparing Bayesian Optimization (TPE algorithm) vs. Random Search
 - **Computational Kernels**: General Matrix Multiplication (GEMM) and 2D Stencil operations
+
 ---
 
-## Authors 
+## Authors
 
-- **Juan F. Rojas de la H.** 
-- **Diego A. Arévalo Q.** 
-- **Sergio A. Gélvez C.** 
-- **Luis A. Torres N.** 
-- **Carlos J. Barrios H.** 
+- **Juan F. Rojas de la H.**
+- **Diego A. Arévalo Q.**
+- **Sergio A. Gélvez C.**
+- **Luis A. Torres N.**
+- **Carlos J. Barrios H.**
+
 ---
 
 ## Quick Start
@@ -34,23 +36,27 @@ This repository contains the implementation and experimental pipeline for compar
 ### Installation
 
 1. **Clone the repository:**
+
 ```bash
 git clone https://github.com/SC3UIS/Bayesian_Auto-Tuning_for_Performance_Portability.git
 cd Bayesian_Auto-Tuning_for_Performance_Portability
 ```
 
-2. **Install Python dependencies:**
+1. **Install Python dependencies:**
+
 ```bash
 python3 -m pip install optuna numpy scipy matplotlib pandas
 ```
 
-3. **Verify CUDA and SYCL toolchains:**
+1. **Verify CUDA and SYCL toolchains:**
+
 ```bash
 nvcc --version
 acpp --version
 ```
 
-4. **Compile kernels (optional - auto-compilation during execution):**
+1. **Compile kernels (optional - auto-compilation during execution):**
+
 ```bash
 cd src
 make clean
@@ -64,12 +70,14 @@ make
 ### Running Auto-Tuning Experiments
 
 #### Basic Execution (Default Settings)
+
 ```bash
 cd src
 python3 run_statistical_experiments.py
 ```
 
 This runs:
+
 - Problem sizes: 1024³, 2048³, 4096³ (GEMM) / 1024² × 512, 2048² × 512, 4096² × 512 (Stencil)
 - Kernels: Both GEMM and Stencil
 - Backends: Both CUDA and SYCL
@@ -79,21 +87,25 @@ This runs:
 #### Customized Execution
 
 **Change problem sizes:**
+
 ```bash
 python3 run_statistical_experiments.py --M 2048 --N 2048 --K 2048
 ```
 
 **Select specific kernels:**
+
 ```bash
 python3 run_statistical_experiments.py --kernels matmul stencil
 ```
 
 **Select specific backends:**
+
 ```bash
 python3 run_statistical_experiments.py --backends cuda sycl
 ```
 
 **Adjust tuning configuration:**
+
 ```bash
 python3 run_statistical_experiments.py \
   --num-runs 10 \
@@ -103,11 +115,13 @@ python3 run_statistical_experiments.py \
 ```
 
 **Specify custom output directory:**
+
 ```bash
 python3 run_statistical_experiments.py --output /path/to/results
 ```
 
 **Full customization example:**
+
 ```bash
 python3 run_statistical_experiments.py \
   --kernels matmul \
@@ -121,17 +135,20 @@ python3 run_statistical_experiments.py \
 ### Post-Processing and Analysis
 
 **Generate statistical analysis:**
+
 ```bash
 python3 statistical_analysis.py \
   --input /path/to/results \
   --output /path/to/analysis
 ```
 
-**Create visualizations:**
+**Create visualizations for specific kernels or backends:**
+
 ```bash
 python3 analyze_results.py \
   --input /path/to/results \
-  --plots convergence efficiency speedup
+  --kernels gemm          \
+  --backends cuda
 ```
 
 ---
@@ -150,9 +167,10 @@ The `data/` directory contains:
 All experimental data is organized by timestamp. To analyze the latest results:
 
 ```bash
-cd data/results_20260522_152743
+cd data/results_20260523_152743
 ls -la
 ```
+
 ---
 
 ## Documentation
@@ -162,6 +180,7 @@ Comprehensive documentation for each source file is available in the `docs/` dir
 ## Acknowledgments
 
 We gratefully acknowledge:
+
 - **CAGE Research Group** for research support and guidance
 - **Universidad Industrial de Santander** for computational resources via the GUANE cluster
 - **Universidad de Cartagena** for access to the PACCA supercomputing infrastructure
