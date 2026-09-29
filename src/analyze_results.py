@@ -665,9 +665,9 @@ def plot_cuda_sycl_ratio(performance_rows: list[dict], output_dir: Path) -> list
 EFFICIENCY_CONFIGS = ("default", "random", "bayesian")
 
 EFFICIENCY_LABELS = {
-    "default": "SYCL default",
-    "random": "SYCL after Random Search",
-    "bayesian": "SYCL after Bayesian Opt",
+    "default": "Default / Default",
+    "random": "Random / Random",
+    "bayesian": "BO / BO",
 }
 
 EFFICIENCY_COLORS = {
@@ -677,67 +677,112 @@ EFFICIENCY_COLORS = {
 }
 
 
-def build_efficiency_rows(performance_rows: list[dict]) -> list[dict]:
-    """Application efficiency e_app (Eq. 3) for the SYCL backend, expressed
-    as a percentage of the CUDA Bayesian-Optimization-tuned baseline time:
+def exact_sign_test_p_value(above: int, below: int) -> float:
+    """Two-sided exact sign-test p-value, excluding ties."""
+    n = above + below
+    if n == 0:
+        return math.nan
+    tail = min(above, below)
+    probability = sum(math.comb(n, index) for index in range(tail + 1)) / 2**n
+    return min(1.0, 2.0 * probability)
 
-        e_app = t_CUDA,BO-tuned / t_SYCL,config * 100
 
-    Both t_CUDA,BO-tuned and t_SYCL,config are the mean best-time across the
-    10 independent tuning campaigns (mean_best_ms), matching the paper's
-    Table 4 methodology -- not a single best-observed trial. One row is
-    emitted per (kernel, size, config) where config is one of "default"
-    (untuned SYCL), "random" (SYCL after Random Search), or "bayesian"
-    (SYCL after Bayesian Optimization) -- matching Figure 2.
+def build_efficiency_rows(
+    performance_rows: list[dict], entries: list[ResultEntry]
+) -> list[dict]:
+    """Compare default/default and matched tuned CUDA/SYCL configurations.
+
+    Tuned e_app samples are ratios within matching run_idx campaigns. The
+    exact paired sign test compares each tuned ratio with the default/default
+    e_app reference; default timings are stored as aggregate measurements.
     """
     rows: list[dict] = []
+    entry_by_key = {
+        (entry.kernel, entry.size, entry.backend): entry for entry in entries
+    }
     for kernel in KERNELS:
         subset = rows_for(performance_rows, kernel=kernel)
         sizes = sorted({row["size"] for row in subset})
 
         for size in sizes:
-            cuda_bo_rows = rows_for(
-                subset, size=size, backend="cuda", algorithm="bayesian"
+            sycl_entry = entry_by_key.get((kernel, size, "sycl"))
+            cuda_entry = entry_by_key.get((kernel, size, "cuda"))
+            if sycl_entry is None or cuda_entry is None:
+                continue
+
+            sycl_default_ms = default_time_ms(sycl_entry)
+            cuda_default_ms = default_time_ms(cuda_entry)
+            if not all(
+                math.isfinite(value) and value > 0.0
+                for value in (sycl_default_ms, cuda_default_ms)
+            ):
+                continue
+
+            default_efficiency = 100.0 * cuda_default_ms / sycl_default_ms
+            rows.append(
+                {
+                    "kernel": kernel,
+                    "size": size,
+                    "config": "default",
+                    "runs": 1,
+                    "sycl_time_ms": sycl_default_ms,
+                    "cuda_time_ms": cuda_default_ms,
+                    "efficiency_pct": default_efficiency,
+                    "median_efficiency_pct": default_efficiency,
+                    "std_efficiency_pct": 0.0,
+                    "sign_test_n": 0,
+                    "sign_test_above_default": 0,
+                    "sign_test_below_default": 0,
+                    "sign_test_p_value": math.nan,
+                    "significant_at_0_05": "",
+                }
             )
-            if not cuda_bo_rows:
-                continue
-            baseline_ms = cuda_bo_rows[0]["mean_best_ms"]
-            if not (math.isfinite(baseline_ms) and baseline_ms > 0.0):
-                baseline_ms = cuda_bo_rows[0]["best_observed_ms"]
-            if not (math.isfinite(baseline_ms) and baseline_ms > 0.0):
-                continue
-
-            sycl_rows = rows_for(subset, size=size, backend="sycl")
-            if not sycl_rows:
-                continue
-
-            configs: list[tuple[str, float]] = []
-
-            default_ms = sycl_rows[0].get("default_ms", math.nan)
-            if math.isfinite(default_ms) and default_ms > 0.0:
-                configs.append(("default", default_ms))
 
             for algorithm in ("random", "bayesian"):
-                algo_rows = rows_for(
-                    subset, size=size, backend="sycl", algorithm=algorithm
-                )
-                if not algo_rows:
+                sycl_runs = {
+                    int(run.get("run_idx", index)): run_best_time(run)
+                    for index, run in enumerate(algorithm_runs(sycl_entry, algorithm))
+                }
+                cuda_runs = {
+                    int(run.get("run_idx", index)): run_best_time(run)
+                    for index, run in enumerate(algorithm_runs(cuda_entry, algorithm))
+                }
+                paired_ids = sorted(sycl_runs.keys() & cuda_runs.keys())
+                paired_times = [
+                    (cuda_runs[run_id], sycl_runs[run_id])
+                    for run_id in paired_ids
+                    if math.isfinite(cuda_runs[run_id])
+                    and cuda_runs[run_id] > 0.0
+                    and math.isfinite(sycl_runs[run_id])
+                    and sycl_runs[run_id] > 0.0
+                ]
+                if not paired_times:
                     continue
-                tuned_ms = algo_rows[0]["mean_best_ms"]
-                if not (math.isfinite(tuned_ms) and tuned_ms > 0.0):
-                    tuned_ms = algo_rows[0]["best_observed_ms"]
-                if math.isfinite(tuned_ms) and tuned_ms > 0.0:
-                    configs.append((algorithm, tuned_ms))
 
-            for config, sycl_ms in configs:
+                efficiencies = [
+                    100.0 * cuda_ms / sycl_ms
+                    for cuda_ms, sycl_ms in paired_times
+                ]
+                above = sum(value > default_efficiency for value in efficiencies)
+                below = sum(value < default_efficiency for value in efficiencies)
+                p_value = exact_sign_test_p_value(above, below)
+                efficiency_stats = sample_summary(efficiencies)
                 rows.append(
                     {
                         "kernel": kernel,
                         "size": size,
-                        "config": config,
-                        "sycl_time_ms": sycl_ms,
-                        "cuda_bo_baseline_ms": baseline_ms,
-                        "efficiency_pct": 100.0 * baseline_ms / sycl_ms,
+                        "config": algorithm,
+                        "runs": len(paired_times),
+                        "sycl_time_ms": mean(sycl_ms for _, sycl_ms in paired_times),
+                        "cuda_time_ms": mean(cuda_ms for cuda_ms, _ in paired_times),
+                        "efficiency_pct": efficiency_stats["mean"],
+                        "median_efficiency_pct": efficiency_stats["median"],
+                        "std_efficiency_pct": efficiency_stats["std"],
+                        "sign_test_n": above + below,
+                        "sign_test_above_default": above,
+                        "sign_test_below_default": below,
+                        "sign_test_p_value": p_value,
+                        "significant_at_0_05": p_value < 0.05,
                     }
                 )
     return rows
@@ -746,10 +791,7 @@ def build_efficiency_rows(performance_rows: list[dict]) -> list[dict]:
 def plot_application_efficiency(
     efficiency_rows: list[dict], output_dir: Path
 ) -> list[Path]:
-    """Reproduces Figure 2: grouped bar chart of e_app (%) per matrix size,
-    for SYCL default / after Random Search / after Bayesian Opt, relative
-    to the CUDA BO-tuned baseline -- one chart per kernel.
-    """
+    """Plot symmetric CUDA/SYCL configuration comparisons per matrix size."""
     require_plot_deps()
     outputs = []
 
@@ -800,13 +842,22 @@ def plot_application_efficiency(
             plt.close(fig)
             continue
 
-        ax.set_ylim(0, 105)
+        max_value = max(
+            (
+                row["efficiency_pct"]
+                for row in subset
+                if math.isfinite(row["efficiency_pct"])
+            ),
+            default=100.0,
+        )
+        ax.set_ylim(0, max(105.0, max_value * 1.12))
+        ax.axhline(100.0, color="#444444", linewidth=1.0)
         ax.set_xticks(base_positions)
         ax.set_xticklabels([str(size) for size in sizes])
         ax.set_xlabel("Matrix size N x N")
-        ax.set_ylabel("Application efficiency E_app (%)")
+        ax.set_ylabel("Application efficiency E_app = CUDA / SYCL (%)")
         ax.set_title(
-            f"Application Efficiency vs CUDA BO-tuned Baseline - {KERNEL_LABELS[kernel]}"
+            f"Matched CUDA/SYCL Application Efficiency - {KERNEL_LABELS[kernel]}"
         )
         ax.grid(True, axis="y", linestyle=":", linewidth=0.7)
         ax.legend(frameon=False, loc="upper left", fontsize=9)
@@ -875,9 +926,9 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    results_dir = args.results_dir or latest_results_dir(Path.cwd())
+    results_dir = args.input or latest_results_dir(Path.cwd())
     results_dir = results_dir.resolve()
-    output_dir = (args.output_dir or (results_dir / "eps_analysis")).resolve()
+    output_dir = (args.output or (results_dir / "eps_analysis")).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
     entries = discover_entries(results_dir, args.kernels, args.backends)
@@ -934,7 +985,7 @@ def main() -> int:
         ],
     )
 
-    efficiency_rows = build_efficiency_rows(performance_rows)
+    efficiency_rows = build_efficiency_rows(performance_rows, entries)
     efficiency_csv = output_dir / "application_efficiency.csv"
     write_csv(
         efficiency_csv,
@@ -943,9 +994,17 @@ def main() -> int:
             "kernel",
             "size",
             "config",
+            "runs",
             "sycl_time_ms",
-            "cuda_bo_baseline_ms",
+            "cuda_time_ms",
             "efficiency_pct",
+            "median_efficiency_pct",
+            "std_efficiency_pct",
+            "sign_test_n",
+            "sign_test_above_default",
+            "sign_test_below_default",
+            "sign_test_p_value",
+            "significant_at_0_05",
         ],
     )
 
