@@ -54,7 +54,12 @@ __global__ void sgemm_blocktiling_2d_kernel(int num_rows_a, int num_cols_b, int 
             {
                 uint a_row = load_idx / BK;
                 uint a_col = load_idx % BK;
-                tile_a[load_idx] = matrix_a[a_row * num_cols_a + a_col];
+                const uint global_row = block_row * BM + a_row;
+                const uint global_col = block_k_idx + a_col;
+                tile_a[load_idx] =
+                    (global_row < num_rows_a && global_col < num_cols_a)
+                        ? matrix_a[a_row * num_cols_a + a_col]
+                        : 0.0f;
             }
         }
 
@@ -65,7 +70,12 @@ __global__ void sgemm_blocktiling_2d_kernel(int num_rows_a, int num_cols_b, int 
             {
                 uint b_row = load_idx / BN;
                 uint b_col = load_idx % BN;
-                tile_b[load_idx] = matrix_b[b_row * num_cols_b + b_col];
+                const uint global_row = block_k_idx + b_row;
+                const uint global_col = block_col * BN + b_col;
+                tile_b[load_idx] =
+                    (global_row < num_cols_a && global_col < num_cols_b)
+                        ? matrix_b[b_row * num_cols_b + b_col]
+                        : 0.0f;
             }
         }
 
@@ -103,10 +113,15 @@ __global__ void sgemm_blocktiling_2d_kernel(int num_rows_a, int num_cols_b, int 
     {
         for (uint res_idx_n = 0; res_idx_n < TN; ++res_idx_n)
         {
-            const uint c_idx = (thread_row * TM + res_idx_m) * num_cols_b +
-                               (thread_col * TN + res_idx_n);
-            matrix_c[c_idx] = alpha * thread_results[res_idx_m * TN + res_idx_n] +
-                              beta * matrix_c[c_idx];
+            const uint global_row = block_row * BM + thread_row * TM + res_idx_m;
+            const uint global_col = block_col * BN + thread_col * TN + res_idx_n;
+            if (global_row < num_rows_a && global_col < num_cols_b)
+            {
+                const uint c_idx = (thread_row * TM + res_idx_m) * num_cols_b +
+                                   (thread_col * TN + res_idx_n);
+                matrix_c[c_idx] = alpha * thread_results[res_idx_m * TN + res_idx_n] +
+                                  beta * matrix_c[c_idx];
+            }
         }
     }
 }

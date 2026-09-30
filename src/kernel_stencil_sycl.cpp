@@ -173,15 +173,11 @@ extern "C" float run_kernel(int M, int N, int K, int BM_arg, int BN_arg,
 
   q.wait_and_throw();
 
-  float elapsed_ms = 0.0f;
-  for (const sycl::event &e : events)
-  {
-    const auto t_start =
-        e.get_profiling_info<sycl::info::event_profiling::command_start>();
-    const auto t_end =
-        e.get_profiling_info<sycl::info::event_profiling::command_end>();
-    elapsed_ms += (t_end - t_start) * 1e-6f;
-  }
+  const auto t_start = events.front().get_profiling_info<
+      sycl::info::event_profiling::command_start>();
+  const auto t_end = events.back().get_profiling_info<
+      sycl::info::event_profiling::command_end>();
+  const float elapsed_ms = (t_end - t_start) * 1e-6f;
 
   sycl::free(d_current, q);
   sycl::free(d_next, q);
