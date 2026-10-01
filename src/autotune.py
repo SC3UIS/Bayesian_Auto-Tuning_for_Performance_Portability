@@ -19,8 +19,8 @@ DEFAULT_SEED = 42
 MAX_PLAUSIBLE_GFLOPS = float(os.environ.get("MAX_PLAUSIBLE_GFLOPS", "200000"))
 CUDA_MATMUL_MAX_THREADS_PER_BLOCK = int(os.environ.get("CUDA_MATMUL_MAX_THREADS_PER_BLOCK", "512"))
 CUDA_STENCIL_MAX_THREADS_PER_BLOCK = int(os.environ.get("CUDA_STENCIL_MAX_THREADS_PER_BLOCK", "512"))
-SYCL_MATMUL_MAX_WORK_GROUP_SIZE = int(os.environ.get("SYCL_MATMUL_MAX_WORK_GROUP_SIZE", "1024"))
-SYCL_STENCIL_MAX_WORK_GROUP_SIZE = int(os.environ.get("SYCL_STENCIL_MAX_WORK_GROUP_SIZE", "1024"))
+SYCL_MATMUL_MAX_WORK_GROUP_SIZE = int(os.environ.get("SYCL_MATMUL_MAX_WORK_GROUP_SIZE", "512"))
+SYCL_STENCIL_MAX_WORK_GROUP_SIZE = int(os.environ.get("SYCL_STENCIL_MAX_WORK_GROUP_SIZE", "512"))
 
 search_spaces = {
     "matmul": {
@@ -41,8 +41,8 @@ search_spaces = {
 
 
 default_configs = {
-    "matmul": (32, 32, 32, 1, 1),
-    "stencil": (16, 64, 0, 1, 1),
+    "matmul": (32, 32, 32, 2, 2),
+    "stencil": (16, 64, 0, 2, 2),
 }
 
 
@@ -61,15 +61,11 @@ def default_config_id(kernel):
 
 
 def max_threads_for_backend(backend=None, kernel="matmul"):
-    if backend == "cuda":
-        if kernel == "stencil":
-            return CUDA_STENCIL_MAX_THREADS_PER_BLOCK
-        return CUDA_MATMUL_MAX_THREADS_PER_BLOCK
-    if backend == "sycl":
-        if kernel == "stencil":
-            return SYCL_STENCIL_MAX_WORK_GROUP_SIZE
-        return SYCL_MATMUL_MAX_WORK_GROUP_SIZE
-    return 1024
+    if kernel == "stencil":
+        return min(CUDA_STENCIL_MAX_THREADS_PER_BLOCK,
+                   SYCL_STENCIL_MAX_WORK_GROUP_SIZE)
+    return min(CUDA_MATMUL_MAX_THREADS_PER_BLOCK,
+               SYCL_MATMUL_MAX_WORK_GROUP_SIZE)
 
 
 def all_valid_configs(kernel="matmul", backend=None, M=None, N=None, K=None):
@@ -203,6 +199,71 @@ print(json.dumps(stats))
     except Exception as e:
         return None, False
 
+
+def exhaustive_grid_search(M, N, K, backend="sycl", kernel="matmul",
+                           num_runs=3, warmup_runs=1, seed=DEFAULT_SEED):
+    configs = all_valid_configs(
+        kernel=kernel, backend=backend, M=M, N=N, K=K
+    )
+    print(
+        f"Exhaustive grid search {backend.upper()} {kernel.upper()}: "
+        f"{len(configs)} valid configurations"
+    )
+
+    evaluations = []
+    failures = []
+    for index, config_id in enumerate(configs, start=1):
+        config = tuple(map(int, config_id.split("_")))
+        stats, success = benchmark_config(
+            M, N, K, *config,
+            backend=backend,
+            kernel=kernel,
+            num_runs=num_runs,
+            warmup_runs=warmup_runs,
+            seed=seed,
+        )
+        if not success or not stats:
+            failures.append(config_id)
+            print(f"[{index:3d}/{len(configs)}] {config_id}: FAILED")
+            continue
+
+        evaluation = {
+            "config": config_id,
+            "BM": config[0],
+            "BN": config[1],
+            "BK": config[2],
+            "TM": config[3],
+            "TN": config[4],
+            "time_ms": stats["median"],
+            "mean_time_ms": stats["mean"],
+            "throughput_gflops": throughput_gflops(
+                kernel, M, N, K, stats["median"]
+            ),
+            "stats": stats,
+        }
+        evaluations.append(evaluation)
+        print(
+            f"[{index:3d}/{len(configs)}] {config_id}: "
+            f"{stats['median']:.4f} ms (median)"
+        )
+
+    complete = bool(configs) and len(evaluations) == len(configs)
+    best = min(evaluations, key=lambda item: item["time_ms"]) if evaluations else None
+    return {
+        "status": "complete" if complete else "incomplete",
+        "valid_config_count": len(configs),
+        "evaluated_config_count": len(evaluations),
+        "failed_config_count": len(failures),
+        "failed_configs": failures,
+        "num_runs_per_config": num_runs,
+        "warmup_runs_per_config": warmup_runs,
+        "seed": seed,
+        "optimum_config": best["config"] if complete and best else None,
+        "optimum_time_ms": best["time_ms"] if complete and best else None,
+        "evaluations": evaluations,
+    }
+
+
 def is_valid_config(bm, bn, bk, tm, tn=1, kernel="matmul", backend=None, M=None, N=None, K=None):
     if tm <= 0 or tn <= 0:
         return False, "TM and TN must be positive"
@@ -220,16 +281,6 @@ def is_valid_config(bm, bn, bk, tm, tn=1, kernel="matmul", backend=None, M=None,
         shared_memory = (bm * bk + bk * bn) * 4
         if shared_memory > 48 * 1024:
             return False, f"shared_mem={shared_memory/1024:.1f}KB > 48KB"
-
-        # The CUDA matmul kernel assumes complete tiles. Keep CUDA searches on
-        # tile-aligned problem sizes unless boundary guards are added there.
-        if backend == "cuda":
-            if M is not None and M % bm != 0:
-                return False, f"M={M} is not divisible by BM={bm}"
-            if N is not None and N % bn != 0:
-                return False, f"N={N} is not divisible by BN={bn}"
-            if K is not None and K % bk != 0:
-                return False, f"K={K} is not divisible by BK={bk}"
     elif kernel == "stencil":
         if bk < 0:
             return False, "BK is row padding for stencil and must be non-negative"
@@ -262,6 +313,7 @@ def random_search(M, N, K, backend="cuda", num_runs=3, num_samples=20,
     if not valid_configs:
         print("No valid configurations available in search space.")
         return results
+    print(f"Valid configurations in search space: {len(valid_configs)}")
 
     num_samples = min(num_samples, len(valid_configs))
     default_id = default_config_id(kernel)

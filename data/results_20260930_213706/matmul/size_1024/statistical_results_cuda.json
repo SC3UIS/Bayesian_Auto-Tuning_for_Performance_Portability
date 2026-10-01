@@ -1,0 +1,130 @@
+{
+  "sample_sizes": {
+    "bayesian": 10,
+    "random": 10
+  },
+  "descriptive_stats": {
+    "bayesian": {
+      "mean": 0.39037120044231416,
+      "median": 0.38782399892807007,
+      "std": 0.02709187640863308,
+      "min": 0.3499840050935745,
+      "max": 0.4404960125684738,
+      "q1": 0.3714919947087765,
+      "q3": 0.39835599809885025
+    },
+    "random": {
+      "mean": 0.3691520020365715,
+      "median": 0.37141600251197815,
+      "std": 0.023815301405178454,
+      "min": 0.3280960023403168,
+      "max": 0.4177920073270798,
+      "q1": 0.3509320020675659,
+      "q3": 0.38271600380539894
+    }
+  },
+  "effect_size_cohens_d": 0.7892298227798497,
+  "welch_ttest": {
+    "t_statistic": 1.7647715336058558,
+    "p_value": 0.09484158272753931,
+    "mean_difference": 0.021219198405742656,
+    "ci_95": 0.022357220487038032,
+    "significant_at_0_05": false,
+    "significant_at_0_01": false
+  },
+  "mann_whitney_u": {
+    "u_statistic": 73.0,
+    "p_value": 0.08897301170181328,
+    "significant_at_0_05": false,
+    "significant_at_0_01": false
+  },
+  "winner": "Random",
+  "kernel": "matmul",
+  "backend": "cuda",
+  "problem_size": {
+    "M": 1024,
+    "N": 1024,
+    "K": 1024
+  },
+  "num_runs": 10,
+  "trials_per_run": 15,
+  "bench_runs_per_config": 10,
+  "warmup_runs_per_config": 5,
+  "grid_runs_per_config": 3,
+  "grid_warmup_runs_per_config": 1,
+  "grid_search_status": "complete",
+  "grid_valid_config_count": 93,
+  "grid_optimum_config": "64_64_8_4_2",
+  "grid_optimum_time_ms": 0.31990399956703186,
+  "grid_regret_comparison": {
+    "metric": "relative_simple_regret_percent",
+    "bayesian_median_percent": 29.14374032822391,
+    "random_median_percent": 10.188055985929822,
+    "bayesian_runs": [
+      30.359103713114255,
+      13.924180821350674,
+      34.44033121434236,
+      11.76352548774724,
+      35.160552764217016,
+      0.0,
+      0.0,
+      28.22846459777104,
+      30.05901605867678,
+      34.44033121434236
+    ],
+    "random_runs": [
+      0.1300423310658383,
+      19.815948971311027,
+      9.382816432379615,
+      48.49454505073831,
+      13.924180821350674,
+      10.99329553948003,
+      11.973592435465829,
+      9.382816432379615,
+      9.012700251355543,
+      9.012700251355543
+    ],
+    "statistical_tests": {
+      "sample_sizes": {
+        "bayesian": 10,
+        "random": 10
+      },
+      "descriptive_stats": {
+        "bayesian": {
+          "mean": 21.837550587156173,
+          "median": 29.14374032822391,
+          "std": 13.394328367633918,
+          "min": 0.0,
+          "max": 35.160552764217016,
+          "q1": 12.303689321148099,
+          "q3": 33.42002433903533
+        },
+        "random": {
+          "mean": 14.212263851688203,
+          "median": 10.188055985929822,
+          "std": 12.33352950555204,
+          "min": 0.1300423310658383,
+          "max": 48.49454505073831,
+          "q1": 9.105229296611562,
+          "q3": 13.436533724879464
+        }
+      },
+      "effect_size_cohens_d": 0.5618688511346477,
+      "welch_ttest": {
+        "t_statistic": 1.2563769455767821,
+        "p_value": 0.22514817696082065,
+        "mean_difference": 7.62528673546797,
+        "ci_95": 11.28531138742651,
+        "significant_at_0_05": false,
+        "significant_at_0_01": false
+      },
+      "mann_whitney_u": {
+        "u_statistic": 67.5,
+        "p_value": 0.1979195112877884,
+        "significant_at_0_05": false,
+        "significant_at_0_01": false
+      },
+      "winner": "Random"
+    }
+  }
+}
