@@ -1,7 +1,0 @@
-kernel,size,status,sycl_config_count,cuda_config_count,shared_config_count,same_config_space,spearman_time_correlation
-matmul,1024,ok,93,93,93,True,0.26872074157267534
-matmul,2048,ok,93,93,93,True,0.09547682460371777
-matmul,4096,ok,93,93,93,True,0.14640023574538505
-stencil,1024,ok,200,200,200,True,0.7479921998049952
-stencil,2048,ok,200,200,200,True,0.7596294907372685
-stencil,4096,ok,200,200,200,True,0.48022950573764356
