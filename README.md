@@ -151,6 +151,8 @@ python3 analyze_results.py \
   --backends cuda
 ```
 
+`analyze_results.py` uses a complete `grid_search` as ground truth and exports `search_space_summary.csv`, `grid_configuration_defects.csv`, `grid_regret_evaluations.csv`, `grid_regret_campaigns.csv`, `bo_vs_rs_grid_regret.csv`, `application_efficiency.csv`, `transferability_summary.csv`, `optimum_transfer.csv`, and `validated_speedups.csv` alongside the existing performance and convergence summaries. Configurations within 10% of the grid optimum count as good; BO/RS TOST uses a paired +/-10 percentage-point regret margin and Holm-adjusted p-values. Validation speedups use the independent paired repetitions saved by the experiment runner. Older result sets without grids, configuration IDs, or validation samples retain the existing plots/tables while affected new metrics are reported as unavailable.
+
 ---
 
 ## Results and Data

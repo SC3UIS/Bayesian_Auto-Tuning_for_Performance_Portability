@@ -2,3 +2,4 @@
 *.out
 *.so
 src/__pycache__/
+tests/

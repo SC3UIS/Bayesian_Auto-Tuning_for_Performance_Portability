@@ -8,7 +8,9 @@ This document explains the purpose of each file under `src/` in the project.
   - Loads autotuning results from `results_*` directories.
   - Generates convergence plots for Bayesian vs Random search.
   - Produces SYCL vs CUDA performance visualizations for both `matmul` and `stencil`.
-  - Writes CSV summaries for analysis.
+  - Uses complete exhaustive-grid evaluations as ground truth for per-configuration defects, noise, good-configuration fractions, and BO/RS regret.
+  - Reports paired BO/RS regret tests with Holm correction and TOST equivalence margins, symmetric CUDA/SYCL application efficiency, shared-space transferability, and independent validation speedups.
+  - Writes dedicated CSV summaries for these analyses; grid- or validation-dependent metrics are marked unavailable when older inputs do not contain the required data.
 
 - `autotune.py`
   - Implements the autotuning logic and low-level benchmark utilities.

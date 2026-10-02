@@ -30,6 +30,11 @@ from pathlib import Path
 from statistics import mean, median, stdev
 from typing import TYPE_CHECKING, Any
 
+try:
+    from scipy import stats as scipy_stats
+except ImportError:
+    scipy_stats = None
+
 if TYPE_CHECKING:
     import matplotlib.pyplot as plt
 else:
@@ -292,6 +297,413 @@ def sample_summary(values: list[float]) -> dict[str, float | int]:
     }
 
 
+GOOD_CONFIG_REGRET_PCT = 10.0
+TOST_MARGIN_PCT = 10.0
+CONFIG_FIELDS = ("BM", "BN", "BK", "TM", "TN")
+
+
+def config_id(evaluation: dict) -> str | None:
+    if evaluation.get("config") is not None:
+        return str(evaluation["config"])
+    if all(key in evaluation for key in CONFIG_FIELDS):
+        return "_".join(str(int(evaluation[key])) for key in CONFIG_FIELDS)
+    return None
+
+
+def grid_evaluations(entry: ResultEntry) -> tuple[dict, list[dict]]:
+    grid = entry.data.get("grid_search", {})
+    evaluations = grid.get("evaluations", []) if isinstance(grid, dict) else []
+    by_config = {
+        config_id(item): item
+        for item in evaluations
+        if config_id(item) is not None
+        and math.isfinite(float(item.get("time_ms", math.nan)))
+        and float(item.get("time_ms", 0.0)) > 0.0
+    }
+    complete = (
+        isinstance(grid, dict)
+        and grid.get("status") == "complete"
+        and bool(by_config)
+        and len(by_config) == int(grid.get("valid_config_count", len(by_config)))
+    )
+    return {**(grid if isinstance(grid, dict) else {}), "complete": complete}, list(by_config.values())
+
+
+def evaluation_times(evaluation: dict) -> list[float]:
+    stats = evaluation.get("stats", {})
+    raw = stats.get("times", []) if isinstance(stats, dict) else []
+    return finite_positive([float(value) for value in raw])
+
+
+def build_grid_analysis(entries: list[ResultEntry]) -> tuple[list[dict], list[dict]]:
+    space_rows: list[dict] = []
+    config_rows: list[dict] = []
+    for entry in entries:
+        grid, evaluations = grid_evaluations(entry)
+        by_config = {config_id(item): item for item in evaluations}
+        valid_count = int(grid.get("valid_config_count", 0) or 0)
+        optimum = min((float(item["time_ms"]) for item in evaluations), default=math.nan)
+        if not grid["complete"]:
+            optimum = math.nan
+        optimum_item = min(evaluations, key=lambda item: float(item["time_ms"])) if evaluations else {}
+        good_count = 0
+        for item in evaluations:
+            time_ms = float(item["time_ms"])
+            times = evaluation_times(item)
+            stats = sample_summary(times)
+            _, ci_low, ci_high = mean_ci(times)
+            defect_ms = time_ms - optimum if math.isfinite(optimum) else math.nan
+            defect_pct = 100.0 * defect_ms / optimum if math.isfinite(optimum) and optimum > 0 else math.nan
+            is_good = math.isfinite(defect_pct) and defect_pct <= GOOD_CONFIG_REGRET_PCT
+            good_count += int(is_good)
+            config_rows.append({
+                "kernel": entry.kernel,
+                "backend": entry.backend,
+                "size": entry.size,
+                "config": config_id(item),
+                "time_ms": time_ms,
+                "measurement_runs": stats["n"],
+                "measurement_mean_ms": stats["mean"],
+                "measurement_std_ms": stats["std"],
+                "measurement_ci95_ms": (ci_high - ci_low) / 2 if math.isfinite(ci_low) and math.isfinite(ci_high) else math.nan,
+                "grid_optimum_ms": optimum,
+                "defect_ms": defect_ms,
+                "defect_pct": defect_pct,
+                "good_at_10pct": is_good,
+                "grid_complete": grid["complete"],
+            })
+        optimum_times = evaluation_times(optimum_item) if optimum_item and grid["complete"] else []
+        optimum_stats = sample_summary(optimum_times)
+        _, optimum_ci_low, optimum_ci_high = mean_ci(optimum_times)
+        space_rows.append({
+            "kernel": entry.kernel,
+            "backend": entry.backend,
+            "size": entry.size,
+            "M": entry.problem_size[0],
+            "N": entry.problem_size[1],
+            "K": entry.problem_size[2],
+            "grid_status": grid.get("status", "missing"),
+            "grid_complete": grid["complete"],
+            "valid_config_count": valid_count,
+            "evaluated_config_count": int(grid.get("evaluated_config_count", len(evaluations)) or 0),
+            "failed_config_count": int(grid.get("failed_config_count", 0) or 0),
+            "optimum_config": config_id(optimum_item) if optimum_item else "",
+            "optimum_ms": optimum,
+            "optimum_noise_runs": optimum_stats["n"],
+            "optimum_noise_std_ms": optimum_stats["std"],
+            "optimum_noise_ci95_ms": (optimum_ci_high - optimum_ci_low) / 2 if math.isfinite(optimum_ci_low) and math.isfinite(optimum_ci_high) else math.nan,
+            "good_config_threshold_pct": GOOD_CONFIG_REGRET_PCT,
+            "good_config_count": good_count if grid["complete"] else "",
+            "good_config_fraction": good_count / valid_count if grid["complete"] and valid_count else math.nan,
+        })
+    return space_rows, config_rows
+
+
+def build_regret_rows(entries: list[ResultEntry]) -> tuple[list[dict], list[dict]]:
+    evaluation_rows: list[dict] = []
+    campaign_rows: list[dict] = []
+    for entry in entries:
+        grid, evaluations = grid_evaluations(entry)
+        grid_by_config = {config_id(item): float(item["time_ms"]) for item in evaluations}
+        optimum = min(grid_by_config.values(), default=math.nan)
+        for algorithm in ALGORITHMS:
+            for run_index, run in enumerate(algorithm_runs(entry, algorithm)):
+                run_idx = int(run.get("run_idx", run_index))
+                running_best = math.inf
+                seen = 0
+                campaign_config = ""
+                for evaluation_index, evaluation in enumerate(run.get("evaluations", []), start=1):
+                    key = config_id(evaluation)
+                    grid_time = grid_by_config.get(key)
+                    available = grid["complete"] and grid_time is not None and optimum > 0
+                    regret_ms = grid_time - optimum if available else math.nan
+                    regret_pct = 100.0 * (grid_time / optimum - 1.0) if available else math.nan
+                    if available:
+                        seen += 1
+                        if regret_ms < running_best:
+                            running_best = regret_ms
+                            campaign_config = key or ""
+                    evaluation_rows.append({
+                        "kernel": entry.kernel,
+                        "backend": entry.backend,
+                        "size": entry.size,
+                        "algorithm": algorithm,
+                        "run_idx": run_idx,
+                        "evaluation": evaluation_index,
+                        "config": key or "",
+                        "grid_time_ms": grid_time if available else math.nan,
+                        "regret_ms": regret_ms,
+                        "regret_pct": regret_pct,
+                        "best_regret_pct_so_far": 100.0 * (running_best / optimum) if available and math.isfinite(running_best) else math.nan,
+                        "grid_status": "ok" if available else "unavailable",
+                    })
+                campaign_rows.append({
+                    "kernel": entry.kernel,
+                    "backend": entry.backend,
+                    "size": entry.size,
+                    "algorithm": algorithm,
+                    "run_idx": run_idx,
+                    "grid_complete": grid["complete"],
+                    "evaluations_with_grid_match": seen,
+                    "best_config_by_grid": campaign_config,
+                    "best_regret_pct": 100.0 * (running_best / optimum) if seen and optimum > 0 else math.nan,
+                })
+    return evaluation_rows, campaign_rows
+
+
+def mean_ci(values: list[float], confidence: float = 0.95) -> tuple[float, float, float]:
+    values = [value for value in values if math.isfinite(value)]
+    if not values:
+        return math.nan, math.nan, math.nan
+    center = mean(values)
+    if len(values) < 2:
+        return center, math.nan, math.nan
+    sd = stdev(values)
+    if scipy_stats is None:
+        critical = 1.96
+    else:
+        critical = float(scipy_stats.t.ppf((1.0 + confidence) / 2.0, len(values) - 1))
+    half_width = critical * sd / math.sqrt(len(values))
+    return center, center - half_width, center + half_width
+
+
+def paired_test(values: list[float], null: float = 0.0, alternative: str = "two-sided") -> float:
+    if scipy_stats is None or len(values) < 2:
+        return math.nan
+    return float(scipy_stats.ttest_1samp(values, popmean=null, alternative=alternative).pvalue)
+
+
+def holm_adjust(rows: list[dict], p_field: str, adjusted_field: str) -> None:
+    valid = [(index, float(row[p_field])) for index, row in enumerate(rows)
+             if isinstance(row.get(p_field), (int, float)) and math.isfinite(float(row[p_field]))]
+    ordered = sorted(valid, key=lambda item: item[1])
+    count = len(ordered)
+    running = 0.0
+    adjusted = {}
+    for rank, (index, p_value) in enumerate(ordered):
+        running = max(running, min(1.0, (count - rank) * p_value))
+        adjusted[index] = running
+    for index, row in enumerate(rows):
+        row[adjusted_field] = adjusted.get(index, math.nan)
+
+
+def build_algorithm_comparisons(campaign_rows: list[dict]) -> list[dict]:
+    comparisons: list[dict] = []
+    groups = sorted({(row["kernel"], row["backend"], row["size"]) for row in campaign_rows})
+    for kernel, backend, size in groups:
+        grouped = {
+            algorithm: {int(row["run_idx"]): float(row["best_regret_pct"])
+                        for row in campaign_rows
+                        if (row["kernel"], row["backend"], row["size"], row["algorithm"]) == (kernel, backend, size, algorithm)
+                        and math.isfinite(float(row["best_regret_pct"]))}
+            for algorithm in ALGORITHMS
+        }
+        common = sorted(grouped["bayesian"].keys() & grouped["random"].keys())
+        differences = [grouped["bayesian"][idx] - grouped["random"][idx] for idx in common]
+        center, ci90_low, ci90_high = mean_ci(differences, confidence=0.90)
+        _, ci95_low, ci95_high = mean_ci(differences, confidence=0.95)
+        sd = stdev(differences) if len(differences) > 1 else math.nan
+        dz = center / sd if len(differences) > 1 and sd > 0 else (0.0 if differences and center == 0 else math.nan)
+        p_difference = paired_test(differences)
+        p_lower = paired_test(differences, null=-TOST_MARGIN_PCT, alternative="greater")
+        p_upper = paired_test(differences, null=TOST_MARGIN_PCT, alternative="less")
+        p_tost = max(p_lower, p_upper) if math.isfinite(p_lower) and math.isfinite(p_upper) else math.nan
+        comparisons.append({
+            "kernel": kernel,
+            "backend": backend,
+            "size": size,
+            "paired_campaigns": len(common),
+            "run_indices": ";".join(str(value) for value in common),
+            "bayesian_mean_regret_pct": mean(grouped["bayesian"].values()) if grouped["bayesian"] else math.nan,
+            "random_mean_regret_pct": mean(grouped["random"].values()) if grouped["random"] else math.nan,
+            "mean_difference_bo_minus_rs_pp": center,
+            "difference_ci95_low_pp": ci95_low,
+            "difference_ci95_high_pp": ci95_high,
+            "difference_cohen_dz": dz,
+            "difference_p_value": p_difference,
+            "difference_holm_p_value": math.nan,
+            "tost_margin_pp": TOST_MARGIN_PCT,
+            "difference_ci90_low_pp": ci90_low,
+            "difference_ci90_high_pp": ci90_high,
+            "tost_lower_p_value": p_lower,
+            "tost_upper_p_value": p_upper,
+            "tost_p_value": p_tost,
+            "tost_holm_p_value": math.nan,
+            "difference_conclusion": "test_unavailable" if not math.isfinite(p_difference) else ("difference" if p_difference < 0.05 else "no_difference_detected"),
+            "equivalence_conclusion": "test_unavailable" if not math.isfinite(p_tost) else ("equivalent" if p_tost < 0.05 else "not_equivalent_or_inconclusive"),
+        })
+    holm_adjust(comparisons, "difference_p_value", "difference_holm_p_value")
+    holm_adjust(comparisons, "tost_p_value", "tost_holm_p_value")
+    for row in comparisons:
+        row["difference_conclusion"] = (
+            "test_unavailable" if not math.isfinite(row["difference_holm_p_value"])
+            else ("difference" if row["difference_holm_p_value"] < 0.05 else "no_difference_detected")
+        )
+        row["equivalence_conclusion"] = (
+            "test_unavailable" if not math.isfinite(row["tost_holm_p_value"])
+            else ("equivalent" if row["tost_holm_p_value"] < 0.05 else "not_equivalent_or_inconclusive")
+        )
+    return comparisons
+
+
+def validation_speedups(entry: ResultEntry, algorithm: str) -> list[dict]:
+    rows = []
+    for index, run in enumerate(algorithm_runs(entry, algorithm)):
+        validation = run.get("validation", {})
+        if validation.get("status") != "ok":
+            continue
+        default_times = validation.get("default_stats", {}).get("times", [])
+        tuned_times = validation.get("tuned_stats", {}).get("times", [])
+        paired = [(float(default), float(tuned)) for default, tuned in zip(default_times, tuned_times)
+                  if math.isfinite(float(default)) and float(default) > 0
+                  and math.isfinite(float(tuned)) and float(tuned) > 0]
+        speedups = [default / tuned for default, tuned in paired]
+        if not speedups:
+            continue
+        logs = [math.log(value) for value in speedups]
+        log_mean, lower, upper = mean_ci(logs, confidence=0.95)
+        rows.append({
+            "kernel": entry.kernel,
+            "backend": entry.backend,
+            "size": entry.size,
+            "algorithm": algorithm,
+            "run_idx": int(run.get("run_idx", index)),
+            "validation_seed": validation.get("validation_seed", ""),
+            "paired_repetitions": len(speedups),
+            "geometric_mean_speedup": math.exp(log_mean),
+            "speedup_ci95_low": math.exp(lower) if math.isfinite(lower) else math.nan,
+            "speedup_ci95_high": math.exp(upper) if math.isfinite(upper) else math.nan,
+            "median_speedup": median(speedups),
+            "pairs_faster_than_default": sum(value > 1 for value in speedups),
+        })
+    return rows
+
+
+def validation_by_run(entry: ResultEntry, algorithm: str) -> dict[int, dict]:
+    return {
+        int(run.get("run_idx", index)): run.get("validation", {})
+        for index, run in enumerate(algorithm_runs(entry, algorithm))
+        if run.get("validation", {}).get("status") == "ok"
+    }
+
+
+def validation_pairs(
+    sycl_entry: ResultEntry, cuda_entry: ResultEntry, algorithm: str | None, field: str
+) -> list[tuple[float, float]]:
+    algorithms = (algorithm,) if algorithm else ("bayesian",)
+    pairs: list[tuple[float, float]] = []
+    for selected_algorithm in algorithms:
+        sycl_runs = validation_by_run(sycl_entry, selected_algorithm)
+        cuda_runs = validation_by_run(cuda_entry, selected_algorithm)
+        for run_idx in sorted(sycl_runs.keys() & cuda_runs.keys()):
+            sycl_validation = sycl_runs[run_idx]
+            cuda_validation = cuda_runs[run_idx]
+            if sycl_validation.get("validation_seed") != cuda_validation.get("validation_seed"):
+                continue
+            sycl_times = sycl_validation.get(f"{field}_stats", {}).get("times", [])
+            cuda_times = cuda_validation.get(f"{field}_stats", {}).get("times", [])
+            pairs.extend(
+                (float(sycl_time), float(cuda_time))
+                for sycl_time, cuda_time in zip(sycl_times, cuda_times)
+                if math.isfinite(float(sycl_time)) and float(sycl_time) > 0
+                and math.isfinite(float(cuda_time)) and float(cuda_time) > 0
+            )
+    return pairs
+
+
+def efficiency_row(
+    kernel: str, size: int, config: str, pairs: list[tuple[float, float]], source: str
+) -> dict:
+    ratios = [100.0 * cuda_time / sycl_time for sycl_time, cuda_time in pairs]
+    stats = sample_summary(ratios)
+    return {
+        "kernel": kernel,
+        "size": size,
+        "config": config,
+        "source": source,
+        "paired_measurements": len(ratios),
+        "sycl_time_ms": mean(sycl_time for sycl_time, _ in pairs) if pairs else math.nan,
+        "cuda_time_ms": mean(cuda_time for _, cuda_time in pairs) if pairs else math.nan,
+        "efficiency_pct": stats["mean"],
+        "median_efficiency_pct": stats["median"],
+        "std_efficiency_pct": stats["std"],
+        "ci95_efficiency_pct": stats["ci95"],
+    }
+
+
+def grid_time_pairs(sycl_entry: ResultEntry, cuda_entry: ResultEntry, config: str) -> list[tuple[float, float]]:
+    sycl_grid, sycl_evals = grid_evaluations(sycl_entry)
+    cuda_grid, cuda_evals = grid_evaluations(cuda_entry)
+    if not sycl_grid["complete"] or not cuda_grid["complete"]:
+        return []
+    sycl_eval = next((item for item in sycl_evals if config_id(item) == config), None)
+    cuda_eval = next((item for item in cuda_evals if config_id(item) == config), None)
+    if sycl_eval is None or cuda_eval is None:
+        return []
+    return list(zip(evaluation_times(sycl_eval), evaluation_times(cuda_eval)))
+
+
+def build_transferability_rows(entries: list[ResultEntry]) -> tuple[list[dict], list[dict]]:
+    summary_rows: list[dict] = []
+    transfer_rows: list[dict] = []
+    entry_by_key = {(entry.kernel, entry.size, entry.backend): entry for entry in entries}
+    scopes = sorted({(entry.kernel, entry.size) for entry in entries})
+    for kernel, size in scopes:
+        sycl_entry = entry_by_key.get((kernel, size, "sycl"))
+        cuda_entry = entry_by_key.get((kernel, size, "cuda"))
+        if sycl_entry is None or cuda_entry is None:
+            summary_rows.append({"kernel": kernel, "size": size, "status": "backend_missing"})
+            continue
+        sycl_grid, sycl_evals = grid_evaluations(sycl_entry)
+        cuda_grid, cuda_evals = grid_evaluations(cuda_entry)
+        sycl_by_config = {config_id(item): float(item["time_ms"]) for item in sycl_evals}
+        cuda_by_config = {config_id(item): float(item["time_ms"]) for item in cuda_evals}
+        shared = sorted(sycl_by_config.keys() & cuda_by_config.keys())
+        same_space = (
+            sycl_grid["complete"] and cuda_grid["complete"]
+            and len(shared) == len(sycl_by_config) == len(cuda_by_config)
+        )
+        rho = math.nan
+        if same_space and len(shared) > 1 and scipy_stats is not None:
+            rho = float(scipy_stats.spearmanr(
+                [sycl_by_config[key] for key in shared],
+                [cuda_by_config[key] for key in shared],
+            ).statistic)
+        summary_rows.append({
+            "kernel": kernel,
+            "size": size,
+            "status": "ok" if same_space else "spaces_not_identical_or_grid_incomplete",
+            "sycl_config_count": len(sycl_by_config),
+            "cuda_config_count": len(cuda_by_config),
+            "shared_config_count": len(shared),
+            "same_config_space": same_space,
+            "spearman_time_correlation": rho,
+        })
+        if not same_space:
+            continue
+        for source_backend, source_times, target_backend, target_times in (
+            ("sycl", sycl_by_config, "cuda", cuda_by_config),
+            ("cuda", cuda_by_config, "sycl", sycl_by_config),
+        ):
+            source_optimum_config = min(source_times, key=source_times.get)
+            target_optimum_time = min(target_times.values())
+            transferred_time = target_times[source_optimum_config]
+            transfer_rows.append({
+                "kernel": kernel,
+                "size": size,
+                "source_backend": source_backend,
+                "target_backend": target_backend,
+                "transferred_config": source_optimum_config,
+                "source_optimum_ms": source_times[source_optimum_config],
+                "target_transferred_ms": transferred_time,
+                "target_optimum_ms": target_optimum_time,
+                "target_regret_ms": transferred_time - target_optimum_time,
+                "target_regret_pct": 100.0 * (transferred_time / target_optimum_time - 1.0),
+                "target_over_source_time_ratio": transferred_time / source_times[source_optimum_config],
+            })
+    return summary_rows, transfer_rows
+
+
 def convergence_summary(entry: ResultEntry, algorithm: str) -> list[dict]:
     traces = [run_trace(run) for run in algorithm_runs(entry, algorithm)]
     traces = [trace for trace in traces if trace]
@@ -459,8 +871,8 @@ def plot_convergence(
                 y=0.99,
             )
             fig.tight_layout(rect=(0, 0, 1, 0.9))
-            output_path = output_dir / f"convergence_{kernel}_{backend}.eps"
-            fig.savefig(output_path, format="eps", bbox_inches="tight")
+            output_path = output_dir / f"convergence_{kernel}_{backend}.pdf"
+            fig.savefig(output_path, format="pdf", bbox_inches="tight")
             plt.close(fig)
             outputs.append(output_path)
 
@@ -519,8 +931,8 @@ def plot_performance(performance_rows: list[dict], output_dir: Path) -> list[Pat
         ax.legend(frameon=False)
         fig.tight_layout()
 
-        output_path = output_dir / f"performance_sycl_vs_cuda_{kernel}.eps"
-        fig.savefig(output_path, format="eps", bbox_inches="tight")
+        output_path = output_dir / f"performance_sycl_vs_cuda_{kernel}.pdf"
+        fig.savefig(output_path, format="pdf", bbox_inches="tight")
         plt.close(fig)
         outputs.append(output_path)
 
@@ -583,8 +995,8 @@ def plot_time(
         ax.legend(frameon=False)
         fig.tight_layout()
 
-        output_path = output_dir / f"time_sycl_vs_cuda_{kernel}.eps"
-        fig.savefig(output_path, format="eps", bbox_inches="tight")
+        output_path = output_dir / f"time_sycl_vs_cuda_{kernel}.pdf"
+        fig.savefig(output_path, format="pdf", bbox_inches="tight")
         plt.close(fig)
         outputs.append(output_path)
 
@@ -654,26 +1066,28 @@ def plot_cuda_sycl_ratio(performance_rows: list[dict], output_dir: Path) -> list
         ax.legend(frameon=False)
         fig.tight_layout()
 
-        output_path = output_dir / f"cuda_over_sycl_ratio_{kernel}.eps"
-        fig.savefig(output_path, format="eps", bbox_inches="tight")
+        output_path = output_dir / f"cuda_over_sycl_ratio_{kernel}.pdf"
+        fig.savefig(output_path, format="pdf", bbox_inches="tight")
         plt.close(fig)
         outputs.append(output_path)
 
     return outputs
 
 
-EFFICIENCY_CONFIGS = ("default", "random", "bayesian")
+EFFICIENCY_CONFIGS = ("default", "random", "bayesian", "grid_optimum")
 
 EFFICIENCY_LABELS = {
     "default": "Default / Default",
     "random": "Random / Random",
     "bayesian": "BO / BO",
+    "grid_optimum": "Grid optimum / Grid optimum",
 }
 
 EFFICIENCY_COLORS = {
     "default": "#7f7f7f",
     "random": "#2ca02c",
     "bayesian": "#1f77b4",
+    "grid_optimum": "#d62728",
 }
 
 
@@ -690,101 +1104,36 @@ def exact_sign_test_p_value(above: int, below: int) -> float:
 def build_efficiency_rows(
     performance_rows: list[dict], entries: list[ResultEntry]
 ) -> list[dict]:
-    """Compare default/default and matched tuned CUDA/SYCL configurations.
-
-    Tuned e_app samples are ratios within matching run_idx campaigns. The
-    exact paired sign test compares each tuned ratio with the default/default
-    e_app reference; default timings are stored as aggregate measurements.
-    """
+    """Compare default/default, tuned/tuned, and grid-optimum/grid-optimum."""
     rows: list[dict] = []
     entry_by_key = {
         (entry.kernel, entry.size, entry.backend): entry for entry in entries
     }
     for kernel in KERNELS:
-        subset = rows_for(performance_rows, kernel=kernel)
-        sizes = sorted({row["size"] for row in subset})
+        sizes = sorted({entry.size for entry in entries if entry.kernel == kernel})
 
         for size in sizes:
             sycl_entry = entry_by_key.get((kernel, size, "sycl"))
             cuda_entry = entry_by_key.get((kernel, size, "cuda"))
             if sycl_entry is None or cuda_entry is None:
                 continue
-
-            sycl_default_ms = default_time_ms(sycl_entry)
-            cuda_default_ms = default_time_ms(cuda_entry)
-            if not all(
-                math.isfinite(value) and value > 0.0
-                for value in (sycl_default_ms, cuda_default_ms)
-            ):
-                continue
-
-            default_efficiency = 100.0 * cuda_default_ms / sycl_default_ms
-            rows.append(
-                {
-                    "kernel": kernel,
-                    "size": size,
-                    "config": "default",
-                    "runs": 1,
-                    "sycl_time_ms": sycl_default_ms,
-                    "cuda_time_ms": cuda_default_ms,
-                    "efficiency_pct": default_efficiency,
-                    "median_efficiency_pct": default_efficiency,
-                    "std_efficiency_pct": 0.0,
-                    "sign_test_n": 0,
-                    "sign_test_above_default": 0,
-                    "sign_test_below_default": 0,
-                    "sign_test_p_value": math.nan,
-                    "significant_at_0_05": "",
-                }
-            )
-
+            default_pairs = validation_pairs(sycl_entry, cuda_entry, None, "default")
+            if default_pairs:
+                rows.append(efficiency_row(kernel, size, "default", default_pairs, "20-pair validation"))
             for algorithm in ("random", "bayesian"):
-                sycl_runs = {
-                    int(run.get("run_idx", index)): run_best_time(run)
-                    for index, run in enumerate(algorithm_runs(sycl_entry, algorithm))
-                }
-                cuda_runs = {
-                    int(run.get("run_idx", index)): run_best_time(run)
-                    for index, run in enumerate(algorithm_runs(cuda_entry, algorithm))
-                }
-                paired_ids = sorted(sycl_runs.keys() & cuda_runs.keys())
-                paired_times = [
-                    (cuda_runs[run_id], sycl_runs[run_id])
-                    for run_id in paired_ids
-                    if math.isfinite(cuda_runs[run_id])
-                    and cuda_runs[run_id] > 0.0
-                    and math.isfinite(sycl_runs[run_id])
-                    and sycl_runs[run_id] > 0.0
-                ]
-                if not paired_times:
-                    continue
-
-                efficiencies = [
-                    100.0 * cuda_ms / sycl_ms
-                    for cuda_ms, sycl_ms in paired_times
-                ]
-                above = sum(value > default_efficiency for value in efficiencies)
-                below = sum(value < default_efficiency for value in efficiencies)
-                p_value = exact_sign_test_p_value(above, below)
-                efficiency_stats = sample_summary(efficiencies)
-                rows.append(
-                    {
-                        "kernel": kernel,
-                        "size": size,
-                        "config": algorithm,
-                        "runs": len(paired_times),
-                        "sycl_time_ms": mean(sycl_ms for _, sycl_ms in paired_times),
-                        "cuda_time_ms": mean(cuda_ms for cuda_ms, _ in paired_times),
-                        "efficiency_pct": efficiency_stats["mean"],
-                        "median_efficiency_pct": efficiency_stats["median"],
-                        "std_efficiency_pct": efficiency_stats["std"],
-                        "sign_test_n": above + below,
-                        "sign_test_above_default": above,
-                        "sign_test_below_default": below,
-                        "sign_test_p_value": p_value,
-                        "significant_at_0_05": p_value < 0.05,
-                    }
-                )
+                tuned_pairs = validation_pairs(sycl_entry, cuda_entry, algorithm, "tuned")
+                if tuned_pairs:
+                    rows.append(efficiency_row(kernel, size, algorithm, tuned_pairs, "20-pair validation"))
+            sycl_grid, sycl_evals = grid_evaluations(sycl_entry)
+            cuda_grid, cuda_evals = grid_evaluations(cuda_entry)
+            if sycl_grid["complete"] and cuda_grid["complete"]:
+                sycl_optimum = min(sycl_evals, key=lambda item: float(item["time_ms"]))
+                cuda_optimum = min(cuda_evals, key=lambda item: float(item["time_ms"]))
+                sycl_times = evaluation_times(sycl_optimum)
+                cuda_times = evaluation_times(cuda_optimum)
+                optimum_pairs = list(zip(sycl_times, cuda_times))
+                if optimum_pairs:
+                    rows.append(efficiency_row(kernel, size, "grid_optimum", optimum_pairs, "independent grid optima; grid repeats"))
     return rows
 
 
@@ -863,8 +1212,8 @@ def plot_application_efficiency(
         ax.legend(frameon=False, loc="upper left", fontsize=9)
         fig.tight_layout()
 
-        output_path = output_dir / f"application_efficiency_{kernel}.eps"
-        fig.savefig(output_path, format="eps", bbox_inches="tight")
+        output_path = output_dir / f"application_efficiency_{kernel}.pdf"
+        fig.savefig(output_path, format="pdf", bbox_inches="tight")
         plt.close(fig)
         outputs.append(output_path)
 
@@ -891,7 +1240,7 @@ def print_summary(
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Analyze SYCL/CUDA autotuning results and generate EPS plots."
+        description="Analyze SYCL/CUDA autotuning results and generate PDF plots."
     )
     parser.add_argument(
         "--input",
@@ -903,7 +1252,7 @@ def main() -> int:
         "--output",
         type=Path,
         default=None,
-        help="Directory for CSV and EPS artifacts. Default: RESULTS_DIR/eps_analysis",
+        help="Directory for CSV and PDF artifacts. Default: RESULTS_DIR/eps_analysis",
     )
     parser.add_argument(
         "--kernels",
@@ -994,21 +1343,82 @@ def main() -> int:
             "kernel",
             "size",
             "config",
-            "runs",
+            "source",
+            "paired_measurements",
             "sycl_time_ms",
             "cuda_time_ms",
             "efficiency_pct",
             "median_efficiency_pct",
             "std_efficiency_pct",
-            "sign_test_n",
-            "sign_test_above_default",
-            "sign_test_below_default",
-            "sign_test_p_value",
-            "significant_at_0_05",
+            "ci95_efficiency_pct",
         ],
     )
 
-    outputs = [performance_csv, convergence_csv, efficiency_csv]
+    space_rows, grid_config_rows = build_grid_analysis(entries)
+    regret_evaluation_rows, campaign_regret_rows = build_regret_rows(entries)
+    comparison_rows = build_algorithm_comparisons(campaign_regret_rows)
+    transfer_rows, transfer_detail_rows = build_transferability_rows(entries)
+    speedup_rows = [
+        row
+        for entry in entries
+        for algorithm in ALGORITHMS
+        for row in validation_speedups(entry, algorithm)
+    ]
+
+    analysis_csvs = [
+        ("search_space_summary.csv", space_rows, [
+            "kernel", "backend", "size", "M", "N", "K", "grid_status",
+            "grid_complete", "valid_config_count", "evaluated_config_count",
+            "failed_config_count", "optimum_config", "optimum_ms",
+            "optimum_noise_runs", "optimum_noise_std_ms", "optimum_noise_ci95_ms",
+            "good_config_threshold_pct", "good_config_count", "good_config_fraction",
+        ]),
+        ("grid_configuration_defects.csv", grid_config_rows, [
+            "kernel", "backend", "size", "config", "time_ms", "measurement_runs",
+            "measurement_mean_ms", "measurement_std_ms", "measurement_ci95_ms",
+            "grid_optimum_ms", "defect_ms", "defect_pct", "good_at_10pct", "grid_complete",
+        ]),
+        ("grid_regret_evaluations.csv", regret_evaluation_rows, [
+            "kernel", "backend", "size", "algorithm", "run_idx", "evaluation",
+            "config", "grid_time_ms", "regret_ms", "regret_pct",
+            "best_regret_pct_so_far", "grid_status",
+        ]),
+        ("grid_regret_campaigns.csv", campaign_regret_rows, [
+            "kernel", "backend", "size", "algorithm", "run_idx", "grid_complete",
+            "evaluations_with_grid_match", "best_config_by_grid", "best_regret_pct",
+        ]),
+        ("bo_vs_rs_grid_regret.csv", comparison_rows, [
+            "kernel", "backend", "size", "paired_campaigns", "run_indices",
+            "bayesian_mean_regret_pct", "random_mean_regret_pct",
+            "mean_difference_bo_minus_rs_pp", "difference_ci95_low_pp",
+            "difference_ci95_high_pp", "difference_cohen_dz", "difference_p_value",
+            "difference_holm_p_value", "tost_margin_pp", "difference_ci90_low_pp",
+            "difference_ci90_high_pp", "tost_lower_p_value", "tost_upper_p_value",
+            "tost_p_value", "tost_holm_p_value", "difference_conclusion",
+            "equivalence_conclusion",
+        ]),
+        ("transferability_summary.csv", transfer_rows, [
+            "kernel", "size", "status", "sycl_config_count", "cuda_config_count",
+            "shared_config_count", "same_config_space", "spearman_time_correlation",
+        ]),
+        ("optimum_transfer.csv", transfer_detail_rows, [
+            "kernel", "size", "source_backend", "target_backend", "transferred_config",
+            "source_optimum_ms", "target_transferred_ms", "target_optimum_ms",
+            "target_regret_ms", "target_regret_pct", "target_over_source_time_ratio",
+        ]),
+        ("validated_speedups.csv", speedup_rows, [
+            "kernel", "backend", "size", "algorithm", "run_idx", "validation_seed",
+            "paired_repetitions", "geometric_mean_speedup", "speedup_ci95_low",
+            "speedup_ci95_high", "median_speedup", "pairs_faster_than_default",
+        ]),
+    ]
+    analysis_csv_paths = []
+    for filename, rows, fields in analysis_csvs:
+        path = output_dir / filename
+        write_csv(path, rows, fields)
+        analysis_csv_paths.append(path)
+
+    outputs = [performance_csv, convergence_csv, efficiency_csv, *analysis_csv_paths]
     outputs.extend(plot_convergence(convergence_rows, output_dir, args.log_y))
     outputs.extend(plot_performance(performance_rows, output_dir))
     outputs.extend(plot_time(performance_rows, output_dir, args.log_y))
@@ -1017,10 +1427,8 @@ def main() -> int:
 
     if not efficiency_rows:
         print(
-            "\nWARNING: no 'default_time_ms' (untuned baseline) field was found in "
-            "the convergence JSON files, so application-efficiency bars could not "
-            "be computed. Add a 'default_time_ms' key to each convergence_*.json "
-            "(see default_time_ms() in this script for accepted key names)."
+            "\nWARNING: no paired default/tuned validation samples or complete grid "
+            "optima were found, so application-efficiency comparisons are unavailable."
         )
 
     print_summary(results_dir, output_dir, entries, outputs)
