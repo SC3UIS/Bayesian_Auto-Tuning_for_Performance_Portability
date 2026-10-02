@@ -1,0 +1,126 @@
+% Tablas complementarias a las figuras.
+% Requiere: \usepackage{booktabs,graphicx}
+
+\begin{table*}[htbp]
+\centering
+\caption{Mejores configuraciones de parámetros encontradas por BO, RS y Grid search.}
+\label{tab:best-configurations}
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrlrlrlr}
+\toprule
+Kernel & Backend & $N$ & BO: $(BM,BN,BK,TM,TN)$ & $t$ (ms) & RS: $(BM,BN,BK,TM,TN)$ & $t$ (ms) & Grid: $(BM,BN,BK,TM,TN)$ & $t$ (ms) \\
+\midrule
+Matmul  & SYCL & 1024 & (32,64,8,2,4) & 2.736 & (32,32,32,4,2) & 2.862 & (32,128,16,4,2) & 2.911 \\
+Matmul  & CUDA & 1024 & (64,64,8,4,2) & 0.350 & (64,32,8,4,2) & 0.328 & (64,64,8,4,2) & 0.320 \\
+Matmul  & SYCL & 2048 & (64,32,32,4,4) & 4.840 & (32,32,16,4,2) & 4.942 & (64,32,32,4,4) & 5.249 \\
+Matmul  & CUDA & 2048 & (64,64,8,4,2) & 2.073 & (64,64,8,4,2) & 2.016 & (64,64,8,4,2) & 2.106 \\
+Matmul  & SYCL & 4096 & (128,32,32,4,2) & 21.558 & (64,64,32,4,2) & 21.676 & (32,32,32,4,2) & 21.951 \\
+Matmul  & CUDA & 4096 & (64,64,8,4,2) & 19.158 & (64,64,8,4,2) & 19.156 & (64,64,8,2,4) & 16.852 \\
+Stencil & SYCL & 1024 & (16,64,0,4,1) & 13.353 & (32,32,1,4,1) & 13.315 & (32,32,0,4,1) & 13.180 \\
+Stencil & CUDA & 1024 & (16,64,2,4,1) & 3.775 & (32,64,2,4,1) & 3.793 & (32,32,2,4,1) & 5.086 \\
+Stencil & SYCL & 2048 & (16,128,0,4,2) & 31.551 & (16,128,1,4,2) & 31.869 & (16,128,8,4,2) & 26.804 \\
+Stencil & CUDA & 2048 & (16,128,8,4,1) & 14.467 & (32,64,2,4,1) & 15.422 & (16,64,2,4,1) & 13.832 \\
+Stencil & SYCL & 4096 & (16,64,1,4,2) & 76.643 & (32,32,1,4,2) & 76.052 & (16,64,0,4,2) & 76.329 \\
+Stencil & CUDA & 4096 & (16,64,2,4,1) & 64.297 & (16,128,8,4,1) & 64.427 & (16,128,2,4,1) & 62.227 \\
+\bottomrule
+\end{tabular}%
+}
+\begin{minipage}{0.98\textwidth}
+\footnotesize
+Nota: BO y RS muestran la configuración asociada a la campaña con menor tiempo final observado entre 10 campañas; $t$ es el mejor tiempo registrado en esa campaña. Grid muestra el mínimo de la búsqueda exhaustiva, medido con tres repeticiones por configuración. Los tiempos de Grid son una referencia de screening y no una validación confirmatoria. Los parámetros se ordenan como $(BM,BN,BK,TM,TN)$.
+\end{minipage}
+\end{table*}
+
+\begin{table*}[htbp]
+\centering
+\caption{Comparación estadística de los tiempos finales de BO y RS en 10 campañas independientes.}
+\label{tab:bo-rs-final-time-comparison}
+\scriptsize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrrrrr}
+\toprule
+Kernel & Backend & $N$ & BO media (ms) & BO mediana (ms) & RS media (ms) & RS mediana (ms) & $p$ Welch & $p$ Mann--Whitney \\
+\midrule
+Matmul  & SYCL & 1024 & 2.923 & 2.868 & 2.949 & 2.941 & 0.7552 & 0.0890 \\
+Matmul  & CUDA & 1024 & 0.390 & 0.388 & 0.369 & 0.371 & 0.0948 & 0.0890 \\
+Matmul  & SYCL & 2048 & 5.463 & 5.475 & 5.558 & 5.783 & 0.6304 & 0.6232 \\
+Matmul  & CUDA & 2048 & 2.566 & 2.744 & 2.681 & 2.749 & 0.4767 & 0.5205 \\
+Matmul  & SYCL & 4096 & 22.791 & 22.627 & 22.497 & 22.575 & 0.3387 & 0.6232 \\
+Matmul  & CUDA & 4096 & 22.938 & 20.952 & 22.419 & 22.472 & 0.7595 & 0.9097 \\
+Stencil & SYCL & 1024 & 14.444 & 14.501 & 13.938 & 13.867 & 0.0777 & 0.1041 \\
+Stencil & CUDA & 1024 & 4.212 & 4.180 & 4.536 & 4.481 & 0.1728 & 0.1212 \\
+Stencil & SYCL & 2048 & 32.972 & 32.931 & 32.739 & 32.614 & 0.4836 & 0.4274 \\
+Stencil & CUDA & 2048 & 16.752 & 16.606 & 16.842 & 16.741 & 0.8432 & 0.7913 \\
+Stencil & SYCL & 4096 & 77.558 & 77.669 & 77.887 & 77.894 & 0.4129 & 0.4274 \\
+Stencil & CUDA & 4096 & 67.114 & 66.728 & 67.311 & 67.105 & 0.8654 & 0.8501 \\
+\bottomrule
+\end{tabular}%
+}
+\begin{minipage}{0.98\textwidth}
+\footnotesize
+Nota: la unidad estadística es la campaña; $n=10$ para cada algoritmo y escenario. Se aplican Welch $t$ y Mann--Whitney U a los tiempos finales por campaña. Los valores $p$ son nominales, sin corrección por comparaciones múltiples; no se detectan diferencias con $\alpha=0.05$ en estos contrastes individuales.
+\end{minipage}
+\end{table*}
+
+\begin{table*}[htbp]
+\centering
+\caption{Variabilidad de los tiempos finales de Optimización Bayesiana (BO) en 10 campañas.}
+\label{tab:bo-final-time-dispersion}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrr}
+\toprule
+Kernel & Backend & $N$ & Desviación estándar (ms) & Mínimo (ms) & Máximo (ms) \\
+\midrule
+Matmul  & SYCL & 1024 & 0.249 & 2.736 & 3.597 \\
+Matmul  & CUDA & 1024 & 0.029 & 0.350 & 0.440 \\
+Matmul  & SYCL & 2048 & 0.452 & 4.840 & 6.173 \\
+Matmul  & CUDA & 2048 & 0.363 & 2.073 & 2.972 \\
+Matmul  & SYCL & 4096 & 0.836 & 21.558 & 24.603 \\
+Matmul  & CUDA & 4096 & 4.556 & 19.158 & 32.769 \\
+Stencil & SYCL & 1024 & 0.701 & 13.353 & 15.206 \\
+Stencil & CUDA & 1024 & 0.455 & 3.775 & 5.162 \\
+Stencil & SYCL & 2048 & 0.766 & 31.551 & 34.466 \\
+Stencil & CUDA & 2048 & 1.046 & 14.467 & 18.125 \\
+Stencil & SYCL & 4096 & 0.629 & 76.643 & 78.300 \\
+Stencil & CUDA & 4096 & 2.599 & 64.297 & 70.902 \\
+\bottomrule
+\end{tabular}%
+}
+\begin{minipage}{0.98\textwidth}
+\footnotesize
+Nota: estadísticos calculados sobre el mejor tiempo final de cada una de las 10 campañas independientes; no sobre las repeticiones internas del benchmark.
+\end{minipage}
+\end{table*}
+
+\begin{table*}[htbp]
+\centering
+\caption{Variabilidad de los tiempos finales de búsqueda aleatoria (RS) en 10 campañas.}
+\label{tab:rs-final-time-dispersion}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llrrrr}
+\toprule
+Kernel & Backend & $N$ & Desviación estándar (ms) & Mínimo (ms) & Máximo (ms) \\
+\midrule
+Matmul  & SYCL & 1024 & 0.082 & 2.862 & 3.155 \\
+Matmul  & CUDA & 1024 & 0.025 & 0.328 & 0.418 \\
+Matmul  & SYCL & 2048 & 0.416 & 4.942 & 6.056 \\
+Matmul  & CUDA & 2048 & 0.345 & 2.016 & 3.108 \\
+Matmul  & SYCL & 4096 & 0.422 & 21.676 & 23.101 \\
+Matmul  & CUDA & 4096 & 2.625 & 19.156 & 27.754 \\
+Stencil & SYCL & 1024 & 0.478 & 13.315 & 14.682 \\
+Stencil & CUDA & 1024 & 0.559 & 3.793 & 5.601 \\
+Stencil & SYCL & 2048 & 0.690 & 31.869 & 34.055 \\
+Stencil & CUDA & 2048 & 0.963 & 15.422 & 18.315 \\
+Stencil & SYCL & 4096 & 1.062 & 76.052 & 79.291 \\
+Stencil & CUDA & 4096 & 2.517 & 64.427 & 70.841 \\
+\bottomrule
+\end{tabular}%
+}
+\begin{minipage}{0.98\textwidth}
+\footnotesize
+Nota: estadísticos calculados sobre el mejor tiempo final de cada una de las 10 campañas independientes; no sobre las repeticiones internas del benchmark.
+\end{minipage}
+\end{table*}
